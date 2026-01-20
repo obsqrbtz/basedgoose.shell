@@ -28,7 +28,7 @@ Rectangle {
     
     
     radius: 14
-    color: Commons.Theme.foreground
+    color: Commons.Theme.surfaceBase
     
     border.width: 1
     border.color: Commons.Theme.surfaceBorder
@@ -45,24 +45,10 @@ Rectangle {
     onIsPlayingChanged: {
         if (!isPlaying) {
             marqueeAnim.stop()
-            titleText.x = titleText.needsScroll ? 0 : (titleContainer.width - titleText.implicitWidth) / 2
+            titleRow.x = titleRow.needsScroll ? 0 : (titleContainer.width - titleRow.implicitWidth) / 2
         }
     }
     
-    // Top highlight
-    Rectangle {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 1
-        height: parent.height / 2
-        radius: parent.radius - 1
-        
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.04) }
-            GradientStop { position: 1.0; color: "transparent" }
-        }
-    }
     
     Item {
         id: mediaPlayerContent
@@ -80,7 +66,7 @@ Rectangle {
             text: "󰎇"
             font.family: "Material Design Icons"
             font.pixelSize: 14
-            color: Commons.Theme.background
+            color: Commons.Theme.foreground
         }
         
         Text {
@@ -88,7 +74,7 @@ Rectangle {
             font.family: "Inter"
             font.pixelSize: 10
             font.weight: Font.Medium
-            color: Commons.Theme.background
+            color: Commons.Theme.foreground
         }
     }
     
@@ -107,48 +93,54 @@ Rectangle {
         
         Item {
             id: titleContainer
-            Layout.preferredWidth: Math.max(80, Math.min(200, titleText.implicitWidth + 8))
+            Layout.preferredWidth: Math.max(80, Math.min(200, titleRow.implicitWidth + 8))
             Layout.preferredHeight: parent.height
             clip: true
             
-            Text {
-                id: titleText
+            Row {
+                id: titleRow
                 anchors.verticalCenter: parent.verticalCenter
-                text: {
-                    var artist = root.player?.trackArtist ?? ""
-                    var title = root.player?.trackTitle ?? "Unknown"
-                    if (artist && artist.trim() !== "") {
-                        return artist + " - " + title
-                    }
-                    return title
-                }
-                color: Commons.Theme.background
-                font.pixelSize: 10
-                font.weight: Font.Medium
+                spacing: 4
                 
                 readonly property bool needsScroll: implicitWidth > titleContainer.width
                 x: needsScroll ? 0 : (titleContainer.width - implicitWidth) / 2
                 
+                Text {
+                    id: artistText
+                    text: {
+                        var artist = root.player?.trackArtist ?? ""
+                        return artist && artist.trim() !== "" ? artist + " - " : ""
+                    }
+                    color: Commons.Theme.surfaceTextVariant
+                    font.pixelSize: 10
+                    font.weight: Font.Medium
+                    visible: text !== ""
+                }
+                
+                Text {
+                    id: trackText
+                    text: root.player?.trackTitle ?? "Unknown"
+                    color: Commons.Theme.foreground
+                    font.pixelSize: 10
+                    font.weight: Font.Medium
+                }
+                
                 SequentialAnimation {
                     id: marqueeAnim
-                    running: titleText.needsScroll && root.isPlaying
+                    running: titleRow.needsScroll && root.isPlaying
                     loops: Animation.Infinite
                     
                     PauseAnimation { duration: 2000 }
                     NumberAnimation {
-                        target: titleText
+                        target: titleRow
                         property: "x"
-                        to: -(titleText.implicitWidth + 20)
-                        duration: titleText.implicitWidth * 30
+                        to: titleContainer.width - titleRow.implicitWidth
+                        duration: Math.abs(titleContainer.width - titleRow.implicitWidth) * 20
                         easing.type: Easing.Linear
                     }
-                    PropertyAction { 
-                        target: titleText
-                        property: "x"
-                        value: titleContainer.width
-                    }
+                    PauseAnimation { duration: 2000 }
                     NumberAnimation {
-                        target: titleText
+                        target: titleRow
                         property: "x"
                         to: 0
                         duration: 300
@@ -176,7 +168,7 @@ Rectangle {
             Layout.preferredWidth: 1
             Layout.preferredHeight: 12
             radius: 0.5
-            color: Commons.Theme.background
+            color: Commons.Theme.surfaceBorder
         }
         
         RowLayout {
@@ -186,7 +178,7 @@ Rectangle {
                 Layout.preferredWidth: 20
                 Layout.preferredHeight: 20
                 radius: 10
-                color: prevArea.containsMouse ? Commons.Theme.secondary : "transparent"
+                color: prevArea.containsMouse ? Commons.Theme.surfaceAccent : "transparent"
                 
                 Behavior on color { ColorAnimation { duration: 100 } }
                 Behavior on scale { NumberAnimation { duration: 80 } }
@@ -197,7 +189,7 @@ Rectangle {
                     text: "󰒮"
                     font.family: "Material Design Icons"
                     font.pixelSize: 13
-                    color: Commons.Theme.background
+                    color: Commons.Theme.foreground
                 }
                 
                 MouseArea {
@@ -218,8 +210,9 @@ Rectangle {
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
                 radius: 12
-                color: Commons.Theme.background
+                color: playArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.primary
                 
+                Behavior on color { ColorAnimation { duration: 100 } }
                 Behavior on scale { NumberAnimation { duration: 80 } }
                 scale: playArea.pressed ? 0.85 : (playArea.containsMouse ? 1.05 : 1.0)
                 
@@ -229,7 +222,7 @@ Rectangle {
                     text: root.isPlaying ? "󰏤" : "󰐊"
                     font.family: "Material Design Icons"
                     font.pixelSize: 14
-                    color: "#ffffff"
+                    color: Commons.Theme.background
                 }
                 
                 MouseArea {
@@ -250,7 +243,7 @@ Rectangle {
                 Layout.preferredWidth: 20
                 Layout.preferredHeight: 20
                 radius: 10
-                color: nextArea.containsMouse ? Commons.Theme.secondary : "transparent"
+                color: nextArea.containsMouse ? Commons.Theme.surfaceAccent : "transparent"
                 
                 Behavior on color { ColorAnimation { duration: 100 } }
                 Behavior on scale { NumberAnimation { duration: 80 } }
@@ -261,7 +254,7 @@ Rectangle {
                     text: "󰒭"
                     font.family: "Material Design Icons"
                     font.pixelSize: 13
-                    color: Commons.Theme.background
+                    color: Commons.Theme.foreground
                 }
                 
                 MouseArea {

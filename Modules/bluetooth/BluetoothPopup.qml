@@ -92,7 +92,6 @@ Widgets.PopupWindow {
                     }
                     
                     ColumnLayout {
-                        Layout.fillWidth: true
                         spacing: 2
                         
                         Text {
@@ -110,6 +109,10 @@ Widgets.PopupWindow {
                             font.pixelSize: 11
                             color: cSubText
                         }
+                    }
+                    
+                    Item {
+                        Layout.fillWidth: true
                     }
                     
                     Widgets.ToggleSwitch {

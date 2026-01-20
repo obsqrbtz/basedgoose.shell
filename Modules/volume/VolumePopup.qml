@@ -83,7 +83,7 @@ Widgets.PopupWindow {
             
             RowLayout {
                 Layout.fillWidth: true
-                spacing: 8
+                spacing: 10
                 
                 Text {
                     text: audio.muted ? "󰖁" : "󰕾"
@@ -92,14 +92,30 @@ Widgets.PopupWindow {
                     color: Commons.Theme.foreground
                 }
                 
-                Text {
-                    text: "Output"
-                    font.family: "Inter"
-                    font.pixelSize: 12
-                    color: Commons.Theme.foreground
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: outputLabel.height
+                    
+                    Text {
+                        id: outputLabel
+                        text: "Output"
+                        font.family: "Inter"
+                        font.pixelSize: 12
+                        color: outputMuteArea.containsMouse ? Commons.Theme.primary : Commons.Theme.foreground
+                        
+                        Behavior on color {
+                            ColorAnimation { duration: 100 }
+                        }
+                    }
+                    
+                    MouseArea {
+                        id: outputMuteArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: audio.toggleMute()
+                    }
                 }
-                
-                Item { Layout.fillWidth: true }
                 
                 Text {
                     text: audio.percentage + "%"
@@ -107,31 +123,6 @@ Widgets.PopupWindow {
                     font.pixelSize: 12
                     font.weight: Font.Medium
                     color: Commons.Theme.foreground
-                }
-                
-                Rectangle {
-                    width: 28
-                    height: 28
-                    radius: 6
-                    color: Commons.Theme.foreground
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
-                    }
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: audio.muted ? "󰝟" : "󰝚"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 14
-                        color: Commons.Theme.background
-                    }
-                    
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: audio.toggleMute()
-                    }
                 }
             }
             
@@ -191,7 +182,7 @@ Widgets.PopupWindow {
             
             RowLayout {
                 Layout.fillWidth: true
-                spacing: 8
+                spacing: 10
                 
                 Text {
                     text: audio.sourceMuted ? "󰍭" : "󰍬"
@@ -200,14 +191,30 @@ Widgets.PopupWindow {
                     color: Commons.Theme.foreground
                 }
                 
-                Text {
-                    text: "Input"
-                    font.family: "Inter"
-                    font.pixelSize: 12
-                    color: Commons.Theme.foreground
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: inputLabel.height
+                    
+                    Text {
+                        id: inputLabel
+                        text: "Input"
+                        font.family: "Inter"
+                        font.pixelSize: 12
+                        color: inputMuteArea.containsMouse ? Commons.Theme.primary : Commons.Theme.foreground
+                        
+                        Behavior on color {
+                            ColorAnimation { duration: 100 }
+                        }
+                    }
+                    
+                    MouseArea {
+                        id: inputMuteArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: audio.toggleSourceMute()
+                    }
                 }
-                
-                Item { Layout.fillWidth: true }
                 
                 Text {
                     text: audio.sourcePercentage + "%"
@@ -215,31 +222,6 @@ Widgets.PopupWindow {
                     font.pixelSize: 12
                     font.weight: Font.Medium
                     color: Commons.Theme.foreground
-                }
-                
-                Rectangle {
-                    width: 28
-                    height: 28
-                    radius: 6
-                    color: Commons.Theme.foreground
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
-                    }
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: audio.sourceMuted ? "󰝟" : "󰝚"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 14
-                        color: Commons.Theme.background
-                    }
-                    
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: audio.toggleSourceMute()
-                    }
                 }
             }
             

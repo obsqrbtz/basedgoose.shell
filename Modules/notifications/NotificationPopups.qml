@@ -22,8 +22,6 @@ PanelWindow {
     readonly property color surfaceBorder: Commons.Theme.surfaceBorder
     readonly property color surfaceAccent: Commons.Theme.surfaceAccent
     
-    readonly property real swipeThreshold: 0.35
-    
     readonly property var activePopups: (
         notifs.notifications
             .filter(n => !n.closed)
@@ -78,9 +76,7 @@ PanelWindow {
                 
                 property bool isVisible: true
                 property bool isHovered: false
-                property bool isDragging: false
                 property bool isExpanded: false
-                property real dragX: 0
                 property real animProgress: 0
                 
                 property real entranceScale: 0.7
@@ -94,21 +90,7 @@ PanelWindow {
                     entranceOpacity = 1.0
                 }
                                 
-                NumberAnimation {
-                    id: snapBackAnim
-                    target: notifCard
-                    property: "dragX"
-                    to: 0
-                    duration: 150
-                    easing.type: Easing.OutQuad
-                }
-                                
                 function dismiss() {
-                    isVisible = false
-                    modelData.close()
-                }
-                
-                function swipeDismiss(direction) {
                     isVisible = false
                     modelData.close()
                 }
@@ -117,7 +99,6 @@ PanelWindow {
                     id: cardWrapper
                     width: parent.width
                     height: cardBg.height
-                    x: notifCard.dragX
                     
                     scale: notifCard.entranceScale
                     opacity: notifCard.entranceOpacity
@@ -126,27 +107,6 @@ PanelWindow {
                     }
                     
                     transformOrigin: Item.Right
-                    
-                        Rectangle {
-                            id: swipeIndicator
-                            anchors.fill: cardBg
-                            radius: cardBg.radius
-                            visible: Math.abs(notifCard.dragX) > 30
-                            opacity: Math.min(0.8, Math.abs(notifCard.dragX) / (Commons.Config.notifications.popupWidth * root.swipeThreshold * 1.5))
-                        
-                        color: notifCard.dragX > 0 ? 
-                               Qt.rgba(root.error.r, root.error.g, root.error.b, 0.08) :
-                               Qt.rgba(root.secondary.r, root.secondary.g, root.secondary.b, 0.08)
-                        
-                        Text {
-                            anchors.centerIn: parent
-                            text: notifCard.dragX > 0 ? "󰅖" : "󰄬"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 24
-                            color: notifCard.dragX > 0 ? root.error : root.secondary
-                            opacity: 0.7
-                        }
-                    }
                     
                     Rectangle {
                         id: cardBg
@@ -174,15 +134,6 @@ PanelWindow {
                         }
                         
                         Rectangle {
-                            anchors.fill: parent
-                            anchors.margins: 1
-                            radius: parent.radius - 1
-                            color: "transparent"
-                            border.width: 1
-                            border.color: root.surfaceBorder
-                        }
-                        
-                        Rectangle {
                             width: 3
                             height: 24
                             anchors.left: parent.left
@@ -203,157 +154,31 @@ PanelWindow {
                         }
                         
                         Rectangle {
-                            id: progressBar
-                            anchors.bottom: parent.bottom
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.leftMargin: 20
-                            anchors.rightMargin: 20
-                            anchors.bottomMargin: 8
-                            height: 2
-                            radius: 1
-                            color: Qt.rgba(root.surfaceText.r, root.surfaceText.g, root.surfaceText.b, 0.06)
-                            clip: true
-                            visible: notifCard.isVisible && !notifCard.isHovered
-                            opacity: 0.8
-                            
-                            Rectangle {
-                                id: progressFill
-                                anchors.left: parent.left
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                width: parent.width
-                                radius: parent.radius
-                                color: Qt.rgba(root.secondary.r, root.secondary.g, root.secondary.b, 0.5)
-                                
-                                NumberAnimation on width {
-                                    id: progressAnim
-                                    from: progressBar.width
-                                    to: 0
-                                    duration: Commons.Config.notifications.timeout
-                                    running: notifCard.isVisible && !notifCard.isHovered && !notifCard.isDragging
-                                    onFinished: if (notifCard.isVisible) notifCard.dismiss()
-                                }
-                            }
-                        }
-                        
-                        Rectangle {
                             id: hoverLayer
                             anchors.fill: parent
                             radius: parent.radius
                             color: root.surfaceText
-                            opacity: notifCard.isHovered && !notifCard.isDragging ? 0.03 : 0
+                            opacity: notifCard.isHovered ? 0.03 : 0
                         }
                         
                         MouseArea {
-                            id: gestureArea
+                            id: mouseArea
                             anchors.fill: parent
                             hoverEnabled: true
                             
-                            property real startX: 0
-                            property real startY: 0
-                            property bool gestureStarted: false
-                            
-                            property real scrollAccumulator: 0
-                            property bool isScrollSwiping: false
-                            
                             onEntered: {
                                 notifCard.isHovered = true
-                                progressAnim.running = false
                             }
                             
                             onExited: {
-                                if (!pressed && !isScrollSwiping) {
+                                if (!pressed) {
                                     notifCard.isHovered = false
-                                    if (notifCard.isVisible && progressFill.width > 0) {
-                                        progressAnim.running = true
-                                    }
-                                }
-                            }
-                            
-                            onWheel: wheel => {
-                                if (Math.abs(wheel.angleDelta.x) > Math.abs(wheel.angleDelta.y)) {
-                                    wheel.accepted = true
-                                    
-                                    scrollAccumulator += wheel.angleDelta.x * 0.5
-                                    
-                                    notifCard.dragX = scrollAccumulator
-                                    isScrollSwiping = true
-                                    notifCard.isDragging = true
-                                    
-                                    scrollResetTimer.restart()
-                                    
-                                    const threshold = Commons.Config.notifications.popupWidth * root.swipeThreshold
-                                    if (Math.abs(scrollAccumulator) > threshold) {
-                                        scrollResetTimer.stop()
-                                        isScrollSwiping = false
-                                        notifCard.swipeDismiss(scrollAccumulator)
-                                        scrollAccumulator = 0
-                                    }
-                                }
-                            }
-                            
-                            Timer {
-                                id: scrollResetTimer
-                                interval: 300
-                                onTriggered: {
-                                    gestureArea.isScrollSwiping = false
-                                    notifCard.isDragging = false
-                                    
-                                    const threshold = Commons.Config.notifications.popupWidth * root.swipeThreshold
-                                    if (Math.abs(gestureArea.scrollAccumulator) > threshold) {
-                                        notifCard.swipeDismiss(gestureArea.scrollAccumulator)
-                                    } else {
-                                        snapBackAnim.start()
-                                        if (notifCard.isVisible && progressFill.width > 0 && !notifCard.isHovered) {
-                                            progressAnim.running = true
-                                        }
-                                    }
-                                    gestureArea.scrollAccumulator = 0
-                                }
-                            }
-                            
-                            onPressed: mouse => {
-                                startX = mouse.x
-                                startY = mouse.y
-                                gestureStarted = false
-                                notifCard.isDragging = false
-                                scrollAccumulator = 0
-                            }
-                            
-                            onPositionChanged: mouse => {
-                                if (!pressed) return
-                                
-                                const deltaX = mouse.x - startX
-                                const deltaY = mouse.y - startY
-                                
-                                if (!gestureStarted && Math.abs(deltaX) > 10) {
-                                    gestureStarted = true
-                                    notifCard.isDragging = true
-                                }
-                                
-                                if (notifCard.isDragging) {
-                                    notifCard.dragX = deltaX * 0.8
                                 }
                             }
                             
                             onReleased: mouse => {
-                                notifCard.isDragging = false
-                                
                                 if (!containsMouse) {
                                     notifCard.isHovered = false
-                                }
-                                
-                                const threshold = Commons.Config.notifications.popupWidth * root.swipeThreshold
-                                
-                                if (Math.abs(notifCard.dragX) > threshold) {
-                                    notifCard.swipeDismiss(notifCard.dragX)
-                                } else {
-                                    snapBackAnim.start()
-                                    
-                                    if (notifCard.isVisible && progressFill.width > 0 && !notifCard.isHovered) {
-                                        progressAnim.running = true
-                                    }
                                 }
                             }
                             
@@ -362,7 +187,7 @@ PanelWindow {
                             onClicked: mouse => {
                                 if (mouse.button === Qt.MiddleButton) {
                                     notifCard.dismiss()
-                                } else if (!gestureStarted) {
+                                } else {
                                     if (modelData.actions && modelData.actions.length === 1) {
                                         modelData.actions[0].invoke()
                                         notifCard.dismiss()
@@ -534,28 +359,6 @@ PanelWindow {
                                             notifCard.dismiss()
                                         }
                                     }
-                                }
-                            }
-                            
-                            Text {
-                                id: swipeHint
-                                Layout.fillWidth: true
-                                Layout.topMargin: 2
-                                text: "swipe to dismiss"
-                                font.pixelSize: 9
-                                font.family: "Inter"
-                                font.letterSpacing: 0.5
-                                color: root.surfaceTextVariant
-                                opacity: 0.35
-                                horizontalAlignment: Text.AlignHCenter
-                                visible: notifCard.index === 0 && notifCard.animProgress > 0.9 && hintVisible
-                                
-                                property bool hintVisible: true
-                                
-                                Timer {
-                                    interval: 3000
-                                    running: swipeHint.visible
-                                    onTriggered: swipeHint.hintVisible = false
                                 }
                             }
                         }

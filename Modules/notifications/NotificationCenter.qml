@@ -91,7 +91,7 @@ Widgets.PopupWindow {
             }
             
             Widgets.IconButton {
-                icon: "󰎘"
+                icon: "\udb80\udf9f"
                 iconSize: 18
                 iconColor: surfaceTextVariant
                 hoverIconColor: error
@@ -161,10 +161,6 @@ Widgets.PopupWindow {
                 border.color: surfaceBorder
                 
                 opacity: modelData.closed ? 0.5 : 1.0
-                
-                Behavior on color {
-                    ColorAnimation { duration: 150 }
-                }
                                 
                 Rectangle {
                     width: 3
@@ -222,7 +218,7 @@ Widgets.PopupWindow {
                         Widgets.IconButton {
                             Layout.preferredWidth: 28
                             Layout.preferredHeight: 28
-                            icon: "󰆴"
+                            icon: "󰅖"
                             iconSize: 14
                             iconColor: surfaceTextVariant
                             hoverIconColor: error

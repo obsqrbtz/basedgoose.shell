@@ -106,8 +106,11 @@ Widgets.PopupWindow {
                 color: cSurfaceContainer
                 
                 RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 8
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 8
+                    anchors.rightMargin: 8
                     spacing: 8
                     
                     Text {
@@ -148,6 +151,7 @@ Widgets.PopupWindow {
                     Widgets.IconButton {
                         width: 32
                         height: 32
+                        Layout.alignment: Qt.AlignVCenter
                         icon: "󰈔"
                         iconSize: 14
                         iconColor: cSubText
@@ -183,19 +187,27 @@ Widgets.PopupWindow {
                 color: cSurfaceContainer
                 clip: true
                 
-                GridView {
-                    id: wallpaperGrid
+                Item {
                     anchors.fill: parent
                     anchors.margins: 8
-                    cellWidth: 120
-                    cellHeight: 120
-                    model: wallpaperList
-                    clip: true
+                    
+                    GridView {
+                        id: wallpaperGrid
+                        anchors.centerIn: parent
+                        width: Math.floor((parent.width / 120)) * 120
+                        height: Math.min(
+                            parent.height,
+                            Math.ceil(wallpaperList.count / Math.max(1, Math.floor(parent.width / 120))) * (120 * 9 / 16 + 8)
+                        )
+                        cellWidth: 120
+                        cellHeight: 120 * 9 / 16 + 8
+                        model: wallpaperList
+                        clip: true
                     
                     delegate: Rectangle {
                             id: wallpaperItem
                             width: wallpaperGrid.cellWidth - 8
-                            height: wallpaperGrid.cellHeight - 8
+                            height: 120 * 9 / 16
                             radius: 8
                             color: itemArea.containsMouse ? cHover : "transparent"
                             border.width: itemArea.containsMouse ? 2 : 1
@@ -252,6 +264,7 @@ Widgets.PopupWindow {
                             }
                         }
                     }
+                }
                     
                 Widgets.EmptyState {
                     anchors.centerIn: parent
