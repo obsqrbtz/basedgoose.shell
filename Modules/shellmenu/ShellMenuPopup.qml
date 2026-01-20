@@ -141,7 +141,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             anchors.centerIn: parent
-                            text: "󰨳"
+                            text: "\uf03e"
                             font.family: "Material Design Icons"
                             font.pixelSize: 14
                             color: cPrimary
