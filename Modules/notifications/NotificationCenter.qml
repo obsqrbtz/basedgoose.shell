@@ -85,7 +85,7 @@ PanelWindow {
                 radius: 16
                 color: root.hasDnd ? secondary : surfaceContainer
                 border.width: 1
-                border.color: root.hasDnd ? Qt.rgba(0,0,0,0.1) : surfaceBorder
+                border.color: surfaceBorder
                 
                 Behavior on color {
                     ColorAnimation { duration: 200 }

@@ -34,7 +34,7 @@ PanelWindow {
             anchors.fill: parent
             color: Services.Theme.background
             radius: Services.Theme.radius
-            border.color: Services.Theme.surfaceBase
+            border.color: Services.Theme.border
             border.width: 1
             
             ColumnLayout {
@@ -47,7 +47,7 @@ PanelWindow {
                 Layout.preferredHeight: 36
                 color: Services.Theme.surfaceBase
                 radius: 6
-                border.color: searchInput.activeFocus ? Services.Theme.secondary : "transparent"
+                border.color: searchInput.activeFocus ? Services.Theme.primaryMuted : "transparent"
                 border.width: 1
                 
                     TextInput {

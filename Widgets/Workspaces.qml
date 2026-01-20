@@ -29,7 +29,7 @@ Rectangle {
                 Layout.preferredWidth: isActive ? Services.Config.workspaceIndicatorActiveWidth : Services.Config.workspaceIndicatorWidth
                 Layout.preferredHeight: Services.Config.workspaceIndicatorHeight
                 radius: Services.Config.workspaceIndicatorRadius
-                color: isActive ? Services.Theme.primary : (hasWindows ? Services.Theme.secondaryMuted : Services.Theme.foregroundMuted)
+                color: isActive ? Services.Theme.primary : (hasWindows ? Services.Theme.primaryMuted : Services.Theme.foregroundMuted)
                 
                 Behavior on Layout.preferredWidth { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 200 } }

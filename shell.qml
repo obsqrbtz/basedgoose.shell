@@ -43,10 +43,6 @@ Scope {
         id: osdWrapper
     }
 
-    Widgets.VolumePopupWindow {
-        id: volumePopup
-    }
-
     Widgets.BluetoothPopupWindow {
         id: bluetoothPopup
     }
@@ -74,11 +70,16 @@ Scope {
     QtObject {
         id: wiring
         Component.onCompleted: {
-            if (volumePopup) bar.volumePopup = volumePopup
             if (bluetoothPopup) bar.bluetoothPopup = bluetoothPopup
             if (mediaPopup) bar.mediaPopup = mediaPopup
             if (notificationPopups) bar.notificationPopups = notificationPopups
             if (notificationCenter) bar.notificationCenter = notificationCenter
+        }
+    }
+    Connections {
+        target: bar
+        function onVolumePopupChanged() {
+            if (bar.volumePopup) osdWrapper.volumePopup = bar.volumePopup
         }
     }
 }

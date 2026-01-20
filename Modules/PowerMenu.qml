@@ -29,7 +29,7 @@ PanelWindow {
         anchors.fill: parent
         color: Services.Theme.background
         radius: Services.Theme.radius
-        border.color: Services.Theme.surfaceBase
+        border.color: Services.Theme.border
         border.width: 1
         
             ColumnLayout {

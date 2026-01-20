@@ -13,6 +13,7 @@ PanelWindow {
 
     property bool showing: false
     property bool initialized: false
+    property var volumePopup
 
     readonly property var volumeMonitor: Services.VolumeMonitor
     readonly property int currentVolume: volumeMonitor.percentage
@@ -43,6 +44,10 @@ PanelWindow {
     }
 
     function triggerOSD() {
+        if (volumePopup && (volumePopup.shouldShow || (volumePopup.container && volumePopup.container.opacity > 0))) {
+            return
+        }
+
         showing = true
         hideTimer.restart()
     }

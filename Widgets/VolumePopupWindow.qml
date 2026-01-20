@@ -30,60 +30,40 @@ PanelWindow {
     color: "transparent"
     visible: shouldShow || container.opacity > 0
     
-    Item {
+    WlrLayershell.keyboardFocus: shouldShow ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    
+    FocusScope {
         id: container
         anchors.fill: parent
         scale: 0.85
         opacity: 0
         transformOrigin: Item.TopRight
+        focus: true
         
-        SequentialAnimation {
-            running: popupWindow.shouldShow
-            
-            ParallelAnimation {
-                NumberAnimation {
-                    target: container
-                    property: "scale"
-                    from: 0.7
-                    to: 1.08
-                    duration: 280
-                    easing.type: Easing.OutCubic
-                }
-                NumberAnimation {
-                    target: container
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: 250
-                }
-            }
-            NumberAnimation {
-                target: container
-                property: "scale"
-                to: 1.0
-                duration: 220
-                easing.type: Easing.OutBack
-                easing.overshoot: 1.8
-            }
+        Keys.onEscapePressed: popupWindow.shouldShow = false
+        
+        states: State {
+            name: "visible"
+            when: popupWindow.shouldShow
+            PropertyChanges { target: container; opacity: 1; scale: 1.0 }
         }
         
-        ParallelAnimation {
-            running: !popupWindow.shouldShow && container.opacity > 0
-            
-            NumberAnimation {
-                target: container
-                property: "scale"
-                to: 0.85
-                duration: 200
-                easing.type: Easing.InCubic
+        transitions: [
+            Transition {
+                to: "visible"
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; duration: 180; easing.type: Easing.OutQuad }
+                    NumberAnimation { property: "scale"; duration: 250; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
+                }
+            },
+            Transition {
+                from: "visible"
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; duration: 120; easing.type: Easing.InQuad }
+                    NumberAnimation { property: "scale"; to: 0.85; duration: 120 }
+                }
             }
-            NumberAnimation {
-                target: container
-                property: "opacity"
-                to: 0
-                duration: 200
-            }
-        }
+        ]
         
         Rectangle {
             anchors.fill: backgroundRect
@@ -106,17 +86,14 @@ PanelWindow {
             color: Services.Theme.surfaceBase
             radius: 16
             
-            border.color: Qt.rgba(Services.Theme.primary.r, Services.Theme.primary.g, Services.Theme.primary.b, 0.2)
+            border.color: Services.Theme.surfaceBorder
             border.width: 1
             
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
                 onEntered: popupWindow.isHovered = true
-                onExited: {
-                    popupWindow.isHovered = false
-                    popupWindow.shouldShow = false
-                }
+                onExited: popupWindow.isHovered = false
             }
         }
     }
@@ -197,7 +174,7 @@ PanelWindow {
                 id: volumeSlider
                 Layout.fillWidth: true
                 from: 0
-                to: 150
+                to: 100
                 value: audio.percentage
                 
                 onMoved: {
@@ -305,7 +282,7 @@ PanelWindow {
                 id: inputSlider
                 Layout.fillWidth: true
                 from: 0
-                to: 150
+                to: 100
                 value: audio.sourcePercentage
                 
                 onMoved: {

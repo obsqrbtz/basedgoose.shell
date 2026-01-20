@@ -36,7 +36,7 @@ Rectangle {
         
         color: Services.Theme.secondary
         border.width: 2
-        border.color: Services.Theme.background
+        border.color: Services.Theme.surfaceBase
         
         Text {
             id: badgeText
@@ -62,7 +62,7 @@ Rectangle {
         
         color: Services.Theme.error
         border.width: 2
-        border.color: Services.Theme.background
+        border.color: Services.Theme.surfaceBase
         
         Text {
             anchors.centerIn: parent

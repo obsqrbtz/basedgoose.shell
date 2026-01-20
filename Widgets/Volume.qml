@@ -7,6 +7,7 @@ Item {
     id: root
     
     property var barWindow
+    property var volumePopup
     
     readonly property var audio: Services.Audio
     readonly property var volumeMonitor: Services.VolumeMonitor
@@ -102,7 +103,21 @@ Item {
             }
         }
         
-        onClicked: audio.toggleMute()
+        onClicked: {
+            if (!volumePopup) return
+            
+            volumePopup.shouldShow = !volumePopup.shouldShow
+            if (!volumePopup.shouldShow) return
+            if (!barWindow || !barWindow.screen) return
+            
+            const pos = root.mapToItem(barWindow.contentItem, 0, 0)
+            const rightEdge = pos.x + root.width
+            const screenWidth = barWindow.screen.width
+            const barHeight = barWindow.implicitHeight || 36
+            
+            volumePopup.margins.right = Math.round(screenWidth - rightEdge)
+            volumePopup.margins.top = 0
+        }
     }
     
     Connections {

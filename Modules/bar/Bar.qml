@@ -12,18 +12,15 @@ PanelWindow {
     signal showPowerMenu()
     signal showAppLauncher()
 
-    // Popups
     property var bluetoothPopup
     property var mediaPopup
     property var volumePopup
     property var notificationPopups
     property var notificationCenter
 
-    // Monitors
     Services.CpuMonitor { id: cpuMonitor }
     Services.MemoryMonitor { id: memoryMonitor }
 
-    // Anchors
     anchors.top: true
     anchors.left: true
     anchors.right: true
@@ -35,12 +32,11 @@ PanelWindow {
     implicitHeight: Services.Config.barHeight
     color: "transparent"
 
-    // Background
     Rectangle {
         anchors.fill: parent
         color: Services.Theme.background
         radius: Services.Theme.radius
-        border.color: Services.Theme.surfaceBase
+        border.color: Services.Theme.border
         border.width: 1
     }
 
@@ -48,22 +44,24 @@ PanelWindow {
         id: btPopup
     }
 
-    Component.onCompleted: {
-        bar.bluetoothPopup = btPopup
+    Widgets.VolumePopupWindow {
+        id: volPopup
     }
 
-    // --- Bar content ---
+    Component.onCompleted: {
+        bar.bluetoothPopup = btPopup
+        bar.volumePopup = volPopup
+    }
+
     RowLayout {
         anchors.fill: parent
         anchors.margins: Services.Config.barPadding
         spacing: Services.Config.barSpacing
 
-        // App launcher
         Widgets.AppLauncherButton {
             onClicked: bar.showAppLauncher()
         }
 
-        // Workspaces
         Widgets.Workspaces {}
                     Rectangle {
                 id: mediaModule
@@ -75,7 +73,7 @@ PanelWindow {
                 color: Services.Theme.foreground
                 
                 border.width: 1
-                border.color: Services.Theme.surfaceBase
+                border.color: Services.Theme.surfaceBorder
                 
                 clip: true
                 
@@ -127,7 +125,6 @@ PanelWindow {
 
         Item { Layout.fillWidth: true }
 
-        // System stats
         Widgets.SystemStats {
             cpuUsage: cpuMonitor.cpuUsage
             memUsed: memoryMonitor.memUsed
@@ -136,7 +133,6 @@ PanelWindow {
 
         Item { Layout.fillWidth: true }
 
-        // Right row
         Rectangle {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: rightRow.width + 20
@@ -159,6 +155,11 @@ PanelWindow {
                         property: "barWindow"
                         value: bar
                     }
+                    Binding {
+                        target: volumeLoader.item
+                        property: "volumePopup"
+                        value: bar.volumePopup
+                    }
                     Layout.leftMargin: Services.Config.componentPadding / 2
                 }
 
@@ -167,7 +168,6 @@ PanelWindow {
                     height: Services.Config.componentHeight
                     color: "transparent"
                     radius: 14
-                    // size to fit loader content plus small padding; use Layout.preferredWidth so RowLayout manages spacing
                     Layout.preferredWidth: Math.min(140, Math.max(44, (bluetoothLoader.status === Loader.Ready && bluetoothLoader.item) ? bluetoothLoader.implicitWidth + Services.Config.componentPadding : 44))
                     Layout.alignment: Qt.AlignVCenter
                     Layout.rightMargin: Services.Config.componentPadding / 2
