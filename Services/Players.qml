@@ -33,6 +33,10 @@ Singleton {
         }
     }
 
+    Component.onCompleted: {
+        updateActivePlayer()
+    }
+
     Connections {
         target: Mpris.players
         function onValuesChanged() {
@@ -44,7 +48,8 @@ Singleton {
         interval: 1500
         repeat: true
         running: true
-        onTriggered: updateActivePlayer
+        triggeredOnStart: true
+        onTriggered: updateActivePlayer()
     }
 
     Connections {

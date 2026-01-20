@@ -11,12 +11,19 @@ Rectangle {
     property var barWindow
     
     readonly property var player: Services.Players.active
-    readonly property bool hasPlayer: player !== null
+    readonly property bool hasPlayer: !!player
     readonly property bool isPlaying: player?.isPlaying ?? false
     
     height: 28
     width: hasPlayer ? (mediaPlayerContent.implicitWidth + 16) : 0
     visible: hasPlayer
+    
+    Component.onCompleted: {
+        if (Services.Players) {
+            Services.Players.updateActivePlayer()
+        }
+    }
+    
     
     radius: 14
     color: Commons.Theme.foreground
