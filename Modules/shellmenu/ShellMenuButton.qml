@@ -14,8 +14,8 @@ Rectangle {
    
     Text {
         anchors.centerIn: parent
-        text: "󰍜"
-        color: Commons.Theme.secondary
+        text: "\uf219"
+        color: Commons.Theme.primary
         font { family: "Material Design Icons"; pixelSize: Commons.Theme.fontSize + 2; }
     }
     

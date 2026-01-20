@@ -10,9 +10,9 @@ QtObject {
     readonly property color foreground: '#C2C2B0'
     readonly property color foregroundMuted: '#CCCCCC'
     readonly property color primary: '#95A328'
-    readonly property color primaryMuted: '#6d781e'
+    readonly property color primaryMuted: Qt.rgba(primary.r, primary.g, primary.b, 0.3)
     readonly property color secondary: '#E1C135'
-    readonly property color secondaryMuted: '#9f8925'
+    readonly property color secondaryMuted: rgba(secondary.r, secondary.g, secondary.b, 0.3)
 
     readonly property color warning: '#E1C135'
     readonly property color success: '#95A328'
