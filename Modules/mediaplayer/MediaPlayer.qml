@@ -14,11 +14,9 @@ Rectangle {
     readonly property bool hasPlayer: player !== null
     readonly property bool isPlaying: player?.isPlaying ?? false
     
-    readonly property real titleWidth: 80
-    
     height: 28
-    width: mediaPlayerContent.implicitWidth + 16
-    visible: Services.Players.active
+    width: hasPlayer ? (mediaPlayerContent.implicitWidth + 16) : 0
+    visible: hasPlayer
     
     radius: 14
     color: Commons.Theme.foreground
@@ -38,7 +36,7 @@ Rectangle {
     onIsPlayingChanged: {
         if (!isPlaying) {
             marqueeAnim.stop()
-            titleText.x = titleText.needsScroll ? 0 : (titleWidth - titleText.implicitWidth) / 2
+            titleText.x = titleText.needsScroll ? 0 : (titleContainer.width - titleText.implicitWidth) / 2
         }
     }
     
@@ -99,20 +97,28 @@ Rectangle {
         visible: hasPlayer
         
         Item {
-            Layout.preferredWidth: root.titleWidth
+            id: titleContainer
+            Layout.preferredWidth: Math.max(80, Math.min(200, titleText.implicitWidth + 8))
             Layout.preferredHeight: parent.height
             clip: true
             
             Text {
                 id: titleText
                 anchors.verticalCenter: parent.verticalCenter
-                text: root.player?.trackTitle ?? "Unknown"
+                text: {
+                    var artist = root.player?.trackArtist ?? ""
+                    var title = root.player?.trackTitle ?? "Unknown"
+                    if (artist && artist.trim() !== "") {
+                        return artist + " - " + title
+                    }
+                    return title
+                }
                 color: Commons.Theme.background
                 font.pixelSize: 10
                 font.weight: Font.Medium
                 
-                readonly property bool needsScroll: implicitWidth > root.titleWidth
-                x: needsScroll ? 0 : (root.titleWidth - implicitWidth) / 2
+                readonly property bool needsScroll: implicitWidth > titleContainer.width
+                x: needsScroll ? 0 : (titleContainer.width - implicitWidth) / 2
                 
                 SequentialAnimation {
                     id: marqueeAnim
@@ -130,7 +136,7 @@ Rectangle {
                     PropertyAction { 
                         target: titleText
                         property: "x"
-                        value: root.titleWidth
+                        value: titleContainer.width
                     }
                     NumberAnimation {
                         target: titleText
