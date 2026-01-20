@@ -1,15 +1,18 @@
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
 import "../Services" as Services
+import "../Commons" as Commons
 
-PanelWindow {
+Commons.PopupWindow {
     id: powerMenu
     
-    visible: false
-    color: "transparent"
+    ipcTarget: "power"
+    initialScale: 0.9
+    transformOriginX: 1.0
+    transformOriginY: 0.0
+    closeOnClickOutside: true
     
     implicitWidth: 240
     implicitHeight: 180
@@ -32,7 +35,7 @@ PanelWindow {
         border.color: Services.Theme.border
         border.width: 1
         
-            ColumnLayout {
+        ColumnLayout {
             anchors.fill: parent
             anchors.margins: 12
             spacing: 8
@@ -61,7 +64,7 @@ PanelWindow {
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        powerMenu.visible = false;
+                        powerMenu.shouldShow = false;
                         processComponent.createObject(powerMenu, { cmd: ["systemctl", "poweroff"] });
                     }
                 }
@@ -91,7 +94,7 @@ PanelWindow {
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        powerMenu.visible = false;
+                        powerMenu.shouldShow = false;
                         processComponent.createObject(powerMenu, { cmd: ["systemctl", "reboot"] });
                     }
                 }
@@ -121,27 +124,27 @@ PanelWindow {
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        powerMenu.visible = false;
+                        powerMenu.shouldShow = false;
                         processComponent.createObject(powerMenu, { cmd: ["hyprctl", "dispatch", "exit"] });
                     }
                 }
             }
         }
-    }
-
-    Component {
-        id: processComponent
-        Process {
-            property var cmd: []
-            running: true
-            command: cmd
+        
+        Component {
+            id: processComponent
+            Process {
+                property var cmd: []
+                running: true
+                command: cmd
+            }
         }
-    }
-    
-    Connections {
-        target: bar
-        function onShowPowerMenu() {
-            powerMenu.visible = !powerMenu.visible;
+        
+        Connections {
+            target: bar
+            function onShowPowerMenu() {
+                powerMenu.toggle();
+            }
         }
     }
 }

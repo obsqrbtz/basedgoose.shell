@@ -3,18 +3,20 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Wayland
 import "../Services" as Services
+import "../Commons" as Commons
 
-PanelWindow {
+Commons.PopupWindow {
     id: popupWindow
     
-    property bool shouldShow: false
+    ipcTarget: "volume"
+    initialScale: 0.85
+    transformOriginX: 1.0
+    transformOriginY: 0.0
+    
     property bool isHovered: false
     readonly property var audio: Services.Audio
         
-    screen: Quickshell.screens[0]
-    
     anchors {
         top: true
         right: true
@@ -27,74 +29,36 @@ PanelWindow {
     
     implicitWidth: 320
     implicitHeight: contentColumn.implicitHeight + 32
-    color: "transparent"
-    visible: shouldShow || container.opacity > 0
     
-    WlrLayershell.keyboardFocus: shouldShow ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-    
-    FocusScope {
-        id: container
+    Rectangle {
+        anchors.fill: backgroundRect
+        anchors.margins: -6
+        radius: backgroundRect.radius + 3
+        color: "transparent"
+        
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: Qt.rgba(0, 0, 0, 0.35)
+            shadowBlur: 0.8
+            shadowVerticalOffset: 8
+        }
+    }
+
+    Rectangle {
+        id: backgroundRect
         anchors.fill: parent
-        scale: 0.85
-        opacity: 0
-        transformOrigin: Item.TopRight
-        focus: true
+        color: Services.Theme.surfaceBase
+        radius: 16
         
-        Keys.onEscapePressed: popupWindow.shouldShow = false
+        border.color: Services.Theme.surfaceBorder
+        border.width: 1
         
-        states: State {
-            name: "visible"
-            when: popupWindow.shouldShow
-            PropertyChanges { target: container; opacity: 1; scale: 1.0 }
-        }
-        
-        transitions: [
-            Transition {
-                to: "visible"
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; duration: 180; easing.type: Easing.OutQuad }
-                    NumberAnimation { property: "scale"; duration: 250; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
-                }
-            },
-            Transition {
-                from: "visible"
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; duration: 120; easing.type: Easing.InQuad }
-                    NumberAnimation { property: "scale"; to: 0.85; duration: 120 }
-                }
-            }
-        ]
-        
-        Rectangle {
-            anchors.fill: backgroundRect
-            anchors.margins: -6
-            radius: backgroundRect.radius + 3
-            color: "transparent"
-            
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                shadowEnabled: true
-                shadowColor: Qt.rgba(0, 0, 0, 0.35)
-                shadowBlur: 0.8
-                shadowVerticalOffset: 8
-            }
-        }
-    
-        Rectangle {
-            id: backgroundRect
+        MouseArea {
             anchors.fill: parent
-            color: Services.Theme.surfaceBase
-            radius: 16
-            
-            border.color: Services.Theme.surfaceBorder
-            border.width: 1
-            
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: popupWindow.isHovered = true
-                onExited: popupWindow.isHovered = false
-            }
+            hoverEnabled: true
+            onEntered: popupWindow.isHovered = true
+            onExited: popupWindow.isHovered = false
         }
     }
     

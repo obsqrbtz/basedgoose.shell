@@ -2,15 +2,19 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Bluetooth
 import Quickshell.Io
 import "../Services" as Services
+import "../Commons" as Commons
 
-PanelWindow {
+Commons.PopupWindow {
     id: popupWindow
     
-    property bool shouldShow: false
+    ipcTarget: "bluetooth"
+    initialScale: 0.94
+    transformOriginX: 1.0
+    transformOriginY: 0.0
+    
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var devices: [...Bluetooth.devices.values].sort((a, b) => {
         if (a.connected !== b.connected) return b.connected - a.connected
@@ -26,14 +30,6 @@ PanelWindow {
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
     
-    Process {
-        id: settingsProcess
-        command: ["blueman-manager"]
-        onStarted: popupWindow.shouldShow = false
-    }
-    
-    screen: Quickshell.screens[0]
-    
     anchors {
         top: true
         right: true
@@ -46,100 +42,34 @@ PanelWindow {
     
     implicitWidth: 320
     implicitHeight: contentColumn.implicitHeight + 32
-    color: "transparent"
-    visible: shouldShow || container.opacity > 0
     
-    WlrLayershell.keyboardFocus: shouldShow ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-    
-    FocusScope {
-        id: container
+    Rectangle {
+        id: backgroundRect
         anchors.fill: parent
-        scale: 0.94
-        opacity: 0
-        transformOrigin: Item.TopRight
-        focus: true
+        color: cSurface
+        radius: 16
+        border.color: cBorder
+        border.width: 1
         
-        Keys.onEscapePressed: popupWindow.shouldShow = false
-        
-        property bool mouseHasEntered: false
-        property bool mouseInside: hoverHandler.hovered
-        
-        Connections {
-            target: popupWindow
-            function onShouldShowChanged() {
-                if (popupWindow.shouldShow) {
-                    container.mouseHasEntered = false
-                    closeTimer.stop()
-                }
-            }
+        Process {
+            id: settingsProcess
+            command: ["blueman-manager"]
+            onStarted: popupWindow.shouldShow = false
         }
         
-        Timer {
-            id: closeTimer
-            interval: 400
-            onTriggered: {
-                if (!container.mouseInside && container.mouseHasEntered && popupWindow.shouldShow) {
-                    popupWindow.shouldShow = false
-                }
-            }
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: Qt.rgba(0, 0, 0, 0.35)
+            shadowBlur: 1.0
+            shadowVerticalOffset: 6
         }
         
-        HoverHandler {
-            id: hoverHandler
-            onHoveredChanged: {
-                if (hovered) {
-                    container.mouseHasEntered = true
-                    closeTimer.stop()
-                } else if (container.mouseHasEntered && popupWindow.shouldShow) {
-                    closeTimer.restart()
-                }
-            }
-        }
-        
-        states: State {
-            name: "visible"
-            when: popupWindow.shouldShow
-            PropertyChanges { target: container; opacity: 1; scale: 1.0 }
-        }
-        
-        transitions: [
-            Transition {
-                to: "visible"
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; duration: 180; easing.type: Easing.OutQuad }
-                    NumberAnimation { property: "scale"; duration: 250; easing.type: Easing.OutBack; easing.overshoot: 1.3 }
-                }
-            },
-            Transition {
-                from: "visible"
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; duration: 120; easing.type: Easing.InQuad }
-                    NumberAnimation { property: "scale"; to: 0.94; duration: 120 }
-                }
-            }
-        ]
-        
-        Rectangle {
-            id: backgroundRect
+        ColumnLayout {
+            id: contentColumn
             anchors.fill: parent
-            color: cSurface
-            radius: 16
-            border.color: cBorder
-            border.width: 1
-            
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                shadowEnabled: true
-                shadowColor: Qt.rgba(0, 0, 0, 0.35)
-                shadowBlur: 1.0
-                shadowVerticalOffset: 6
-            }
-            
-            ColumnLayout {
-                id: contentColumn
-                anchors.fill: parent
-                anchors.margins: 16
-                spacing: 12
+            anchors.margins: 16
+            spacing: 12
                 
                 RowLayout {
                     Layout.fillWidth: true
@@ -425,4 +355,3 @@ PanelWindow {
             }
         }
     }
-}

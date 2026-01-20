@@ -59,13 +59,6 @@ Scope {
         id: notificationCenter
     }
     
-    IpcHandler {
-        target: "launcher"
-        
-        function toggle(): void {
-            appLauncher.toggle();
-        }
-    }
 
     QtObject {
         id: wiring

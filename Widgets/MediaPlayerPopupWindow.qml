@@ -300,13 +300,6 @@ PanelWindow {
         onHoveredChanged: popupWindow.isHovered = hovered
     }
 
-    MouseArea {
-        id: rootClickArea
-        anchors.fill: parent
-        hoverEnabled: false
-        acceptedButtons: Qt.NoButton
-    }
-
     property real progress: 0
     Timer {
         id: progressTimer

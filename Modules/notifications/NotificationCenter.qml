@@ -3,13 +3,18 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Wayland
 import "../../Services" as Services
+import "../../Commons" as Commons
 
-PanelWindow {
+Commons.PopupWindow {
     id: root
     
-    property bool shouldShow: false
+    ipcTarget: "notifications"
+    initialScale: 0.95
+    transformOriginX: 1.0
+    transformOriginY: 0.0
+    closeOnClickOutside: true
+    
     property alias notifs: root.notifService
     
     readonly property var notifService: Services.Notifs
@@ -26,9 +31,6 @@ PanelWindow {
     readonly property color surfaceBorder: Services.Theme.surfaceBorder
     readonly property color surfaceAccent: Services.Theme.surfaceAccent
     
-    screen: Quickshell.screens[0]
-    visible: shouldShow
-    
     anchors {
         top: true
         right: true
@@ -41,8 +43,6 @@ PanelWindow {
     
     implicitWidth: Services.Config.notifications.centerWidth
     implicitHeight: Services.Config.notifications.centerHeight
-    
-    color: surfaceBase
         
     Rectangle {
         anchors.fill: parent
