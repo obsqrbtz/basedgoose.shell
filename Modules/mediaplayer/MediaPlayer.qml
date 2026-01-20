@@ -4,10 +4,11 @@ import Quickshell
 import "../../Services" as Services
 import "../../Commons" as Commons
 
-Item {
+Rectangle {
     id: root
     
     property var mediaPopup
+    property var barWindow
     
     readonly property var player: Services.Players.active
     readonly property bool hasPlayer: player !== null
@@ -15,8 +16,24 @@ Item {
     
     readonly property real titleWidth: 80
     
-    implicitWidth: hasPlayer ? contentRow.implicitWidth : noMediaRow.implicitWidth
-    implicitHeight: 22
+    height: 28
+    width: mediaPlayerContent.implicitWidth + 16
+    visible: Services.Players.active
+    
+    radius: 14
+    color: Commons.Theme.foreground
+    
+    border.width: 1
+    border.color: Commons.Theme.surfaceBorder
+    
+    clip: true
+    
+    Behavior on width {
+        NumberAnimation { 
+            duration: 400
+            easing.bezierCurve: [0.34, 1.56, 0.64, 1]
+        }
+    }
     
     onIsPlayingChanged: {
         if (!isPlaying) {
@@ -24,6 +41,27 @@ Item {
             titleText.x = titleText.needsScroll ? 0 : (titleWidth - titleText.implicitWidth) / 2
         }
     }
+    
+    // Top highlight
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 1
+        height: parent.height / 2
+        radius: parent.radius - 1
+        
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, 0.04) }
+            GradientStop { position: 1.0; color: "transparent" }
+        }
+    }
+    
+    Item {
+        id: mediaPlayerContent
+        anchors.centerIn: parent
+        implicitWidth: hasPlayer ? contentRow.implicitWidth : noMediaRow.implicitWidth
+        implicitHeight: 22
     
     RowLayout {
         id: noMediaRow
@@ -225,6 +263,7 @@ Item {
                 }
             }
         }
+    }
     }
 }
 

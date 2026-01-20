@@ -4,7 +4,7 @@ import Quickshell
 import "../../Services" as Services
 import "../../Commons" as Commons
 
-Item {
+Rectangle {
     id: root
     property var barWindow
     property var bluetoothPopup
@@ -15,8 +15,17 @@ Item {
     readonly property int deviceCount: Services.Bluetooth.deviceCount
     readonly property bool isHovered: mouseArea.containsMouse
     
-    implicitWidth: bluetoothRow.implicitWidth
-    implicitHeight: 20
+    height: Commons.Config.componentHeight
+    color: "transparent"
+    radius: 14
+    width: Math.min(140, Math.max(44, bluetoothContent.implicitWidth + Commons.Config.componentPadding))
+    clip: true
+    
+    Item {
+        id: bluetoothContent
+        anchors.centerIn: parent
+        implicitWidth: bluetoothRow.implicitWidth
+        implicitHeight: 20
     
     RowLayout {
         id: bluetoothRow
@@ -90,5 +99,5 @@ Item {
             bluetoothPopup.margins.top = barHeight + 6
         }
     }
+    }
 }
-
