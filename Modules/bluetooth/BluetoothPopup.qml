@@ -4,10 +4,11 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
-import "../Services" as Services
-import "../Commons" as Commons
+import "../../Services" as Services
+import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
-Commons.PopupWindow {
+Widgets.PopupWindow {
     id: popupWindow
     
     ipcTarget: "bluetooth"
@@ -22,10 +23,10 @@ Commons.PopupWindow {
         return a.name.localeCompare(b.name)
     })
     
-    readonly property color cSurface: Services.Theme.background
-    readonly property color cSurfaceContainer: Qt.lighter(Services.Theme.background, 1.15)
-    readonly property color cPrimary: Services.Theme.secondary
-    readonly property color cText: Services.Theme.foreground
+    readonly property color cSurface: Commons.Theme.background
+    readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
+    readonly property color cPrimary: Commons.Theme.secondary
+    readonly property color cText: Commons.Theme.foreground
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
@@ -355,3 +356,4 @@ Commons.PopupWindow {
             }
         }
     }
+

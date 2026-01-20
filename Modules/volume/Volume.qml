@@ -1,7 +1,8 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 Item {
     id: root
@@ -37,9 +38,9 @@ Item {
             font.pixelSize: 14
             
             color: {
-                if (isMuted) return Services.Theme.foreground
-                if (isHovered) return Services.Theme.secondary
-                return Services.Theme.foreground
+                if (isMuted) return Commons.Theme.foreground
+                if (isHovered) return Commons.Theme.secondary
+                return Commons.Theme.foreground
             }
             
             Behavior on color {
@@ -61,8 +62,8 @@ Item {
             font.weight: Font.Medium
             
             color: {
-                if (isMuted) return Services.Theme.foregroundMuted
-                return Services.Theme.foreground
+                if (isMuted) return Commons.Theme.foregroundMuted
+                return Commons.Theme.foreground
             }
             
             Behavior on color {
@@ -144,3 +145,4 @@ Item {
         }
     }
 }
+

@@ -2,10 +2,11 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
-import "../Services" as Services
-import "../Commons" as Commons
+import "../../Services" as Services
+import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
-Commons.PopupWindow {
+Widgets.PopupWindow {
     id: powerMenu
     
     ipcTarget: "power"
@@ -30,9 +31,9 @@ Commons.PopupWindow {
     Rectangle {
         id: contentRect
         anchors.fill: parent
-        color: Services.Theme.background
-        radius: Services.Theme.radius
-        border.color: Services.Theme.border
+        color: Commons.Theme.background
+        radius: Commons.Theme.radius
+        border.color: Commons.Theme.border
         border.width: 1
         
         ColumnLayout {
@@ -43,7 +44,7 @@ Commons.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
-                color: shutdownMa.containsMouse ? Services.Theme.surfaceBase : "transparent"
+                color: shutdownMa.containsMouse ? Commons.Theme.surfaceBase : "transparent"
                 radius: 6
                 
                 RowLayout {
@@ -53,8 +54,8 @@ Commons.PopupWindow {
                     
                     Text {
                         text: "\udb81\udc25 Shutdown"
-                        color: Services.Theme.error
-                        font { family: Services.Theme.font; pixelSize: Services.Theme.fontSize + 2; weight: Font.DemiBold }
+                        color: Commons.Theme.error
+                        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
                     }
                 }
                 
@@ -73,7 +74,7 @@ Commons.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
-                color: rebootMa.containsMouse ? Services.Theme.surfaceBase : "transparent"
+                color: rebootMa.containsMouse ? Commons.Theme.surfaceBase : "transparent"
                 radius: 6
                 
                 RowLayout {
@@ -83,8 +84,8 @@ Commons.PopupWindow {
                     
                     Text {
                         text: "\udb81\udf09 Reboot"
-                        color: Services.Theme.warning
-                        font { family: Services.Theme.font; pixelSize: Services.Theme.fontSize + 2; weight: Font.DemiBold }
+                        color: Commons.Theme.warning
+                        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
                     }
                 }
                 
@@ -103,7 +104,7 @@ Commons.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
-                color: logoutMa.containsMouse ? Services.Theme.surfaceBase : "transparent"
+                color: logoutMa.containsMouse ? Commons.Theme.surfaceBase : "transparent"
                 radius: 6
                 
                 RowLayout {
@@ -113,8 +114,8 @@ Commons.PopupWindow {
                     
                     Text {
                         text: "\udb81\uddfd Logout"
-                        color: Services.Theme.secondary
-                        font { family: Services.Theme.font; pixelSize: Services.Theme.fontSize + 2; weight: Font.DemiBold }
+                        color: Commons.Theme.secondary
+                        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
                     }
                 }
                 
@@ -148,3 +149,4 @@ Commons.PopupWindow {
         }
     }
 }
+

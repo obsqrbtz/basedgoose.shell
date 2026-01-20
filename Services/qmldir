@@ -1,6 +1,3 @@
-singleton Theme 1.0 ../Commons/Theme.qml
-singleton Config 1.0 ../Commons/Config.qml
-
 CpuMonitor 1.0 CpuMonitor.qml
 MemoryMonitor 1.0 MemoryMonitor.qml
 

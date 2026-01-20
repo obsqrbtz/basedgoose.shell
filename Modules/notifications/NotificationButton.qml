@@ -1,6 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 Rectangle {
     id: root
@@ -16,7 +17,7 @@ Rectangle {
     radius: 14
     
     color: mouseArea.containsMouse ? 
-           Qt.rgba(Services.Theme.secondary.r, Services.Theme.secondary.g, Services.Theme.secondary.b, 0.15) :
+           Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.15) :
            "transparent"
     
     Behavior on color {
@@ -34,9 +35,9 @@ Rectangle {
         height: 16
         radius: 8
         
-        color: Services.Theme.secondary
+        color: Commons.Theme.secondary
         border.width: 2
-        border.color: Services.Theme.surfaceBase
+        border.color: Commons.Theme.surfaceBase
         
         Text {
             id: badgeText
@@ -45,7 +46,7 @@ Rectangle {
             font.pixelSize: 8
             font.weight: Font.Bold
             font.family: "Inter"
-            color: Services.Theme.background
+            color: Commons.Theme.background
         }
     }
     
@@ -60,16 +61,16 @@ Rectangle {
         height: 12
         radius: 6
         
-        color: Services.Theme.error
+        color: Commons.Theme.error
         border.width: 2
-        border.color: Services.Theme.surfaceBase
+        border.color: Commons.Theme.surfaceBase
         
         Text {
             anchors.centerIn: parent
             text: "󰂛"
             font.family: "Material Design Icons"
             font.pixelSize: 7
-            color: Services.Theme.background
+            color: Commons.Theme.background
         }
     }
     
@@ -78,7 +79,7 @@ Rectangle {
         text: root.hasDnd ? "󰂛" : (root.unreadCount > 0 ? "󰵅" : "󰂚")
         font.family: "Material Design Icons"
         font.pixelSize: 16
-        color: mouseArea.containsMouse ? Services.Theme.secondary : Services.Theme.foreground
+        color: mouseArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.foreground
         
         Behavior on color {
             ColorAnimation { duration: 150 }

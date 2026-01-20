@@ -1,0 +1,4 @@
+module AppLauncher
+AppLauncher 1.0 AppLauncher.qml
+AppLauncherButton 1.0 AppLauncherButton.qml
+

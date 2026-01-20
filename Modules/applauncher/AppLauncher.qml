@@ -2,10 +2,11 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
-import "../Services" as Services
-import "../Commons" as Commons
+import "../../Services" as Services
+import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
-Commons.PopupWindow {
+Widgets.PopupWindow {
     id: appLauncher
     
     ipcTarget: "launcher"
@@ -20,9 +21,9 @@ Commons.PopupWindow {
     Rectangle {
         id: contentRect
         anchors.fill: parent
-        color: Services.Theme.background
-        radius: Services.Theme.radius
-        border.color: Services.Theme.border
+        color: Commons.Theme.background
+        radius: Commons.Theme.radius
+        border.color: Commons.Theme.border
         border.width: 1
         
         Component {
@@ -79,17 +80,17 @@ Commons.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 36
-                color: Services.Theme.surfaceBase
+                color: Commons.Theme.surfaceBase
                 radius: 6
-                border.color: searchInput.activeFocus ? Services.Theme.primaryMuted : "transparent"
+                border.color: searchInput.activeFocus ? Commons.Theme.primaryMuted : "transparent"
                 border.width: 1
                 
                     TextInput {
                     id: searchInput
                     anchors.fill: parent
                     anchors.margins: 8
-                        color: Services.Theme.foreground
-                        font { family: Services.Theme.font; pixelSize: Services.Theme.fontSize }
+                        color: Commons.Theme.foreground
+                        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize }
                     selectByMouse: true
                     focus: true
                     activeFocusOnPress: true
@@ -119,7 +120,7 @@ Commons.PopupWindow {
                     Text {
                         anchors.fill: parent
                         text: "Search applications..."
-                        color: Services.Theme.foregroundMuted
+                        color: Commons.Theme.foregroundMuted
                         font: searchInput.font
                         visible: !searchInput.text && !searchInput.activeFocus
                     }
@@ -148,7 +149,7 @@ Commons.PopupWindow {
                         
                         width: appList.width
                         height: 40
-                        color: (appMa.containsMouse || appList.currentIndex === index) ? Services.Theme.surfaceBase : "transparent"
+                        color: (appMa.containsMouse || appList.currentIndex === index) ? Commons.Theme.surfaceBase : "transparent"
                         radius: 6
                         
                         RowLayout {
@@ -158,8 +159,8 @@ Commons.PopupWindow {
                             
                             Text {
                                 text: name
-                                color: Services.Theme.foreground
-                                font { family: Services.Theme.font; pixelSize: Services.Theme.fontSize }
+                                color: Commons.Theme.foreground
+                                font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize }
                             }
                             
                             Item { Layout.fillWidth: true }
@@ -215,3 +216,4 @@ Commons.PopupWindow {
         filterApps();
     }
 }
+

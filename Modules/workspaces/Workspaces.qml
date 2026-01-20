@@ -2,23 +2,24 @@ import Quickshell
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 Rectangle {
     id: workspaces
     
     width: workspaceRow.width + 16
-    height: Services.Config.componentHeight
-    color: Services.Theme.surfaceBase
-    radius: Services.Config.componentRadius
+    height: Commons.Config.componentHeight
+    color: Commons.Theme.surfaceBase
+    radius: Commons.Config.componentRadius
     
     RowLayout {
         id: workspaceRow
         anchors.centerIn: parent
-        spacing: Services.Config.workspaceSpacing
+        spacing: Commons.Config.workspaceSpacing
         
         Repeater {
-            model: Services.Config.workspaceCount
+            model: Commons.Config.workspaceCount
             
             delegate: Rectangle {
                 required property int index
@@ -26,10 +27,10 @@ Rectangle {
                 property bool isActive: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id === (index + 1) : false
                 property bool hasWindows: ws !== undefined && ws !== null
                 
-                Layout.preferredWidth: isActive ? Services.Config.workspaceIndicatorActiveWidth : Services.Config.workspaceIndicatorWidth
-                Layout.preferredHeight: Services.Config.workspaceIndicatorHeight
-                radius: Services.Config.workspaceIndicatorRadius
-                color: isActive ? Services.Theme.primary : (hasWindows ? Services.Theme.primaryMuted : Services.Theme.foregroundMuted)
+                Layout.preferredWidth: isActive ? Commons.Config.workspaceIndicatorActiveWidth : Commons.Config.workspaceIndicatorWidth
+                Layout.preferredHeight: Commons.Config.workspaceIndicatorHeight
+                radius: Commons.Config.workspaceIndicatorRadius
+                color: isActive ? Commons.Theme.primary : (hasWindows ? Commons.Theme.primaryMuted : Commons.Theme.foregroundMuted)
                 
                 Behavior on Layout.preferredWidth { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 200 } }

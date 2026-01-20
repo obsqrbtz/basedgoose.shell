@@ -3,10 +3,13 @@ import Quickshell
 import Quickshell.Io
 import QtQuick 6.10
 import "./Modules/bar" as BarModule
-import "./Modules" as Modules
+import "./Modules/power" as Power
+import "./Modules/applauncher" as AppLauncher
+import "./Modules/bluetooth" as Bluetooth
+import "./Modules/mediaplayer" as MediaPlayer
+import "./Modules/volume" as Volume
 import "./Modules/notifications" as Notifications
 import "./Modules/osd" as Osd
-import "./Widgets" as Widgets
 import "./Services" as Services
 
 Scope {
@@ -31,11 +34,11 @@ Scope {
         id: bar
     }
     
-    Modules.PowerMenu {
+    Power.PowerMenuPopup {
         id: powerMenu
     }
     
-    Modules.AppLauncher {
+    AppLauncher.AppLauncher {
         id: appLauncher
     }
 
@@ -43,11 +46,11 @@ Scope {
         id: osdWrapper
     }
 
-    Widgets.BluetoothPopupWindow {
+    Bluetooth.BluetoothPopup {
         id: bluetoothPopup
     }
 
-    Widgets.MediaPlayerPopupWindow {
+    MediaPlayer.MediaPlayerPopup {
         id: mediaPopup
     }
 

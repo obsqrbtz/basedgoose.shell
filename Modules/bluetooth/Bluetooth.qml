@@ -1,7 +1,8 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 Item {
     id: root
@@ -21,7 +22,7 @@ Item {
         id: bluetoothRow
         anchors.centerIn: parent
         spacing: 5
-        Layout.leftMargin: Services.Config.componentPadding / 2
+        Layout.leftMargin: Commons.Config.componentPadding / 2
         Layout.alignment: Qt.AlignVCenter
         
         Text {
@@ -34,10 +35,10 @@ Item {
             font.family: "Material Design Icons"
             font.pixelSize: 14
             color: {
-                if (!isEnabled) return Services.Theme.foreground
-                if (isHovered) return Services.Theme.primary
-                if (hasConnection) return Services.Theme.success
-                return Services.Theme.foreground
+                if (!isEnabled) return Commons.Theme.foreground
+                if (isHovered) return Commons.Theme.primary
+                if (hasConnection) return Commons.Theme.success
+                return Commons.Theme.foreground
             }
             Behavior on color { ColorAnimation { duration: 150 } }
             scale: isHovered ? 1.05 : 1.0
@@ -58,9 +59,9 @@ Item {
             font.weight: hasConnection ? Font.Medium : Font.Normal
             elide: Text.ElideRight
             color: {
-                if (!isEnabled || !hasConnection) return Services.Theme.foreground
-                if (isHovered) return Services.Theme.primary
-                return Services.Theme.foreground
+                if (!isEnabled || !hasConnection) return Commons.Theme.foreground
+                if (isHovered) return Commons.Theme.primary
+                return Commons.Theme.foreground
             }
             Behavior on color { ColorAnimation { duration: 150 } }
         }
@@ -90,3 +91,4 @@ Item {
         }
     }
 }
+

@@ -4,7 +4,17 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Services.SystemTray
 import "../../Services" as Services
-import "../../Widgets" as Widgets
+import "../../Commons" as Commons
+import "../../Modules/applauncher" as AppLauncher
+import "../../Modules/clock" as Clock
+import "../../Modules/notifications" as Notifications
+import "../../Modules/power" as Power
+import "../../Modules/systemstats" as SystemStats
+import "../../Modules/systemtray" as SystemTray
+import "../../Modules/workspaces" as Workspaces
+import "../../Modules/bluetooth" as Bluetooth
+import "../../Modules/mediaplayer" as MediaPlayer
+import "../../Modules/volume" as Volume
 
 PanelWindow {
     id: bar
@@ -25,26 +35,26 @@ PanelWindow {
     anchors.left: true
     anchors.right: true
     margins {
-        top: Services.Config.barMargin
-        left: Services.Config.barMargin
-        right: Services.Config.barMargin
+        top: Commons.Config.barMargin
+        left: Commons.Config.barMargin
+        right: Commons.Config.barMargin
     }
-    implicitHeight: Services.Config.barHeight
+    implicitHeight: Commons.Config.barHeight
     color: "transparent"
 
     Rectangle {
         anchors.fill: parent
-        color: Services.Theme.background
-        radius: Services.Theme.radius
-        border.color: Services.Theme.border
+        color: Commons.Theme.background
+        radius: Commons.Theme.radius
+        border.color: Commons.Theme.border
         border.width: 1
     }
 
-    Widgets.BluetoothPopupWindow {
+    Bluetooth.BluetoothPopup {
         id: btPopup
     }
 
-    Widgets.VolumePopupWindow {
+    Volume.VolumePopup {
         id: volPopup
     }
 
@@ -55,14 +65,14 @@ PanelWindow {
 
     RowLayout {
         anchors.fill: parent
-        anchors.margins: Services.Config.barPadding
-        spacing: Services.Config.barSpacing
+        anchors.margins: Commons.Config.barPadding
+        spacing: Commons.Config.barSpacing
 
-        Widgets.AppLauncherButton {
+        AppLauncher.AppLauncherButton {
             onClicked: bar.showAppLauncher()
         }
 
-        Widgets.Workspaces {}
+        Workspaces.Workspaces {}
                     Rectangle {
                 id: mediaModule
                 height: 28
@@ -70,10 +80,10 @@ PanelWindow {
                 visible: Services.Players.active
                 
                 radius: 14
-                color: Services.Theme.foreground
+                color: Commons.Theme.foreground
                 
                 border.width: 1
-                border.color: Services.Theme.surfaceBorder
+                border.color: Commons.Theme.surfaceBorder
                 
                 clip: true
                 
@@ -103,7 +113,7 @@ PanelWindow {
                     id: mediaPlayerLoader
                     anchors.centerIn: parent
                     asynchronous: true
-                    source: "../../Widgets/MediaPlayer.qml"
+                    source: "../../Modules/mediaplayer/MediaPlayer.qml"
                     
                     Binding {
                         target: mediaPlayerLoader.item
@@ -125,7 +135,7 @@ PanelWindow {
 
         Item { Layout.fillWidth: true }
 
-        Widgets.SystemStats {
+        SystemStats.SystemStats {
             cpuUsage: cpuMonitor.cpuUsage
             memUsed: memoryMonitor.memUsed
             memTotal: memoryMonitor.memTotal
@@ -136,19 +146,19 @@ PanelWindow {
         Rectangle {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: rightRow.width + 20
-            height: Services.Config.componentHeight
-            color: Services.Theme.surfaceBase
-            radius: Services.Config.componentRadius
+            height: Commons.Config.componentHeight
+            color: Commons.Theme.surfaceBase
+            radius: Commons.Config.componentRadius
 
             RowLayout {
                 id: rightRow
                 spacing: 10
 
-                Item { width: Services.Config.componentPadding / 2 }
+                Item { width: Commons.Config.componentPadding / 2 }
 
                 Loader {
                     id: volumeLoader
-                    source: "../../Widgets/Volume.qml"
+                    source: "../../Modules/volume/Volume.qml"
                     asynchronous: true
                     Binding {
                         target: volumeLoader.item
@@ -160,22 +170,22 @@ PanelWindow {
                         property: "volumePopup"
                         value: bar.volumePopup
                     }
-                    Layout.leftMargin: Services.Config.componentPadding / 2
+                    Layout.leftMargin: Commons.Config.componentPadding / 2
                 }
 
                 Rectangle {
                     id: bluetoothContainer
-                    height: Services.Config.componentHeight
+                    height: Commons.Config.componentHeight
                     color: "transparent"
                     radius: 14
-                    Layout.preferredWidth: Math.min(140, Math.max(44, (bluetoothLoader.status === Loader.Ready && bluetoothLoader.item) ? bluetoothLoader.implicitWidth + Services.Config.componentPadding : 44))
+                    Layout.preferredWidth: Math.min(140, Math.max(44, (bluetoothLoader.status === Loader.Ready && bluetoothLoader.item) ? bluetoothLoader.implicitWidth + Commons.Config.componentPadding : 44))
                     Layout.alignment: Qt.AlignVCenter
-                    Layout.rightMargin: Services.Config.componentPadding / 2
+                    Layout.rightMargin: Commons.Config.componentPadding / 2
                     clip: true
 
                     Loader {
                         id: bluetoothLoader
-                        source: "../../Widgets/Bluetooth.qml"
+                        source: "../../Modules/bluetooth/Bluetooth.qml"
                         asynchronous: true
                         anchors.centerIn: parent
                         Binding {
@@ -191,17 +201,17 @@ PanelWindow {
                     }
                 }
 
-                Widgets.Clock {}
+                Clock.Clock {}
 
-                Widgets.SystemTrayComponent {
+                SystemTray.SystemTrayComponent {
                     barWindow: bar
                 }
 
-                Widgets.NotificationButton {
+                Notifications.NotificationButton {
                     notificationCenter: bar.notificationCenter
                 }
 
-                Widgets.PowerButton {
+                Power.PowerButton {
                     onClicked: bar.showPowerMenu()
                 }
             }

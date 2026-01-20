@@ -3,10 +3,11 @@ import QtQuick.Layouts 6.10
 import QtQuick.Controls 6.10
 import QtQuick.Effects
 import Quickshell
-import "../Services" as Services
-import "../Commons" as Commons
+import "../../Services" as Services
+import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
-Commons.PopupWindow {
+Widgets.PopupWindow {
     id: popupWindow
     
     ipcTarget: "volume"
@@ -48,10 +49,10 @@ Commons.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: Services.Theme.surfaceBase
+        color: Commons.Theme.surfaceBase
         radius: 16
         
-        border.color: Services.Theme.surfaceBorder
+        border.color: Commons.Theme.surfaceBorder
         border.width: 1
         
         MouseArea {
@@ -73,7 +74,7 @@ Commons.PopupWindow {
             font.family: "Inter"
             font.pixelSize: 14
             font.weight: Font.DemiBold
-            color: Services.Theme.foreground
+            color: Commons.Theme.foreground
         }
         
         ColumnLayout {
@@ -88,14 +89,14 @@ Commons.PopupWindow {
                     text: audio.muted ? "󰖁" : "󰕾"
                     font.family: "Material Design Icons"
                     font.pixelSize: 20
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                 }
                 
                 Text {
                     text: "Output"
                     font.family: "Inter"
                     font.pixelSize: 12
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                 }
                 
                 Item { Layout.fillWidth: true }
@@ -105,14 +106,14 @@ Commons.PopupWindow {
                     font.family: "Inter"
                     font.pixelSize: 12
                     font.weight: Font.Medium
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                 }
                 
                 Rectangle {
                     width: 28
                     height: 28
                     radius: 6
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                     
                     Behavior on color {
                         ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -123,7 +124,7 @@ Commons.PopupWindow {
                         text: audio.muted ? "󰝟" : "󰝚"
                         font.family: "Material Design Icons"
                         font.pixelSize: 14
-                        color: Services.Theme.background
+                        color: Commons.Theme.background
                     }
                     
                     MouseArea {
@@ -153,12 +154,12 @@ Commons.PopupWindow {
                     width: volumeSlider.availableWidth
                     height: implicitHeight
                     radius: 3
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                     
                     Rectangle {
                         width: volumeSlider.visualPosition * parent.width
                         height: parent.height
-                        color: Services.Theme.primary
+                        color: Commons.Theme.primary
                         radius: 3
                         
                         Behavior on width {
@@ -173,8 +174,8 @@ Commons.PopupWindow {
                     implicitWidth: 18
                     implicitHeight: 18
                     radius: 9
-                    color: Services.Theme.foreground
-                    border.color: Services.Theme.primary
+                    color: Commons.Theme.foreground
+                    border.color: Commons.Theme.primary
                     border.width: 2
                     
                     Behavior on x {
@@ -196,14 +197,14 @@ Commons.PopupWindow {
                     text: audio.sourceMuted ? "󰍭" : "󰍬"
                     font.family: "Material Design Icons"
                     font.pixelSize: 20
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                 }
                 
                 Text {
                     text: "Input"
                     font.family: "Inter"
                     font.pixelSize: 12
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                 }
                 
                 Item { Layout.fillWidth: true }
@@ -213,14 +214,14 @@ Commons.PopupWindow {
                     font.family: "Inter"
                     font.pixelSize: 12
                     font.weight: Font.Medium
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                 }
                 
                 Rectangle {
                     width: 28
                     height: 28
                     radius: 6
-                    color: Services.Theme.foreground
+                    color: Commons.Theme.foreground
                     
                     Behavior on color {
                         ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -231,7 +232,7 @@ Commons.PopupWindow {
                         text: audio.sourceMuted ? "󰝟" : "󰝚"
                         font.family: "Material Design Icons"
                         font.pixelSize: 14
-                        color: Services.Theme.background
+                        color: Commons.Theme.background
                     }
                     
                     MouseArea {
@@ -261,12 +262,12 @@ Commons.PopupWindow {
                     width: inputSlider.availableWidth
                     height: implicitHeight
                     radius: 3
-                    color: Services.Theme.primary
+                    color: Commons.Theme.primary
                     
                     Rectangle {
                         width: inputSlider.visualPosition * parent.width
                         height: parent.height
-                        color: Services.Theme.primary
+                        color: Commons.Theme.primary
                         radius: 3
                         
                         Behavior on width {
@@ -281,8 +282,8 @@ Commons.PopupWindow {
                     implicitWidth: 18
                     implicitHeight: 18
                     radius: 9
-                    color: Services.Theme.foreground
-                    border.color: Services.Theme.primary
+                    color: Commons.Theme.foreground
+                    border.color: Commons.Theme.primary
                     border.width: 2
                     
                     Behavior on x {
@@ -293,3 +294,4 @@ Commons.PopupWindow {
         }
     }
 }
+

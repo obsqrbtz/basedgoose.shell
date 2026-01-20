@@ -4,28 +4,29 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 import "../../Services" as Services
+import "../../Commons" as Commons
 
 PanelWindow {
     id: root
     
     readonly property var notifs: Services.Notifs
     
-    readonly property color surfaceBase: Services.Theme.surfaceBase
-    readonly property color surfaceContainer: Services.Theme.surfaceContainer
-    readonly property color secondary: Services.Theme.secondary
-    readonly property color surfaceText: Services.Theme.surfaceText
-    readonly property color surfaceTextVariant: Services.Theme.surfaceTextVariant
-    readonly property color error: Services.Theme.error
-    readonly property color warning: Services.Theme.warning
-    readonly property color surfaceBorder: Services.Theme.surfaceBorder
-    readonly property color surfaceAccent: Services.Theme.surfaceAccent
+    readonly property color surfaceBase: Commons.Theme.surfaceBase
+    readonly property color surfaceContainer: Commons.Theme.surfaceContainer
+    readonly property color secondary: Commons.Theme.secondary
+    readonly property color surfaceText: Commons.Theme.surfaceText
+    readonly property color surfaceTextVariant: Commons.Theme.surfaceTextVariant
+    readonly property color error: Commons.Theme.error
+    readonly property color warning: Commons.Theme.warning
+    readonly property color surfaceBorder: Commons.Theme.surfaceBorder
+    readonly property color surfaceAccent: Commons.Theme.surfaceAccent
     
     readonly property real swipeThreshold: 0.35
     
     readonly property var activePopups: (
         notifs.notifications
             .filter(n => !n.closed)
-            .slice(0, Services.Config.notifications.maxVisible)
+            .slice(0, Commons.Config.notifications.maxVisible)
     )
     
     screen: Quickshell.screens[0]
@@ -36,22 +37,22 @@ PanelWindow {
     }
     
     margins {
-        top: Services.Config.notifications.margin
-             + Services.Config.barHeight
-             + Services.Config.barMargin * 2
-        right: Services.Config.notifications.margin
+        top: Commons.Config.notifications.margin
+             + Commons.Config.barHeight
+             + Commons.Config.barMargin * 2
+        right: Commons.Config.notifications.margin
     }
     
     visible: activePopups.length > 0
     color: "transparent"
     
-    implicitWidth: Services.Config.notifications.popupWidth
+    implicitWidth: Commons.Config.notifications.popupWidth
     implicitHeight: notifColumn.implicitHeight
     
     Column {
         id: notifColumn
         width: parent.width
-        spacing: Services.Config.notifications.spacing
+        spacing: Commons.Config.notifications.spacing
         
         move: Transition {
             NumberAnimation {
@@ -70,7 +71,7 @@ PanelWindow {
                 required property var modelData
                 required property int index
                 
-                width: Services.Config.notifications.popupWidth
+                width: Commons.Config.notifications.popupWidth
                 height: cardWrapper.height
                 clip: true
                 
@@ -130,7 +131,7 @@ PanelWindow {
                             anchors.fill: cardBg
                             radius: cardBg.radius
                             visible: Math.abs(notifCard.dragX) > 30
-                            opacity: Math.min(0.8, Math.abs(notifCard.dragX) / (Services.Config.notifications.popupWidth * root.swipeThreshold * 1.5))
+                            opacity: Math.min(0.8, Math.abs(notifCard.dragX) / (Commons.Config.notifications.popupWidth * root.swipeThreshold * 1.5))
                         
                         color: notifCard.dragX > 0 ? 
                                Qt.rgba(root.error.r, root.error.g, root.error.b, 0.08) :
@@ -228,7 +229,7 @@ PanelWindow {
                                     id: progressAnim
                                     from: progressBar.width
                                     to: 0
-                                    duration: Services.Config.notifications.timeout
+                                    duration: Commons.Config.notifications.timeout
                                     running: notifCard.isVisible && !notifCard.isHovered && !notifCard.isDragging
                                     onFinished: if (notifCard.isVisible) notifCard.dismiss()
                                 }
@@ -281,7 +282,7 @@ PanelWindow {
                                     
                                     scrollResetTimer.restart()
                                     
-                                    const threshold = Services.Config.notifications.popupWidth * root.swipeThreshold
+                                    const threshold = Commons.Config.notifications.popupWidth * root.swipeThreshold
                                     if (Math.abs(scrollAccumulator) > threshold) {
                                         scrollResetTimer.stop()
                                         isScrollSwiping = false
@@ -298,7 +299,7 @@ PanelWindow {
                                     gestureArea.isScrollSwiping = false
                                     notifCard.isDragging = false
                                     
-                                    const threshold = Services.Config.notifications.popupWidth * root.swipeThreshold
+                                    const threshold = Commons.Config.notifications.popupWidth * root.swipeThreshold
                                     if (Math.abs(gestureArea.scrollAccumulator) > threshold) {
                                         notifCard.swipeDismiss(gestureArea.scrollAccumulator)
                                     } else {
@@ -342,7 +343,7 @@ PanelWindow {
                                     notifCard.isHovered = false
                                 }
                                 
-                                const threshold = Services.Config.notifications.popupWidth * root.swipeThreshold
+                                const threshold = Commons.Config.notifications.popupWidth * root.swipeThreshold
                                 
                                 if (Math.abs(notifCard.dragX) > threshold) {
                                     notifCard.swipeDismiss(notifCard.dragX)

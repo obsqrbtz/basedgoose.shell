@@ -1,7 +1,8 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 Item {
     id: root
@@ -34,7 +35,7 @@ Item {
             text: "󰎇"
             font.family: "Material Design Icons"
             font.pixelSize: 14
-            color: Services.Theme.background
+            color: Commons.Theme.background
         }
         
         Text {
@@ -42,7 +43,7 @@ Item {
             font.family: "Inter"
             font.pixelSize: 10
             font.weight: Font.Medium
-            color: Services.Theme.background
+            color: Commons.Theme.background
         }
     }
     
@@ -68,7 +69,7 @@ Item {
                 id: titleText
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.player?.trackTitle ?? "Unknown"
-                color: Services.Theme.background
+                color: Commons.Theme.background
                 font.pixelSize: 10
                 font.weight: Font.Medium
                 
@@ -110,7 +111,7 @@ Item {
                 onClicked: {
                     if (root.mediaPopup && root.player) {
                         if (!root.mediaPopup.shouldShow) {
-                            root.mediaPopup.margins.left = Services.Config.mediaPlayer.popupMargin
+                            root.mediaPopup.margins.left = Commons.Config.mediaPlayer.popupMargin
                         }
                         root.mediaPopup.shouldShow = !root.mediaPopup.shouldShow
                     }
@@ -122,7 +123,7 @@ Item {
             Layout.preferredWidth: 1
             Layout.preferredHeight: 12
             radius: 0.5
-            color: Services.Theme.background
+            color: Commons.Theme.background
         }
         
         RowLayout {
@@ -132,7 +133,7 @@ Item {
                 Layout.preferredWidth: 20
                 Layout.preferredHeight: 20
                 radius: 10
-                color: prevArea.containsMouse ? Services.Theme.secondary : "transparent"
+                color: prevArea.containsMouse ? Commons.Theme.secondary : "transparent"
                 
                 Behavior on color { ColorAnimation { duration: 100 } }
                 Behavior on scale { NumberAnimation { duration: 80 } }
@@ -143,7 +144,7 @@ Item {
                     text: "󰒮"
                     font.family: "Material Design Icons"
                     font.pixelSize: 13
-                    color: Services.Theme.background
+                    color: Commons.Theme.background
                 }
                 
                 MouseArea {
@@ -164,7 +165,7 @@ Item {
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
                 radius: 12
-                color: Services.Theme.background
+                color: Commons.Theme.background
                 
                 Behavior on scale { NumberAnimation { duration: 80 } }
                 scale: playArea.pressed ? 0.85 : (playArea.containsMouse ? 1.05 : 1.0)
@@ -196,7 +197,7 @@ Item {
                 Layout.preferredWidth: 20
                 Layout.preferredHeight: 20
                 radius: 10
-                color: nextArea.containsMouse ? Services.Theme.secondary : "transparent"
+                color: nextArea.containsMouse ? Commons.Theme.secondary : "transparent"
                 
                 Behavior on color { ColorAnimation { duration: 100 } }
                 Behavior on scale { NumberAnimation { duration: 80 } }
@@ -207,7 +208,7 @@ Item {
                     text: "󰒭"
                     font.family: "Material Design Icons"
                     font.pixelSize: 13
-                    color: Services.Theme.background
+                    color: Commons.Theme.background
                 }
                 
                 MouseArea {
@@ -226,3 +227,4 @@ Item {
         }
     }
 }
+

@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
 import "../../Services" as Services
+import "../../Commons" as Commons
 
 PanelWindow {
     id: root
@@ -78,14 +79,14 @@ PanelWindow {
         radius: 16
 
         color: Qt.rgba(
-                   Services.Theme.background.r,
-                   Services.Theme.background.g,
-                   Services.Theme.background.b,
+                   Commons.Theme.background.r,
+                   Commons.Theme.background.g,
+                   Commons.Theme.background.b,
                    0.95
                )
 
         border.width: 1
-        border.color: Services.Theme.border
+        border.color: Commons.Theme.border
 
         opacity: root.showing ? 1.0 : 0.0
         scale: root.showing ? 1.0 : 0.9
@@ -105,8 +106,8 @@ PanelWindow {
                 font.family: "Material Design Icons"
                 font.pixelSize: 20
                 color: root.currentMuted
-                       ? Services.Theme.foreground
-                       : Services.Theme.secondary
+                       ? Commons.Theme.foreground
+                       : Commons.Theme.secondary
                 Layout.alignment: Qt.AlignVCenter
             }
 
@@ -116,9 +117,9 @@ PanelWindow {
                 Layout.alignment: Qt.AlignVCenter
                 radius: 3
                 color: Qt.rgba(
-                    Services.Theme.foreground.r,
-                    Services.Theme.foreground.g,
-                    Services.Theme.foreground.b,
+                    Commons.Theme.foreground.r,
+                    Commons.Theme.foreground.g,
+                    Commons.Theme.foreground.b,
                     0.2
                 )
 
@@ -127,8 +128,8 @@ PanelWindow {
                     height: parent.height
                     radius: 3
                     color: root.currentMuted
-                           ? Services.Theme.foreground
-                           : Services.Theme.secondary
+                           ? Commons.Theme.foreground
+                           : Commons.Theme.secondary
 
                     Behavior on width {
                         NumberAnimation {
@@ -145,7 +146,7 @@ PanelWindow {
 
             Text {
                 text: root.currentVolume + "%"
-                color: Services.Theme.foreground
+                color: Commons.Theme.foreground
                 font.family: "Inter"
                 font.pixelSize: 13
                 font.weight: Font.DemiBold

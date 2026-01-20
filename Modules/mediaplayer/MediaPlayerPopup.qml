@@ -3,7 +3,8 @@ import Quickshell.Wayland
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Effects
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 PanelWindow {
     id: popupWindow
@@ -34,16 +35,16 @@ PanelWindow {
     implicitWidth: targetWidth
     implicitHeight: targetHeight
     
-    color: Services.Theme.surfaceBase
+    color: Commons.Theme.surfaceBase
     
     Rectangle {
         anchors.fill: parent
-        radius: Services.Config.notifications.centerRadius
-        color: Services.Theme.surfaceBase
+        radius: Commons.Config.notifications.centerRadius
+        color: Commons.Theme.surfaceBase
         opacity: shouldShow ? 1.0 : 0
 
         border.width: 1
-        border.color: Services.Theme.border
+        border.color: Commons.Theme.border
         
         layer.enabled: true
         layer.effect: MultiEffect {
@@ -64,20 +65,20 @@ PanelWindow {
         
         Rectangle {
             Layout.alignment: Qt.AlignHCenter
-            Layout.preferredWidth: Services.Config.mediaPlayer.albumArtSize
-            Layout.preferredHeight: Services.Config.mediaPlayer.albumArtSize
+            Layout.preferredWidth: Commons.Config.mediaPlayer.albumArtSize
+            Layout.preferredHeight: Commons.Config.mediaPlayer.albumArtSize
             radius: 14
-            color: Services.Theme.surfaceContainer
+            color: Commons.Theme.surfaceContainer
             clip: true
             
             border.width: 1
-            border.color: Services.Theme.surfaceBorder
+            border.color: Commons.Theme.surfaceBorder
             
             Image {
                 anchors.fill: parent
                 anchors.margins: 1
                 source: player?.trackArtUrl ?? ""
-                sourceSize: Qt.size(Services.Config.mediaPlayer.albumArtSize * 2, Services.Config.mediaPlayer.albumArtSize * 2)
+                sourceSize: Qt.size(Commons.Config.mediaPlayer.albumArtSize * 2, Commons.Config.mediaPlayer.albumArtSize * 2)
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
                 smooth: true
@@ -103,7 +104,7 @@ PanelWindow {
                 text: "󰎈"
                 font.family: "Material Design Icons"
                 font.pixelSize: 80
-                color: Services.Theme.surfaceTextVariant
+                color: Commons.Theme.surfaceTextVariant
                 visible: !(player?.trackArtUrl ?? false)
                 opacity: 0.3
             }
@@ -116,7 +117,7 @@ PanelWindow {
             Text {
                 Layout.fillWidth: true
                 text: player?.trackTitle ?? "Unknown"
-                color: Services.Theme.surfaceText
+                color: Commons.Theme.surfaceText
                 font.pixelSize: 16
                 font.weight: Font.Bold
                 font.family: "Inter"
@@ -129,7 +130,7 @@ PanelWindow {
             Text {
                 Layout.fillWidth: true
                 text: player?.trackArtist ?? ""
-                color: Services.Theme.surfaceTextVariant
+                color: Commons.Theme.surfaceTextVariant
                 font.pixelSize: 13
                 font.family: "Inter"
                 font.weight: Font.Medium
@@ -140,7 +141,7 @@ PanelWindow {
             Text {
                 Layout.fillWidth: true
                 text: player?.trackAlbum ?? ""
-                color: Services.Theme.surfaceTextVariant
+                color: Commons.Theme.surfaceTextVariant
                 font.pixelSize: 11
                 font.family: "Inter"
                 opacity: 0.7
@@ -154,12 +155,12 @@ PanelWindow {
             Layout.preferredHeight: 6
             Layout.topMargin: 8
             
-            color: Services.Theme.surfaceContainer
+            color: Commons.Theme.surfaceContainer
             radius: 3
             
             Rectangle {
                 height: parent.height
-                color: Services.Theme.secondary
+                color: Commons.Theme.secondary
                 radius: 3
                 
                 width: parent.width * (popupWindow.progress)
@@ -175,7 +176,7 @@ PanelWindow {
             
             Text {
                 text: formatTime(popupWindow.playerPosition ?? 0)
-                color: Services.Theme.surfaceTextVariant
+                color: Commons.Theme.surfaceTextVariant
                 font.pixelSize: 10
                 font.family: "JetBrainsMono Nerd Font"
             }
@@ -184,7 +185,7 @@ PanelWindow {
             
             Text {
                 text: formatTime(popupWindow.playerLength ?? 0)
-                color: Services.Theme.surfaceTextVariant
+                color: Commons.Theme.surfaceTextVariant
                 font.pixelSize: 10
                 font.family: "JetBrainsMono Nerd Font"
             }
@@ -198,13 +199,13 @@ PanelWindow {
             Item { Layout.fillWidth: true }
             
             Rectangle {
-                Layout.preferredWidth: Services.Config.mediaPlayer.controlSize
-                Layout.preferredHeight: Services.Config.mediaPlayer.controlSize
+                Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
+                Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
                 property color baseColor: "transparent"
-                property color hoverColor: Qt.rgba(Services.Theme.surfaceText.r, Services.Theme.surfaceText.g, Services.Theme.surfaceText.b, 0.08)
-                property color pressedColor: Qt.rgba(Services.Theme.surfaceText.r, Services.Theme.surfaceText.g, Services.Theme.surfaceText.b, 0.12)
+                property color hoverColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08)
+                property color pressedColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.12)
                 color: prevHover.pressed ? pressedColor : (prevHover.containsMouse ? hoverColor : baseColor)
-                radius: Services.Config.mediaPlayer.controlSize / 2
+                radius: Commons.Config.mediaPlayer.controlSize / 2
 
                 Behavior on color { ColorAnimation { duration: 120 } }
                 
@@ -213,7 +214,7 @@ PanelWindow {
                     text: "󰒮"
                     font.family: "Material Design Icons"
                     font.pixelSize: 20
-                    color: Services.Theme.surfaceText
+                    color: Commons.Theme.surfaceText
                 }
                 
                 MouseArea {
@@ -229,13 +230,13 @@ PanelWindow {
             }
             
             Rectangle {
-                Layout.preferredWidth: Services.Config.mediaPlayer.playButtonSize
-                Layout.preferredHeight: Services.Config.mediaPlayer.playButtonSize
-                property color baseColor: Qt.rgba(Services.Theme.secondary.r, Services.Theme.secondary.g, Services.Theme.secondary.b, 0.9)
-                property color hoverColor: Services.Theme.secondary
-                property color pressedColor: Qt.darker(Services.Theme.secondary, 1.1)
+                Layout.preferredWidth: Commons.Config.mediaPlayer.playButtonSize
+                Layout.preferredHeight: Commons.Config.mediaPlayer.playButtonSize
+                property color baseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.9)
+                property color hoverColor: Commons.Theme.secondary
+                property color pressedColor: Qt.darker(Commons.Theme.secondary, 1.1)
                 color: playHover.pressed ? pressedColor : (playHover.containsMouse ? hoverColor : baseColor)
-                radius: Services.Config.mediaPlayer.playButtonSize / 2
+                radius: Commons.Config.mediaPlayer.playButtonSize / 2
 
                 Behavior on color { ColorAnimation { duration: 120 } }
                 
@@ -245,7 +246,7 @@ PanelWindow {
                     text: (player?.isPlaying ?? false) ? "󰏤" : "󰐊"
                     font.family: "Material Design Icons"
                     font.pixelSize: 24
-                    color: Services.Theme.background
+                    color: Commons.Theme.background
                 }
                 
                 MouseArea {
@@ -261,13 +262,13 @@ PanelWindow {
             }
             
             Rectangle {
-                Layout.preferredWidth: Services.Config.mediaPlayer.controlSize
-                Layout.preferredHeight: Services.Config.mediaPlayer.controlSize
+                Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
+                Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
                 property color baseColor: "transparent"
-                property color hoverColor: Qt.rgba(Services.Theme.surfaceText.r, Services.Theme.surfaceText.g, Services.Theme.surfaceText.b, 0.08)
-                property color pressedColor: Qt.rgba(Services.Theme.surfaceText.r, Services.Theme.surfaceText.g, Services.Theme.surfaceText.b, 0.12)
+                property color hoverColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08)
+                property color pressedColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.12)
                 color: nextHover.pressed ? pressedColor : (nextHover.containsMouse ? hoverColor : baseColor)
-                radius: Services.Config.mediaPlayer.controlSize / 2
+                radius: Commons.Config.mediaPlayer.controlSize / 2
 
                 Behavior on color { ColorAnimation { duration: 120 } }
                 
@@ -276,7 +277,7 @@ PanelWindow {
                     text: "󰒭"
                     font.family: "Material Design Icons"
                     font.pixelSize: 20
-                    color: Services.Theme.surfaceText
+                    color: Commons.Theme.surfaceText
                 }
                 
                 MouseArea {
@@ -324,3 +325,4 @@ PanelWindow {
         return mins + ":" + (secs < 10 ? "0" : "") + secs
     }
 }
+

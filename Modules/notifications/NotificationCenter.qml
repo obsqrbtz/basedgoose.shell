@@ -5,8 +5,9 @@ import QtQuick.Effects
 import Quickshell
 import "../../Services" as Services
 import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
-Commons.PopupWindow {
+Widgets.PopupWindow {
     id: root
     
     ipcTarget: "notifications"
@@ -22,14 +23,14 @@ Commons.PopupWindow {
     readonly property var groupedNotifs: notifService.groupedNotifications
     readonly property bool hasDnd: notifService.dnd
     
-    readonly property color surfaceBase: Services.Theme.surfaceBase
-    readonly property color surfaceContainer: Services.Theme.surfaceContainer
-    readonly property color secondary: Services.Theme.secondary
-    readonly property color surfaceText: Services.Theme.surfaceText
-    readonly property color surfaceTextVariant: Services.Theme.surfaceTextVariant
-    readonly property color error: Services.Theme.error
-    readonly property color surfaceBorder: Services.Theme.surfaceBorder
-    readonly property color surfaceAccent: Services.Theme.surfaceAccent
+    readonly property color surfaceBase: Commons.Theme.surfaceBase
+    readonly property color surfaceContainer: Commons.Theme.surfaceContainer
+    readonly property color secondary: Commons.Theme.secondary
+    readonly property color surfaceText: Commons.Theme.surfaceText
+    readonly property color surfaceTextVariant: Commons.Theme.surfaceTextVariant
+    readonly property color error: Commons.Theme.error
+    readonly property color surfaceBorder: Commons.Theme.surfaceBorder
+    readonly property color surfaceAccent: Commons.Theme.surfaceAccent
     
     anchors {
         top: true
@@ -37,16 +38,16 @@ Commons.PopupWindow {
     }
     
     margins {
-        top: Services.Config.notifications.centerMargin + Services.Config.barHeight + Services.Config.barMargin * 2
-        right: Services.Config.notifications.centerMargin
+        top: Commons.Config.notifications.centerMargin + Commons.Config.barHeight + Commons.Config.barMargin * 2
+        right: Commons.Config.notifications.centerMargin
     }
     
-    implicitWidth: Services.Config.notifications.centerWidth
-    implicitHeight: Services.Config.notifications.centerHeight
+    implicitWidth: Commons.Config.notifications.centerWidth
+    implicitHeight: Commons.Config.notifications.centerHeight
         
     Rectangle {
         anchors.fill: parent
-        radius: Services.Config.notifications.centerRadius
+        radius: Commons.Config.notifications.centerRadius
         color: surfaceBase
         border.width: 1
         border.color: surfaceBorder
@@ -97,7 +98,7 @@ Commons.PopupWindow {
                     radius: 12
                     x: root.hasDnd ? parent.width - width - 4 : 4
                     y: 4
-                    color: root.hasDnd ? Services.Theme.background : surfaceTextVariant
+                    color: root.hasDnd ? Commons.Theme.background : surfaceTextVariant
                     
                     Behavior on x {
                         NumberAnimation { 
@@ -115,7 +116,7 @@ Commons.PopupWindow {
                         text: root.hasDnd ? "󰂛" : "󰂚"
                         font.family: "Material Design Icons"
                         font.pixelSize: 14
-                        color: root.hasDnd ? Services.Theme.secondary : Services.Theme.background
+                        color: root.hasDnd ? Commons.Theme.secondary : Commons.Theme.background
                     }
                 }
                 
@@ -201,7 +202,7 @@ Commons.PopupWindow {
             Layout.fillHeight: true
             
             clip: true
-            spacing: Services.Config.notifications.itemSpacing
+            spacing: Commons.Config.notifications.itemSpacing
             
             model: root.recentNotifs
             
@@ -280,7 +281,7 @@ Commons.PopupWindow {
                     anchors.verticalCenter: parent.verticalCenter
                     radius: 1.5
                     visible: modelData.urgency >= 1
-                    color: modelData.urgency === 2 ? error : Services.Theme.warning
+                    color: modelData.urgency === 2 ? error : Commons.Theme.warning
                 }
                 
                 ColumnLayout {

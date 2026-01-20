@@ -3,29 +3,30 @@ import Quickshell.Services.SystemTray
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../Services" as Services
+import "../../Services" as Services
+import "../../Commons" as Commons
 
 RowLayout {
     id: systemTrayComponent
     
     property var barWindow: null
     
-    spacing: Services.Config.traySpacing
+    spacing: Commons.Config.traySpacing
     visible: SystemTray.items.values.length > 0
     
     Repeater {
         model: SystemTray.items
         
         Rectangle {
-            width: Services.Config.trayIconSize
-            height: Services.Config.trayIconSize
-            color: trayMa.containsMouse ? Services.Theme.background : "transparent"
-            radius: Services.Config.trayIconRadius
+            width: Commons.Config.trayIconSize
+            height: Commons.Config.trayIconSize
+            color: trayMa.containsMouse ? Commons.Theme.background : "transparent"
+            radius: Commons.Config.trayIconRadius
             
             Image {
                 anchors.centerIn: parent
-                width: Services.Config.trayIconImageSize
-                height: Services.Config.trayIconImageSize
+                width: Commons.Config.trayIconImageSize
+                height: Commons.Config.trayIconImageSize
                 source: modelData.icon
                 smooth: true
             }
