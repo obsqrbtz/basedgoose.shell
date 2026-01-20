@@ -5,6 +5,7 @@ import QtQuick.Layouts 6.10
 import QtQuick.Effects
 import "../../Services" as Services
 import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
 PanelWindow {
     id: popupWindow
@@ -198,34 +199,15 @@ PanelWindow {
             
             Item { Layout.fillWidth: true }
             
-            Rectangle {
+            Widgets.IconButton {
                 Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
                 Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                property color baseColor: "transparent"
-                property color hoverColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08)
-                property color pressedColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.12)
-                color: prevHover.pressed ? pressedColor : (prevHover.containsMouse ? hoverColor : baseColor)
-                radius: Commons.Config.mediaPlayer.controlSize / 2
-
-                Behavior on color { ColorAnimation { duration: 120 } }
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰒮"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 20
-                    color: Commons.Theme.surfaceText
-                }
-                
-                MouseArea {
-                    id: prevHover
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    
-                    onClicked: {
-                        if (player) player.previous()
-                    }
+                icon: "󰒮"
+                iconSize: 20
+                iconColor: Commons.Theme.surfaceText
+                animationDuration: 120
+                onClicked: {
+                    if (player) player.previous()
                 }
             }
             
@@ -261,34 +243,15 @@ PanelWindow {
                 }
             }
             
-            Rectangle {
+            Widgets.IconButton {
                 Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
                 Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                property color baseColor: "transparent"
-                property color hoverColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08)
-                property color pressedColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.12)
-                color: nextHover.pressed ? pressedColor : (nextHover.containsMouse ? hoverColor : baseColor)
-                radius: Commons.Config.mediaPlayer.controlSize / 2
-
-                Behavior on color { ColorAnimation { duration: 120 } }
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰒭"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 20
-                    color: Commons.Theme.surfaceText
-                }
-                
-                MouseArea {
-                    id: nextHover
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    
-                    onClicked: {
-                        if (player) player.next()
-                    }
+                icon: "󰒭"
+                iconSize: 20
+                iconColor: Commons.Theme.surfaceText
+                animationDuration: 120
+                onClicked: {
+                    if (player) player.next()
                 }
             }
             

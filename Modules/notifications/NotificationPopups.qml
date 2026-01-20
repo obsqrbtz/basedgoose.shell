@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Wayland
 import "../../Services" as Services
 import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
 PanelWindow {
     id: root
@@ -385,52 +386,13 @@ PanelWindow {
                                 Layout.fillWidth: true
                                 spacing: 12
                                 
-                                Rectangle {
+                                Widgets.AppIcon {
                                     Layout.preferredWidth: 38
                                     Layout.preferredHeight: 38
-                                    radius: 19
-                                    visible: modelData.appIcon && modelData.appIcon.length > 0
-                                    color: root.surfaceAccent
-                                    
-                                    Image {
-                                        anchors.centerIn: parent
-                                        width: 20
-                                        height: 20
-                                        source: {
-                                            if (!modelData.appIcon) return ""
-                                            if (modelData.appIcon.startsWith("/") || modelData.appIcon.startsWith("file://")) {
-                                                return modelData.appIcon
-                                            }
-                                            return "image://icon/" + modelData.appIcon
-                                        }
-                                        fillMode: Image.PreserveAspectFit
-                                        smooth: true
-                                        cache: true
-                                        asynchronous: true
-                                        
-                                        onStatusChanged: {
-                                            if (status === Image.Error) {
-                                                parent.visible = false
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                Rectangle {
-                                    Layout.preferredWidth: 38
-                                    Layout.preferredHeight: 38
-                                    radius: 19
-                                    visible: !modelData.appIcon || modelData.appIcon.length === 0
-                                    color: root.surfaceAccent
-                                    
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: "󰂞"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 16
-                                        color: root.secondary
-                                        opacity: 0.9
-                                    }
+                                    size: 38
+                                    iconSize: 20
+                                    iconSource: modelData.appIcon || ""
+                                    fallbackIcon: "󰂞"
                                 }
                                 
                                 ColumnLayout {
@@ -457,44 +419,16 @@ PanelWindow {
                                     }
                                 }
                                 
-                                Rectangle {
+                                Widgets.IconButton {
                                     Layout.preferredWidth: 28
                                     Layout.preferredHeight: 28
-                                    radius: 14
-                                    color: closeMouseArea.pressed ? 
-                                           Qt.rgba(root.error.r, root.error.g, root.error.b, 0.15) :
-                                           closeMouseArea.containsMouse ?
-                                           Qt.rgba(root.surfaceText.r, root.surfaceText.g, root.surfaceText.b, 0.06) :
-                                           "transparent"
-                                    
-                                    Behavior on color {
-                                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                                    }
-                                    
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: "󰅖"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 14
-                                        color: closeMouseArea.containsMouse ? 
-                                               root.error : 
-                                               Qt.rgba(root.surfaceText.r, root.surfaceText.g, root.surfaceText.b, 0.4)
-                                        
-                                        Behavior on color {
-                                            ColorAnimation { duration: 150 }
-                                        }
-                                    }
-                                    
-                                    MouseArea {
-                                        id: closeMouseArea
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        cursorShape: Qt.PointingHandCursor
-                                        onClicked: mouse => {
-                                            mouse.accepted = true
-                                            notifCard.dismiss()
-                                        }
-                                    }
+                                    icon: "󰅖"
+                                    iconSize: 14
+                                    iconColor: Qt.rgba(root.surfaceText.r, root.surfaceText.g, root.surfaceText.b, 0.4)
+                                    hoverIconColor: root.error
+                                    hoverColor: Qt.rgba(root.surfaceText.r, root.surfaceText.g, root.surfaceText.b, 0.06)
+                                    pressedColor: Qt.rgba(root.error.r, root.error.g, root.error.b, 0.15)
+                                    onClicked: notifCard.dismiss()
                                 }
                             }
                         
@@ -587,45 +521,17 @@ PanelWindow {
                                 Repeater {
                                     model: notifCard.modelData.actions || []
                                     
-                                    Rectangle {
+                                    Widgets.ActionButton {
                                         required property var modelData
                                         required property int index
                                         
-                                        width: actionText.width + 20
-                                        height: 30
-                                        radius: 15
-                                        
-                                        color: actionMouse.pressed ?
-                                               Qt.rgba(root.secondary.r, root.secondary.g, root.secondary.b, 0.25) :
-                                               actionMouse.containsMouse ?
-                                               Qt.rgba(root.secondary.r, root.secondary.g, root.secondary.b, 0.15) :
-                                               Qt.rgba(root.secondary.r, root.secondary.g, root.secondary.b, 0.08)
-                                        
-                                        Behavior on color {
-                                            ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                                        }
-                                        
-                                        Text {
-                                            id: actionText
-                                            anchors.centerIn: parent
-                                            text: parent.modelData.text || parent.modelData.identifier
-                                            font.pixelSize: 11
-                                            font.weight: Font.Medium
-                                            font.family: "Inter"
-                                            font.letterSpacing: 0.3
-                                            color: root.secondary
-                                            opacity: actionMouse.pressed ? 0.8 : 1.0
-                                        }
-                                        
-                                        MouseArea {
-                                            id: actionMouse
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            cursorShape: Qt.PointingHandCursor
-                                            onClicked: {
-                                                parent.modelData.invoke()
-                                                notifCard.dismiss()
-                                            }
+                                        text: modelData.text || modelData.identifier
+                                        fontSize: 11
+                                        horizontalPadding: 20
+                                        implicitHeight: 30
+                                        onClicked: {
+                                            modelData.invoke()
+                                            notifCard.dismiss()
                                         }
                                     }
                                 }

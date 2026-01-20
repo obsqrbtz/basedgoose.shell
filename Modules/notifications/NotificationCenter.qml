@@ -80,113 +80,31 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
             }
             
-            Rectangle {
-                Layout.preferredWidth: 48
-                Layout.preferredHeight: 32
-                radius: 16
-                color: root.hasDnd ? secondary : surfaceContainer
-                border.width: 1
-                border.color: surfaceBorder
-                
-                Behavior on color {
-                    ColorAnimation { duration: 200 }
-                }
-                
-                Rectangle {
-                    width: 24
-                    height: 24
-                    radius: 12
-                    x: root.hasDnd ? parent.width - width - 4 : 4
-                    y: 4
-                    color: root.hasDnd ? Commons.Theme.background : surfaceTextVariant
-                    
-                    Behavior on x {
-                        NumberAnimation { 
-                            duration: 200
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 200 }
-                    }
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: root.hasDnd ? "󰂛" : "󰂚"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 14
-                        color: root.hasDnd ? Commons.Theme.secondary : Commons.Theme.background
-                    }
-                }
-                
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.notifService.toggleDnd()
-                }
+            Widgets.ToggleSwitch {
+                checked: root.hasDnd
+                checkedColor: secondary
+                uncheckedColor: surfaceContainer
+                thumbColor: root.hasDnd ? Commons.Theme.background : surfaceTextVariant
+                icon: root.hasDnd ? "󰂛" : "󰂚"
+                iconColor: root.hasDnd ? Commons.Theme.secondary : Commons.Theme.background
+                onToggled: root.notifService.toggleDnd()
             }
             
-            Rectangle {
-                Layout.preferredWidth: 36
-                Layout.preferredHeight: 36
-                radius: 18
-                color: clearAllMouse.containsMouse ? 
-                       Qt.rgba(error.r, error.g, error.b, 0.15) :
-                       surfaceContainer
-                
-                Behavior on color {
-                    ColorAnimation { duration: 150 }
-                }
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰎘"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 18
-                    color: clearAllMouse.containsMouse ? error : surfaceTextVariant
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 150 }
-                    }
-                }
-                
-                MouseArea {
-                    id: clearAllMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.notifService.clearAll()
-                }
+            Widgets.IconButton {
+                icon: "󰎘"
+                iconSize: 18
+                iconColor: surfaceTextVariant
+                hoverIconColor: error
+                baseColor: surfaceContainer
+                hoverColor: Qt.rgba(error.r, error.g, error.b, 0.15)
+                onClicked: root.notifService.clearAll()
             }
             
-            Rectangle {
-                Layout.preferredWidth: 36
-                Layout.preferredHeight: 36
-                radius: 18
-                color: closeMouse.containsMouse ? 
-                       Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.08) :
-                       "transparent"
-                
-                Behavior on color {
-                    ColorAnimation { duration: 150 }
-                }
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰅖"
-                    font.family: "Material Design Icons"
-                    font.pixelSize: 18
-                    color: surfaceTextVariant
-                }
-                
-                MouseArea {
-                    id: closeMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.shouldShow = false
-                }
+            Widgets.IconButton {
+                icon: "󰅖"
+                iconSize: 18
+                iconColor: surfaceTextVariant
+                onClicked: root.shouldShow = false
             }
         }
         
@@ -216,37 +134,12 @@ Widgets.PopupWindow {
                 height: 200
                 visible: notifListView.count === 0
                 
-                ColumnLayout {
+                Widgets.EmptyState {
                     anchors.centerIn: parent
-                    spacing: 12
-                    
-                    Text {
-                        text: "󰂚"
-                        font.family: "Material Design Icons"
-                        font.pixelSize: 64
-                        color: surfaceTextVariant
-                        opacity: 0.3
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                    
-                    Text {
-                        text: "No notifications"
-                        font.pixelSize: 16
-                        font.weight: Font.Medium
-                        font.family: "Inter"
-                        color: surfaceTextVariant
-                        opacity: 0.6
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                    
-                    Text {
-                        text: "You're all caught up!"
-                        font.pixelSize: 13
-                        font.family: "Inter"
-                        color: surfaceTextVariant
-                        opacity: 0.4
-                        Layout.alignment: Qt.AlignHCenter
-                    }
+                    icon: "󰂚"
+                    iconSize: 64
+                    title: "No notifications"
+                    subtitle: "You're all caught up!"
                 }
             }
             
@@ -295,45 +188,13 @@ Widgets.PopupWindow {
                         Layout.fillWidth: true
                         spacing: 10
                         
-                        Rectangle {
+                        Widgets.AppIcon {
                             Layout.preferredWidth: 32
                             Layout.preferredHeight: 32
-                            radius: 16
-                            color: surfaceAccent
-                            visible: modelData.appIcon && modelData.appIcon.length > 0
-                            
-                            Image {
-                                anchors.centerIn: parent
-                                width: 18
-                                height: 18
-                                source: {
-                                    if (!modelData.appIcon) return ""
-                                    if (modelData.appIcon.startsWith("/") || modelData.appIcon.startsWith("file://")) {
-                                        return modelData.appIcon
-                                    }
-                                    return "image://icon/" + modelData.appIcon
-                                }
-                                fillMode: Image.PreserveAspectFit
-                                smooth: true
-                                cache: true
-                                asynchronous: true
-                            }
-                        }
-                        
-                        Rectangle {
-                            Layout.preferredWidth: 32
-                            Layout.preferredHeight: 32
-                            radius: 16
-                            color: surfaceAccent
-                            visible: !modelData.appIcon || modelData.appIcon.length === 0
-                            
-                            Text {
-                                anchors.centerIn: parent
-                                text: "󰂞"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 14
-                                color: secondary
-                            }
+                            size: 32
+                            iconSize: 18
+                            iconSource: modelData.appIcon || ""
+                            fallbackIcon: "󰂞"
                         }
                         
                         ColumnLayout {
@@ -358,42 +219,16 @@ Widgets.PopupWindow {
                             }
                         }
                         
-                        Rectangle {
+                        Widgets.IconButton {
                             Layout.preferredWidth: 28
                             Layout.preferredHeight: 28
-                            radius: 14
-                            color: deleteMouse.pressed ?
-                                   Qt.rgba(error.r, error.g, error.b, 0.2) :
-                                   deleteMouse.containsMouse ?
-                                   Qt.rgba(error.r, error.g, error.b, 0.1) :
-                                   "transparent"
-                            
-                            Behavior on color {
-                                ColorAnimation { duration: 150 }
-                            }
-                            
-                            Text {
-                                anchors.centerIn: parent
-                                text: "󰆴"
-                                font.family: "Material Design Icons"
-                                font.pixelSize: 14
-                                color: deleteMouse.containsMouse ? error : surfaceTextVariant
-                                
-                                Behavior on color {
-                                    ColorAnimation { duration: 150 }
-                                }
-                            }
-                            
-                            MouseArea {
-                                id: deleteMouse
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: mouse => {
-                                    mouse.accepted = true
-                                    root.notifService.deleteNotification(modelData)
-                                }
-                            }
+                            icon: "󰆴"
+                            iconSize: 14
+                            iconColor: surfaceTextVariant
+                            hoverIconColor: error
+                            hoverColor: Qt.rgba(error.r, error.g, error.b, 0.1)
+                            pressedColor: Qt.rgba(error.r, error.g, error.b, 0.2)
+                            onClicked: root.notifService.deleteNotification(modelData)
                         }
                     }
                     
@@ -431,42 +266,15 @@ Widgets.PopupWindow {
                         Repeater {
                             model: notificationItemHover.modelData.actions || []
                             
-                            Rectangle {
+                            Widgets.ActionButton {
                                 required property var modelData
                                 
-                                width: actionText.width + 16
-                                height: 26
-                                radius: 13
-                                
-                                color: actionMouse.pressed ?
-                                       Qt.rgba(secondary.r, secondary.g, secondary.b, 0.25) :
-                                       actionMouse.containsMouse ?
-                                       Qt.rgba(secondary.r, secondary.g, secondary.b, 0.15) :
-                                       Qt.rgba(secondary.r, secondary.g, secondary.b, 0.08)
-                                
-                                Behavior on color {
-                                    ColorAnimation { duration: 150 }
-                                }
-                                
-                                Text {
-                                    id: actionText
-                                    anchors.centerIn: parent
-                                    text: parent.modelData.text || parent.modelData.identifier
-                                    font.pixelSize: 10
-                                    font.weight: Font.Medium
-                                    font.family: "Inter"
-                                    color: secondary
-                                }
-                                
-                                MouseArea {
-                                    id: actionMouse
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        parent.modelData.invoke()
-                                        notificationItemHover.modelData.close()
-                                    }
+                                text: modelData.text || modelData.identifier
+                                fontSize: 10
+                                horizontalPadding: 16
+                                onClicked: {
+                                    modelData.invoke()
+                                    notificationItemHover.modelData.close()
                                 }
                             }
                         }

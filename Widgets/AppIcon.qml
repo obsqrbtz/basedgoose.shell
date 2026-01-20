@@ -1,0 +1,52 @@
+import QtQuick 6.10
+import "../../Commons" as Commons
+
+Rectangle {
+    id: root
+    
+    property string iconSource: ""
+    property string fallbackIcon: "󰂞"
+    property int iconSize: 18
+    property int size: 32
+    property color backgroundColor: Commons.Theme.surfaceAccent
+    property color iconColor: Commons.Theme.secondary
+    
+    implicitWidth: root.size
+    implicitHeight: root.size
+    radius: width / 2
+    color: root.backgroundColor
+    
+    Image {
+        anchors.centerIn: parent
+        width: root.iconSize
+        height: root.iconSize
+        source: {
+            if (!root.iconSource) return ""
+            if (root.iconSource.startsWith("/") || root.iconSource.startsWith("file://")) {
+                return root.iconSource
+            }
+            return "image://icon/" + root.iconSource
+        }
+        fillMode: Image.PreserveAspectFit
+        smooth: true
+        cache: true
+        asynchronous: true
+        visible: root.iconSource && root.iconSource.length > 0
+        
+        onStatusChanged: {
+            if (status === Image.Error) {
+                visible = false
+            }
+        }
+    }
+    
+    Text {
+        anchors.centerIn: parent
+        text: root.fallbackIcon
+        font.family: "Material Design Icons"
+        font.pixelSize: root.iconSize - 4
+        color: root.iconColor
+        visible: !root.iconSource || root.iconSource.length === 0 || (imageLoader.visible === false && imageLoader.status === Image.Error)
+    }
+}
+

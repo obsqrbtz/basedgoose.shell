@@ -1,2 +1,7 @@
 module Widgets
 PopupWindow 1.0 PopupWindow.qml
+IconButton 1.0 IconButton.qml
+ToggleSwitch 1.0 ToggleSwitch.qml
+EmptyState 1.0 EmptyState.qml
+ActionButton 1.0 ActionButton.qml
+AppIcon 1.0 AppIcon.qml

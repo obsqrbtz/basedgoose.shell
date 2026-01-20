@@ -112,30 +112,15 @@ Widgets.PopupWindow {
                         }
                     }
                     
-                    Rectangle {
+                    Widgets.ToggleSwitch {
                         width: 44
                         height: 24
-                        radius: 12
-                        color: adapter?.enabled ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
-                        
-                        Behavior on color { ColorAnimation { duration: 150 } }
-                        
-                        Rectangle {
-                            width: 18
-                            height: 18
-                            radius: 9
-                            anchors.verticalCenter: parent.verticalCenter
-                            x: adapter?.enabled ? parent.width - width - 3 : 3
-                            color: "#ffffff"
-                            
-                            Behavior on x { NumberAnimation { duration: 150; easing.type: Easing.OutCubic } }
-                        }
-                        
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: if (adapter) adapter.enabled = !adapter.enabled
-                        }
+                        checked: adapter?.enabled ?? false
+                        checkedColor: cPrimary
+                        uncheckedColor: Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                        thumbColor: "#ffffff"
+                        animationDuration: 150
+                        onToggled: if (adapter) adapter.enabled = !adapter.enabled
                     }
                 }
                 
@@ -256,33 +241,22 @@ Widgets.PopupWindow {
                                     }
                                 }
                                 
-                                Rectangle {
+                                Widgets.IconButton {
                                     width: 28
                                     height: 28
-                                    radius: 14
-                                    color: actionArea.containsMouse ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15) : "transparent"
+                                    icon: isConnected ? "󰌊" : "󰌘"
+                                    iconSize: 14
+                                    iconColor: isConnected ? cPrimary : cSubText
+                                    hoverIconColor: isConnected ? cPrimary : cPrimary
+                                    baseColor: "transparent"
+                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
                                     border.width: 1
                                     border.color: isConnected ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
-                                    
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: isConnected ? "󰌊" : "󰌘"
-                                        font.family: "Material Design Icons"
-                                        font.pixelSize: 14
-                                        color: isConnected ? cPrimary : cSubText
-                                    }
-                                    
-                                    MouseArea {
-                                        id: actionArea
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        cursorShape: Qt.PointingHandCursor
-                                        onClicked: {
-                                            if (isConnected) {
-                                                deviceItem.modelData.connected = false
-                                            } else {
-                                                deviceItem.modelData.connected = true
-                                            }
+                                    onClicked: {
+                                        if (isConnected) {
+                                            deviceItem.modelData.connected = false
+                                        } else {
+                                            deviceItem.modelData.connected = true
                                         }
                                     }
                                 }
@@ -297,26 +271,15 @@ Widgets.PopupWindow {
                         }
                     }
                     
-                    ColumnLayout {
+                    Widgets.EmptyState {
                         anchors.centerIn: parent
                         visible: devices.length === 0
-                        spacing: 6
-                        
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: "󰂲"
-                            font.family: "Material Design Icons"
-                            font.pixelSize: 32
-                            color: Qt.rgba(cText.r, cText.g, cText.b, 0.2)
-                        }
-                        
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: adapter?.enabled ? "No devices found" : "Bluetooth disabled"
-                            font.family: "Inter"
-                            font.pixelSize: 12
-                            color: cSubText
-                        }
+                        icon: "󰂲"
+                        iconSize: 32
+                        iconOpacity: 0.2
+                        title: adapter?.enabled ? "No devices found" : "Bluetooth disabled"
+                        subtitle: ""
+                        textOpacity: 1.0
                     }
                 }
                 
