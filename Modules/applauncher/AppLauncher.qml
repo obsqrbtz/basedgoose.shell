@@ -2,27 +2,66 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Effects
 import "../../Services" as Services
 import "../../Commons" as Commons
 import "../../Widgets" as Widgets
 
 Widgets.PopupWindow {
     id: appLauncher
-    
+
     ipcTarget: "launcher"
-    initialScale: 0.92
+    initialScale: 0.94
     transformOriginX: 0.5
-    transformOriginY: 0.0
+    transformOriginY: 0.5
     closeOnClickOutside: true
     
-    implicitWidth: 420
-    implicitHeight: 200
+    readonly property color cSurface: Commons.Theme.surfaceBase
+    readonly property color cSurfaceContainer: Commons.Theme.surfaceContainer
+    readonly property color cText: Commons.Theme.foreground
+    readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
+    readonly property color cBorder: Commons.Theme.surfaceBorder
+    readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
+    readonly property color cPrimary: Commons.Theme.secondary
+    
+    anchors {
+        top: true
+        left: true
+    }
+    
+    readonly property int launcherWidth: 420
+    readonly property int launcherHeight: 500
+    
+    margins {
+        top: Quickshell.screens[0] ? (Quickshell.screens[0].height - launcherHeight) / 2 : 0
+        left: Quickshell.screens[0] ? (Quickshell.screens[0].width - launcherWidth) / 2 : 0
+    }
+    
+    implicitWidth: launcherWidth
+    implicitHeight: launcherHeight
     
     Rectangle {
-        id: contentRect
+        anchors.fill: backgroundRect
+        anchors.margins: -6
+        radius: backgroundRect.radius + 3
+        color: "transparent"
+        
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: Qt.rgba(0, 0, 0, 0.35)
+            shadowBlur: 0.8
+            shadowVerticalOffset: 8
+        }
+    }
+    
+    Rectangle {
+        id: backgroundRect
         anchors.fill: parent
-        color: Commons.Theme.background
-        radius: Commons.Theme.radius
+        color: Commons.Theme.surfaceBase
+        radius: 16
+        
         border.color: Commons.Theme.border
         border.width: 1
         
@@ -46,7 +85,7 @@ Widgets.PopupWindow {
         Process {
             id: appListProc
             running: true
-            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g')\"; done"]
+            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g')|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)\"; done"]
             
             stdout: StdioCollector {
                 onStreamFinished: {
@@ -56,13 +95,15 @@ Widgets.PopupWindow {
                     
                     for (var i = 0; i < lines.length; i++) {
                         var parts = lines[i].split('|||');
-                        if (parts.length === 2 && parts[0] && parts[1]) {
+                        if (parts.length >= 2 && parts[0] && parts[1]) {
                             var name = parts[0].trim();
                             var execStr = parts[1].trim();
+                            var iconStr = parts.length >= 3 ? parts[2].trim() : "";
                             if (execStr.length > 0) {
                                 appModel.append({
                                     name: name,
-                                    exec: execStr
+                                    exec: execStr,
+                                    icon: iconStr
                                 });
                             }
                         }
@@ -74,57 +115,84 @@ Widgets.PopupWindow {
         
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 12
-            spacing: 8
+            anchors.margins: 20
+            spacing: 16
+            
+            Text {
+                text: "Applications"
+                font.pixelSize: 20
+                font.weight: Font.Bold
+                font.family: "Inter"
+                color: cText
+                Layout.fillWidth: true
+            }
             
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 36
-                color: Commons.Theme.surfaceBase
-                radius: 6
-                border.color: searchInput.activeFocus ? Commons.Theme.borderFocused : "transparent"
+                Layout.preferredHeight: 48
+                color: searchInput.activeFocus ? cSurfaceContainer : cSurfaceContainer
+                radius: 12
+                border.color: searchInput.activeFocus ? Commons.Theme.borderFocused : cBorder
                 border.width: 1
                 
-                    TextInput {
-                    id: searchInput
+                RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 8
-                        color: Commons.Theme.foreground
-                        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize }
-                    selectByMouse: true
-                    focus: true
-                    activeFocusOnPress: true
-                    onTextChanged: {
-                        filterApps();
-                    }
-                    Keys.onEscapePressed: {
-                        appLauncher.shouldShow = false;
-                    }
-                    Keys.onReturnPressed: {
-                        if (appList.currentIndex >= 0) {
-                            var item = filteredModel.get(appList.currentIndex);
-                            if (item) {
-                                appLauncher.shouldShow = false;
-                                var command = item.exec.trim().split(/\s+/).filter(function(cmd) { return cmd.length > 0; });
-                                var proc = processComponent.createObject(appLauncher, {  cmd: ["sh", "-c", command.join(" ") + " &"]  });
-                            }
-                        }
-                    }
-                    Keys.onDownPressed: {
-                        appList.incrementCurrentIndex();
-                    }
-                    Keys.onUpPressed: {
-                        appList.decrementCurrentIndex();
-                    }
+                    anchors.margins: 12
+                    spacing: 12
                     
                     Text {
-                        anchors.fill: parent
-                        text: "Search applications..."
-                        color: Commons.Theme.foregroundMuted
-                        font: searchInput.font
-                        visible: !searchInput.text && !searchInput.activeFocus
+                        text: "󰍉"
+                        font.family: "Material Design Icons"
+                        font.pixelSize: 18
+                        color: cSubText
+                    }
+                    
+                    TextInput {
+                        id: searchInput
+                        Layout.fillWidth: true
+                        color: cText
+                        font { family: "Inter"; pixelSize: 13; weight: Font.Medium }
+                        selectByMouse: true
+                        focus: true
+                        activeFocusOnPress: true
+                        onTextChanged: {
+                            filterApps();
+                        }
+                        Keys.onEscapePressed: {
+                            appLauncher.shouldShow = false;
+                        }
+                        Keys.onReturnPressed: {
+                            if (appList.currentIndex >= 0) {
+                                var item = filteredModel.get(appList.currentIndex);
+                                if (item) {
+                                    appLauncher.shouldShow = false;
+                                    var command = item.exec.trim().split(/\s+/).filter(function(cmd) { return cmd.length > 0; });
+                                    var proc = processComponent.createObject(appLauncher, {  cmd: ["sh", "-c", command.join(" ") + " &"]  });
+                                }
+                            }
+                        }
+                        Keys.onDownPressed: {
+                            appList.incrementCurrentIndex();
+                        }
+                        Keys.onUpPressed: {
+                            appList.decrementCurrentIndex();
+                        }
+                        
+                        Text {
+                            anchors.fill: parent
+                            text: "Search applications..."
+                            color: cSubText
+                            font: searchInput.font
+                            visible: !searchInput.text && !searchInput.activeFocus
+                        }
                     }
                 }
+            }
+            
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: cBorder
             }
             
             ListView {
@@ -132,7 +200,7 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 model: filteredModel
-                spacing: 4
+                spacing: 8
                 currentIndex: 0
                 clip: true
                 
@@ -141,44 +209,77 @@ Widgets.PopupWindow {
                         positionViewAtIndex(currentIndex, ListView.Contain);
                     }
                 }
+                
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                }
+                
+                Item {
+                    anchors.centerIn: parent
+                    width: parent.width
+                    height: 200
+                    visible: appList.count === 0
                     
-                    delegate: Rectangle {
-                        required property string name
-                        required property string exec
-                        required property int index
+                    Widgets.EmptyState {
+                        anchors.centerIn: parent
+                        icon: "󰍉"
+                        iconSize: 64
+                        title: "No applications found"
+                        subtitle: searchInput.text ? "Try a different search term" : "Start typing to search"
+                    }
+                }
+                
+                delegate: Rectangle {
+                    required property string name
+                    required property string exec
+                    required property string icon
+                    required property int index
+                    
+                    width: appList.width
+                    height: 48
+                    radius: 12
+                    color: (appMa.containsMouse || appList.currentIndex === index) ? 
+                           (appList.currentIndex === index ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12) : cHover) : 
+                           "transparent"
+                    border.width: 1
+                    border.color: appList.currentIndex === index ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.3) : cBorder
+                    
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 12
                         
-                        width: appList.width
-                        height: 40
-                        color: (appMa.containsMouse || appList.currentIndex === index) ? Commons.Theme.surfaceBase : "transparent"
-                        radius: 6
-                        
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
-                            
-                            Text {
-                                text: name
-                                color: Commons.Theme.foreground
-                                font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize }
-                            }
-                            
-                            Item { Layout.fillWidth: true }
+                        Widgets.AppIcon {
+                            Layout.preferredWidth: 28
+                            Layout.preferredHeight: 28
+                            size: 28
+                            iconSize: 18
+                            iconSource: icon || ""
+                            fallbackIcon: "󰀻"
                         }
                         
-                        MouseArea {
-                            id: appMa
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                appLauncher.shouldShow = false;
-                                var command = exec.trim().split(/\s+/).filter(function(cmd) { return cmd.length > 0; });
-                                var proc = processComponent.createObject(appLauncher, {  cmd: ["sh", "-c", command.join(" ") + " &"]  });
-                            }
+                        Text {
+                            text: name
+                            color: cText
+                            font { family: "Inter"; pixelSize: 13; weight: Font.Medium }
+                            Layout.fillWidth: true
+                            elide: Text.ElideRight
+                        }
+                    }
+                    
+                    MouseArea {
+                        id: appMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            appLauncher.shouldShow = false;
+                            var command = exec.trim().split(/\s+/).filter(function(cmd) { return cmd.length > 0; });
+                            var proc = processComponent.createObject(appLauncher, {  cmd: ["sh", "-c", command.join(" ") + " &"]  });
                         }
                     }
                 }
+            }
         }
         
         Connections {
@@ -195,13 +296,13 @@ Widgets.PopupWindow {
         if (searchText === "") {
             for (var i = 0; i < appModel.count; i++) {
                 var item = appModel.get(i);
-                filteredModel.append({ name: item.name, exec: item.exec });
+                filteredModel.append({ name: item.name, exec: item.exec, icon: item.icon });
             }
         } else {
             for (var i = 0; i < appModel.count; i++) {
                 var item = appModel.get(i);
                 if (item.name.toLowerCase().includes(searchText)) {
-                    filteredModel.append({ name: item.name, exec: item.exec });
+                    filteredModel.append({ name: item.name, exec: item.exec, icon: item.icon });
                 }
             }
         }

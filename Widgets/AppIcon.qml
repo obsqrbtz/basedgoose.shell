@@ -17,13 +17,14 @@ Rectangle {
     color: root.backgroundColor
     
     Image {
+        id: iconImage
         anchors.centerIn: parent
         width: root.iconSize
         height: root.iconSize
         source: {
             if (!root.iconSource) return ""
             if (root.iconSource.startsWith("/") || root.iconSource.startsWith("file://")) {
-                return root.iconSource
+                return root.iconSource.startsWith("file://") ? root.iconSource : "file://" + root.iconSource
             }
             return "image://icon/" + root.iconSource
         }
@@ -32,12 +33,6 @@ Rectangle {
         cache: true
         asynchronous: true
         visible: root.iconSource && root.iconSource.length > 0
-        
-        onStatusChanged: {
-            if (status === Image.Error) {
-                visible = false
-            }
-        }
     }
     
     Text {
@@ -46,7 +41,8 @@ Rectangle {
         font.family: "Material Design Icons"
         font.pixelSize: root.iconSize - 4
         color: root.iconColor
-        visible: !root.iconSource || root.iconSource.length === 0 || (imageLoader.visible === false && imageLoader.status === Image.Error)
+        visible: !root.iconSource || root.iconSource.length === 0 || iconImage.status === Image.Error
+        z: iconImage.visible ? -1 : 1
     }
 }
 
