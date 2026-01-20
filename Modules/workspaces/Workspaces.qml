@@ -8,10 +8,12 @@ import "../../Commons" as Commons
 Rectangle {
     id: workspaces
     
-    width: workspaceRow.width + 16
-    height: Commons.Config.componentHeight
+    Layout.preferredWidth: workspaceRow.implicitWidth + 16
+    Layout.preferredHeight: Commons.Config.componentHeight
+    implicitHeight: Commons.Config.componentHeight
     color: Commons.Theme.surfaceBase
     radius: Commons.Config.componentRadius
+    clip: true
     
     RowLayout {
         id: workspaceRow

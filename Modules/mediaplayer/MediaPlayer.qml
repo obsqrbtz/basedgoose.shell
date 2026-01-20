@@ -14,8 +14,10 @@ Rectangle {
     readonly property bool hasPlayer: !!player
     readonly property bool isPlaying: player?.isPlaying ?? false
     
-    height: 28
-    width: hasPlayer ? (mediaPlayerContent.implicitWidth + 16) : 0
+    Layout.preferredWidth: hasPlayer ? Math.max(0, mediaPlayerContent.implicitWidth + 16) : 0
+    Layout.preferredHeight: 28
+    implicitHeight: 28
+    implicitWidth: hasPlayer ? Math.max(0, mediaPlayerContent.implicitWidth + 16) : 0
     visible: hasPlayer
     
     Component.onCompleted: {

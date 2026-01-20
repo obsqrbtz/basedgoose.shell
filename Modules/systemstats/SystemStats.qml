@@ -10,10 +10,12 @@ Rectangle {
     property real memUsed: 0
     property real memTotal: 0
     
-    width: statsRow.width + 20
-    height: Commons.Config.componentHeight
+    Layout.preferredWidth: statsRow.implicitWidth + 20
+    Layout.preferredHeight: Commons.Config.componentHeight
+    implicitHeight: Commons.Config.componentHeight
     color: Commons.Theme.surfaceBase
     radius: Commons.Config.componentRadius
+    clip: true
     
     RowLayout {
         id: statsRow
