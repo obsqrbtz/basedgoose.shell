@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import "../../Commons" as Commons
 import "../../Widgets" as Widgets
+import "../../Services" as Services
 
 Widgets.PopupWindow {
     id: popupWindow
@@ -13,7 +14,7 @@ Widgets.PopupWindow {
     initialScale: 0.94
     transformOriginX: 0.5
     transformOriginY: 0.5
-    closeOnClickOutside: true
+    closeOnClickOutside: !directoryDialogProcess.running
     
     readonly property color cSurface: Commons.Theme.background
     readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
@@ -94,6 +95,83 @@ Widgets.PopupWindow {
                         font.family: "Inter"
                         font.pixelSize: 11
                         color: cSubText
+                    }
+                }
+            }
+            
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 40
+                radius: 10
+                color: cSurfaceContainer
+                
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.margins: 8
+                    spacing: 8
+                    
+                    Text {
+                        text: "Directory:"
+                        font.family: "Inter"
+                        font.pixelSize: 12
+                        color: cText
+                    }
+                    
+                    TextInput {
+                        id: directoryInput
+                        Layout.fillWidth: true
+                        text: Services.ConfigService.wallpaperDirectory
+                        font.family: "Inter"
+                        font.pixelSize: 11
+                        color: cText
+                        selectByMouse: true
+                        
+                        Rectangle {
+                            anchors.fill: parent
+                            anchors.margins: -4
+                            radius: 6
+                            color: directoryInput.activeFocus ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.1) : "transparent"
+                            border.width: directoryInput.activeFocus ? 1 : 0
+                            border.color: cPrimary
+                            z: -1
+                        }
+                        
+                        Keys.onReturnPressed: {
+                            saveDirectory()
+                        }
+                        Keys.onEscapePressed: {
+                            text = Services.ConfigService.wallpaperDirectory
+                            focus = false
+                        }
+                    }
+                    
+                    Widgets.IconButton {
+                        width: 32
+                        height: 32
+                        icon: "󰈔"
+                        iconSize: 14
+                        iconColor: cSubText
+                        hoverIconColor: cPrimary
+                        baseColor: "transparent"
+                        hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                        onClicked: {
+                            openDirectoryDialog()
+                        }
+                    }
+                    
+                    Widgets.IconButton {
+                        width: 32
+                        height: 32
+                        visible: directoryInput.text !== Services.ConfigService.wallpaperDirectory
+                        icon: "󰄬"
+                        iconSize: 14
+                        iconColor: cPrimary
+                        hoverIconColor: cPrimary
+                        baseColor: "transparent"
+                        hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                        onClicked: {
+                            saveDirectory()
+                        }
                     }
                 }
             }
@@ -194,10 +272,11 @@ Widgets.PopupWindow {
         
         Process {
             id: loadingProcess
-            running: true
-            property string wallpaperDir: Commons.Config.wallpaperDirectory.startsWith("~") 
-                ? Commons.Config.wallpaperDirectory.replace("~", "$HOME")
-                : Commons.Config.wallpaperDirectory
+            running: Services.ConfigService.initialized
+            property string wallpaperDir: {
+                var dir = Services.ConfigService.initialized ? Services.ConfigService.wallpaperDirectory : Commons.Config.wallpaperDirectory
+                return dir.startsWith("~") ? dir.replace("~", "$HOME") : dir
+            }
             command: ["sh", "-c", "find " + wallpaperDir + " -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.webp' -o -iname '*.bmp' -o -iname '*.tiff' -o -iname '*.svg' -o -iname '*.avif' -o -iname '*.jxl' \\) 2>/dev/null | head -100"]
             
             stdout: StdioCollector {
@@ -228,6 +307,36 @@ Widgets.PopupWindow {
                 command: cmd
             }
         }
+        
+        Process {
+            id: directoryDialogProcess
+            running: false
+            command: ["sh", "-c", "zenity --file-selection --directory --title='Select Wallpaper Directory' 2>/dev/null || yad --file --directory --title='Select Wallpaper Directory' 2>/dev/null || echo ''"]
+            
+            onRunningChanged: {
+                if (running) {
+                    popupWindow.shouldShow = true
+                }
+            }
+            
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    var selectedDir = text.trim()
+                    if (selectedDir.length > 0) {
+                        directoryInput.text = selectedDir
+                        saveDirectory()
+                    }
+                }
+            }
+        }
+        
+        Connections {
+            target: Services.ConfigService
+            function onWallpaperDirectoryChanged() {
+                directoryInput.text = Services.ConfigService.wallpaperDirectory
+                refresh()
+            }
+        }
     }
     
     function setWallpaper(filePath) {
@@ -241,5 +350,18 @@ Widgets.PopupWindow {
         loadingProcess.running = false
         wallpaperList.clear()
         loadingProcess.running = true
+    }
+    
+    function saveDirectory() {
+        var newDir = directoryInput.text.trim()
+        if (newDir.length > 0) {
+            Services.ConfigService.setWallpaperDirectory(newDir)
+            directoryInput.focus = false
+            refresh()
+        }
+    }
+    
+    function openDirectoryDialog() {
+        directoryDialogProcess.running = true
     }
 }
