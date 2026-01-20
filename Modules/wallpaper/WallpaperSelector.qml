@@ -152,7 +152,7 @@ Widgets.PopupWindow {
                         width: 32
                         height: 32
                         Layout.alignment: Qt.AlignVCenter
-                        icon: "󰈔"
+                        icon: "\uf4d3"
                         iconSize: 14
                         iconColor: cSubText
                         hoverIconColor: cPrimary

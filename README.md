@@ -7,3 +7,4 @@ Quickshell setup for Hyprland
 - pamixer
 - wl-clipboard
 - awww
+- zenity or yad
