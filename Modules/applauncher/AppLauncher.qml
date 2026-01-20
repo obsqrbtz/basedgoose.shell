@@ -82,7 +82,7 @@ Widgets.PopupWindow {
                 Layout.preferredHeight: 36
                 color: Commons.Theme.surfaceBase
                 radius: 6
-                border.color: searchInput.activeFocus ? Commons.Theme.primaryMuted : "transparent"
+                border.color: searchInput.activeFocus ? Commons.Theme.borderFocused : "transparent"
                 border.width: 1
                 
                     TextInput {

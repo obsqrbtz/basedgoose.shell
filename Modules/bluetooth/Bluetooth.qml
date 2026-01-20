@@ -95,8 +95,7 @@ Rectangle {
             const screenWidth = barWindow.screen.width
             const barHeight = barWindow.implicitHeight || 36
             
-            bluetoothPopup.margins.right = Math.round(screenWidth - rightEdge - 8)
-            bluetoothPopup.margins.top = barHeight + 6
+            bluetoothPopup.margins.right = Commons.Config.popupMargin
         }
     }
     }

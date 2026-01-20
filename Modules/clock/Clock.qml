@@ -57,8 +57,8 @@ Item {
             const screenWidth = barWindow.screen.width
             const popupWidth = calendarPopup.implicitWidth || 320
             
-            calendarPopup.margins.left = Math.max(4, Math.round(clockCenterX - popupWidth / 2))
-            calendarPopup.margins.top = 0
+            calendarPopup.margins.left = Math.max(Commons.Config.popupMargin, Math.round(clockCenterX - popupWidth / 2))
+            calendarPopup.margins.top = Commons.Config.popupMargin
         }
     }
 }

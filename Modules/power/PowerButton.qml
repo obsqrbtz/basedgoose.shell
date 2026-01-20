@@ -5,6 +5,9 @@ import "../../Commons" as Commons
 Rectangle {
     id: powerButton
     
+    property var barWindow
+    property var powerMenuPopup
+    
     signal clicked()
     
     width: Commons.Config.powerButtonSize
@@ -24,6 +27,21 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: powerButton.clicked()
+        onClicked: {
+            powerButton.clicked()
+            
+            if (!powerMenuPopup) return
+            
+            powerMenuPopup.shouldShow = !powerMenuPopup.shouldShow
+            if (!powerMenuPopup.shouldShow) return
+            if (!barWindow || !barWindow.screen) return
+            
+            const pos = powerButton.mapToItem(barWindow.contentItem, 0, 0)
+            const rightEdge = pos.x + powerButton.width
+            const screenWidth = barWindow.screen.width
+            const barHeight = barWindow.implicitHeight || 36
+            
+            powerMenuPopup.margins.right = Commons.Config.popupMargin
+        }
     }
 }

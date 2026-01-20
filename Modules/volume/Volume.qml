@@ -116,8 +116,8 @@ Item {
             const screenWidth = barWindow.screen.width
             const barHeight = barWindow.implicitHeight || 36
             
-            volumePopup.margins.right = Math.round(screenWidth - rightEdge)
-            volumePopup.margins.top = 0
+            volumePopup.margins.right = Commons.Config.popupMargin
+            volumePopup.margins.top = Commons.Config.popupMargin
         }
     }
     

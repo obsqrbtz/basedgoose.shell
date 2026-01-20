@@ -30,6 +30,7 @@ PanelWindow {
     property var notificationPopups
     property var notificationCenter
     property var shellMenuPopup
+    property var powerMenuPopup
 
     Services.CpuMonitor { id: cpuMonitor }
     Services.MemoryMonitor { id: memoryMonitor }
@@ -140,6 +141,8 @@ PanelWindow {
                 }
 
                 Power.PowerButton {
+                    barWindow: bar
+                    powerMenuPopup: bar.powerMenuPopup
                     onClicked: bar.showPowerMenu()
                 }
             }

@@ -38,10 +38,10 @@ PanelWindow {
     }
     
     margins {
-        top: Commons.Config.notifications.margin
+        top: Commons.Config.popupMargin
              + Commons.Config.barHeight
              + Commons.Config.barMargin * 2
-        right: Commons.Config.notifications.margin
+        right: Commons.Config.popupMargin
     }
     
     visible: activePopups.length > 0
@@ -158,7 +158,7 @@ PanelWindow {
                         border.width: 1
                         border.color: notifCard.isHovered ? 
                                      Qt.rgba(root.secondary.r, root.secondary.g, root.secondary.b, 0.15) : 
-                                     root.surfaceBorder
+                                     Commons.Theme.border
                         
                         Behavior on border.color {
                             ColorAnimation { duration: 200; easing.type: Easing.OutCubic }

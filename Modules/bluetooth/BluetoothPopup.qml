@@ -28,7 +28,7 @@ Widgets.PopupWindow {
     readonly property color cPrimary: Commons.Theme.secondary
     readonly property color cText: Commons.Theme.foreground
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
-    readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
+    readonly property color cBorder: Commons.Theme.border
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
     
     anchors {
@@ -37,8 +37,8 @@ Widgets.PopupWindow {
     }
     
     margins {
-        right: 12
-        top: 12
+        right: Commons.Config.popupMargin
+        top: Commons.Config.popupMargin
     }
     
     implicitWidth: 320

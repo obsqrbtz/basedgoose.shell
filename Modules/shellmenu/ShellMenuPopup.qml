@@ -31,8 +31,8 @@ Widgets.PopupWindow {
     }
     
     margins {
-        left: 4
-        top: 4
+        left: Commons.Config.popupMargin
+        top: Commons.Config.popupMargin
     }
     
     implicitWidth: 240
@@ -59,7 +59,7 @@ Widgets.PopupWindow {
         color: Commons.Theme.surfaceBase
         radius: 16
         
-        border.color: Commons.Theme.surfaceBorder
+        border.color: Commons.Theme.border
         border.width: 1
         
         ColumnLayout {

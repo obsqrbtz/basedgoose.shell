@@ -164,7 +164,7 @@ Rectangle {
                 onClicked: {
                     if (root.mediaPopup && root.player) {
                         if (!root.mediaPopup.shouldShow) {
-                            root.mediaPopup.margins.left = Commons.Config.mediaPlayer.popupMargin
+                            root.mediaPopup.margins.left = Commons.Config.popupMargin
                         }
                         root.mediaPopup.shouldShow = !root.mediaPopup.shouldShow
                     }

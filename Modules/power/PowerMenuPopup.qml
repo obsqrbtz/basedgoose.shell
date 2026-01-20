@@ -24,8 +24,8 @@ Widgets.PopupWindow {
     }
     
     margins {
-        top: 46
-        right: 8
+        top: Commons.Config.popupMargin
+        right: Commons.Config.popupMargin
     }
       
     Rectangle {
@@ -141,12 +141,6 @@ Widgets.PopupWindow {
             }
         }
         
-        Connections {
-            target: bar
-            function onShowPowerMenu() {
-                powerMenu.toggle();
-            }
-        }
     }
 }
 

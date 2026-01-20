@@ -27,8 +27,8 @@ Widgets.PopupWindow {
     }
     
     margins {
-        top: 4
-        left: Commons.Config.mediaPlayer.popupMargin
+        top: Commons.Config.popupMargin
+        left: Commons.Config.popupMargin
     }
     
     implicitWidth: 360

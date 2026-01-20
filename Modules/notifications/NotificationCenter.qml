@@ -38,8 +38,8 @@ Widgets.PopupWindow {
     }
     
     margins {
-        top: Commons.Config.notifications.centerMargin + Commons.Config.barHeight + Commons.Config.barMargin * 2
-        right: Commons.Config.notifications.centerMargin
+        top: Commons.Config.popupMargin
+        right: Commons.Config.popupMargin
     }
     
     implicitWidth: Commons.Config.notifications.centerWidth
@@ -50,7 +50,7 @@ Widgets.PopupWindow {
         radius: Commons.Config.notifications.centerRadius
         color: surfaceBase
         border.width: 1
-        border.color: surfaceBorder
+        border.color: Commons.Theme.border
         
         layer.enabled: true
         layer.effect: MultiEffect {

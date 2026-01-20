@@ -94,6 +94,7 @@ Scope {
             if (notificationPopups) bar.notificationPopups = notificationPopups
             if (notificationCenter) bar.notificationCenter = notificationCenter
             if (shellMenuPopup) bar.shellMenuPopup = shellMenuPopup
+            if (powerMenu) bar.powerMenuPopup = powerMenu
         }
     }
     Connections {

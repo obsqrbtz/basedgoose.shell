@@ -38,6 +38,8 @@ QtObject {
     readonly property int powerButtonSize: 28
     readonly property int powerButtonRadius: 6
     
+    readonly property int popupMargin: 12
+    
     readonly property int cpuUpdateInterval: 3000
     readonly property int memoryUpdateInterval: 3000
     

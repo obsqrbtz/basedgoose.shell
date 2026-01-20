@@ -5,7 +5,8 @@ QtObject {
     id: theme
     
     readonly property color background: '#151515'
-    readonly property color border: Qt.rgba(secondary.r, secondary.g, secondary.b, 0.12)
+    readonly property color border: Qt.rgba(foreground.r, foreground.g, foreground.b, 0.12)
+    readonly property color borderFocused: Qt.rgba(primary.r, primary.g, primary.b, 0.6)
     readonly property color foreground: '#C2C2B0'
     readonly property color foregroundMuted: '#CCCCCC'
     readonly property color primary: '#95A328'

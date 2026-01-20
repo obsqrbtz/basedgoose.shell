@@ -24,8 +24,8 @@ Widgets.PopupWindow {
     }
     
     margins {
-        right: 4
-        top: 4
+        right: Commons.Config.popupMargin
+        top: Commons.Config.popupMargin
     }
     
     implicitWidth: 320
@@ -52,7 +52,7 @@ Widgets.PopupWindow {
         color: Commons.Theme.surfaceBase
         radius: 16
         
-        border.color: Commons.Theme.surfaceBorder
+        border.color: Commons.Theme.border
         border.width: 1
         
         MouseArea {
@@ -262,7 +262,7 @@ Widgets.PopupWindow {
                     width: inputSlider.availableWidth
                     height: implicitHeight
                     radius: 3
-                    color: Commons.Theme.primary
+                    color: Commons.Theme.foreground
                     
                     Rectangle {
                         width: inputSlider.visualPosition * parent.width
