@@ -132,14 +132,14 @@ Widgets.PopupWindow {
                         
                         Repeater {
                             model: [
-                                { target: "wallpaper", command: "qs -c basedgoose-shell ipc call wallpaper toggle", description: "Toggle wallpaper selector" },
-                                { target: "calendar", command: "qs -c basedgoose-shell ipc call calendar toggle", description: "Toggle calendar popup" },
-                                { target: "launcher", command: "qs -c basedgoose-shell ipc call launcher toggle", description: "Toggle app launcher" },
-                                { target: "power", command: "qs -c basedgoose-shell ipc call power toggle", description: "Toggle power menu" },
-                                { target: "volume", command: "qs -c basedgoose-shell ipc call volume toggle", description: "Toggle volume popup" },
-                                { target: "cheatsheet", command: "qs -c basedgoose-shell ipc call cheatsheet toggle", description: "Toggle IPC cheatsheet" },
-                                { target: "shellmenu", command: "qs -c basedgoose-shell ipc call shellmenu toggle", description: "Toggle shell menu" },
-                                { target: "notification center", command: "qs -c basedgoose-shell ipc call notificatios toggle", description: "Toggle notification center" }
+                                { target: "wallpaper", command: "qs -c basedgoose.shell ipc call wallpaper toggle", description: "Toggle wallpaper selector" },
+                                { target: "calendar", command: "qs -c basedgoose.shell ipc call calendar toggle", description: "Toggle calendar popup" },
+                                { target: "launcher", command: "qs -c basedgoose.shell ipc call launcher toggle", description: "Toggle app launcher" },
+                                { target: "power", command: "qs -c basedgoose.shell ipc call power toggle", description: "Toggle power menu" },
+                                { target: "volume", command: "qs -c basedgoose.shell ipc call volume toggle", description: "Toggle volume popup" },
+                                { target: "cheatsheet", command: "qs -c basedgoose.shell ipc call cheatsheet toggle", description: "Toggle IPC cheatsheet" },
+                                { target: "shellmenu", command: "qs -c basedgoose.shell ipc call shellmenu toggle", description: "Toggle shell menu" },
+                                { target: "notification center", command: "qs -c basedgoose.shell ipc call notificatios toggle", description: "Toggle notification center" }
                             ]
                             
                             Rectangle {
