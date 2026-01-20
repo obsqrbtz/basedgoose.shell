@@ -159,11 +159,6 @@ PanelWindow {
                         property: "barWindow"
                         value: bar
                     }
-                    Binding {
-                        target: volumeLoader.item
-                        property: "volumePopup"
-                        value: bar.volumePopup
-                    }
                     Layout.leftMargin: Services.Config.componentPadding / 2
                 }
 
