@@ -1,0 +1,5 @@
+# basedgoose.shell
+
+## deps
+
+- pamixer

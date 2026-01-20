@@ -1,0 +1,5 @@
+module Commons
+singleton Theme 1.0 Theme.qml
+singleton Config 1.0 Config.qml
+
+

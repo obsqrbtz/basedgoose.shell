@@ -1,0 +1,12 @@
+singleton Theme 1.0 ../Commons/Theme.qml
+singleton Config 1.0 ../Commons/Config.qml
+
+CpuMonitor 1.0 CpuMonitor.qml
+MemoryMonitor 1.0 MemoryMonitor.qml
+
+singleton Audio 1.0 Audio.qml
+singleton Notifs 1.0 Notifs.qml
+singleton Players 1.0 Players.qml
+singleton VolumeMonitor 1.0 VolumeMonitor.qml
+singleton NotificationServer 1.0 NotificationServer.qml
+singleton Bluetooth 1.0 Bluetooth.qml

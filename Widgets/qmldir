@@ -1,0 +1,14 @@
+module Widgets
+AppLauncherButton 1.0 AppLauncherButton.qml
+Bluetooth 1.0 Bluetooth.qml
+BluetoothPopupWindow 1.0 BluetoothPopupWindow.qml
+Clock 1.0 Clock.qml
+MediaPlayer 1.0 MediaPlayer.qml
+MediaPlayerPopupWindow 1.0 MediaPlayerPopupWindow.qml
+NotificationButton 1.0 NotificationButton.qml
+PowerButton 1.0 PowerButton.qml
+SystemStats 1.0 SystemStats.qml
+SystemTrayComponent 1.0 SystemTrayComponent.qml
+Volume 1.0 Volume.qml
+VolumePopupWindow 1.0 VolumePopupWindow.qml
+Workspaces 1.0 Workspaces.qml
