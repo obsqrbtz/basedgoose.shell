@@ -39,6 +39,8 @@ QtObject {
     
     readonly property int cpuUpdateInterval: 3000
     readonly property int memoryUpdateInterval: 3000
+    
+    readonly property string wallpaperDirectory: "~/Pictures/walls"
 
     readonly property var notifications: ({
         popupWidth: 320,

@@ -10,6 +10,7 @@ import "./Modules/mediaplayer" as MediaPlayer
 import "./Modules/volume" as Volume
 import "./Modules/notifications" as Notifications
 import "./Modules/osd" as Osd
+import "./Modules/wallpaper" as Wallpaper
 import "./Services" as Services
 
 Scope {
@@ -62,6 +63,16 @@ Scope {
         id: notificationCenter
     }
     
+    Wallpaper.WallpaperSelector {
+        id: wallpaperSelector
+    }
+    
+    Process {
+        id: awwwDaemon
+        running: true
+        command: ["awww-daemon"]
+        onStarted: console.log("[Shell] awww-daemon started")
+    }
 
     QtObject {
         id: wiring
