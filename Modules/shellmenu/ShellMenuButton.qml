@@ -3,27 +3,27 @@ import "../../Services" as Services
 import "../../Commons" as Commons
 
 Rectangle {
-    id: appLauncherButton
+    id: shellMenuButton
     
     signal clicked()
     
     width: Commons.Config.powerButtonSize
     height: Commons.Config.powerButtonSize
-    color: launcherMa.containsMouse ? Commons.Theme.surfaceBase : "transparent"
+    color: menuMa.containsMouse ? Commons.Theme.surfaceBase : "transparent"
     radius: Commons.Config.powerButtonRadius
    
     Text {
         anchors.centerIn: parent
-        text: "\udb83\udec0"
+        text: "󰍜"
         color: Commons.Theme.secondary
-        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; }
+        font { family: "Material Design Icons"; pixelSize: Commons.Theme.fontSize + 2; }
     }
     
     MouseArea {
-        id: launcherMa
+        id: menuMa
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: appLauncherButton.clicked()
+        onClicked: shellMenuButton.clicked()
     }
 }

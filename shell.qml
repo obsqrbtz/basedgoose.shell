@@ -11,6 +11,8 @@ import "./Modules/volume" as Volume
 import "./Modules/notifications" as Notifications
 import "./Modules/osd" as Osd
 import "./Modules/wallpaper" as Wallpaper
+import "./Modules/cheatsheet" as Cheatsheet
+import "./Modules/shellmenu" as ShellMenu
 import "./Services" as Services
 
 Scope {
@@ -67,6 +69,16 @@ Scope {
         id: wallpaperSelector
     }
     
+    Cheatsheet.IPCCheatsheet {
+        id: ipcCheatsheet
+    }
+    
+    ShellMenu.ShellMenuPopup {
+        id: shellMenuPopup
+        cheatsheetPopup: ipcCheatsheet
+        wallpaperSelector: wallpaperSelector
+    }
+    
     Process {
         id: awwwDaemon
         running: true
@@ -81,6 +93,7 @@ Scope {
             if (mediaPopup) bar.mediaPopup = mediaPopup
             if (notificationPopups) bar.notificationPopups = notificationPopups
             if (notificationCenter) bar.notificationCenter = notificationCenter
+            if (shellMenuPopup) bar.shellMenuPopup = shellMenuPopup
         }
     }
     Connections {

@@ -6,6 +6,7 @@ import Quickshell.Services.SystemTray
 import "../../Services" as Services
 import "../../Commons" as Commons
 import "../../Modules/applauncher" as AppLauncher
+import "../../Modules/shellmenu" as ShellMenu
 import "../../Modules/clock" as Clock
 import "../../Modules/notifications" as Notifications
 import "../../Modules/power" as Power
@@ -15,12 +16,12 @@ import "../../Modules/workspaces" as Workspaces
 import "../../Modules/bluetooth" as Bluetooth
 import "../../Modules/mediaplayer" as MediaPlayer
 import "../../Modules/volume" as Volume
+import "../../Modules/shellmenu" as ShellMenu
 
 PanelWindow {
     id: bar
 
     signal showPowerMenu()
-    signal showAppLauncher()
 
     property var bluetoothPopup
     property var calendarPopup
@@ -28,6 +29,7 @@ PanelWindow {
     property var volumePopup
     property var notificationPopups
     property var notificationCenter
+    property var shellMenuPopup
 
     Services.CpuMonitor { id: cpuMonitor }
     Services.MemoryMonitor { id: memoryMonitor }
@@ -74,8 +76,12 @@ PanelWindow {
         anchors.margins: Commons.Config.barPadding
         spacing: Commons.Config.barSpacing
 
-        AppLauncher.AppLauncherButton {
-            onClicked: bar.showAppLauncher()
+        ShellMenu.ShellMenuButton {
+            onClicked: {
+                if (bar.shellMenuPopup) {
+                    bar.shellMenuPopup.toggle()
+                }
+            }
         }
 
         Workspaces.Workspaces {}
