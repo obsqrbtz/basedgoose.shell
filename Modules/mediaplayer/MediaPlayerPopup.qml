@@ -7,10 +7,9 @@ import "../../Services" as Services
 import "../../Commons" as Commons
 import "../../Widgets" as Widgets
 
-PanelWindow {
+Widgets.PopupWindow {
     id: popupWindow
     
-    property bool shouldShow: false
     property bool isHovered: false
     
     readonly property var player: Services.Players.active
@@ -18,11 +17,9 @@ PanelWindow {
     readonly property real playerLength: Services.Players.trackLength
     readonly property bool playerIsPlaying: Services.Players.isPlaying
     
-    readonly property real targetWidth: shouldShow ? 360 : 0
-    readonly property real targetHeight: shouldShow ? (player ? contentColumn.implicitHeight + 32 : 0) : 0
-    
-    visible: shouldShow && player !== null
-    screen: Quickshell.screens[0]
+    initialScale: 0.94
+    transformOriginX: 0.0
+    transformOriginY: 0.0
     
     anchors {
         top: true
@@ -31,34 +28,40 @@ PanelWindow {
     
     margins {
         top: 4
+        left: Commons.Config.mediaPlayer.popupMargin
     }
     
-    implicitWidth: targetWidth
-    implicitHeight: targetHeight
+    implicitWidth: 360
+    implicitHeight: player ? contentColumn.implicitHeight + 32 : 0
     
-    color: Commons.Theme.surfaceBase
+    visible: shouldShow && player !== null
     
-    Rectangle {
+    Item {
+        id: contentItem
         anchors.fill: parent
-        radius: Commons.Config.notifications.centerRadius
-        color: Commons.Theme.surfaceBase
-        opacity: shouldShow ? 1.0 : 0
-
-        border.width: 1
-        border.color: Commons.Theme.border
         
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.25)
-            shadowBlur: 0.8
-            shadowVerticalOffset: 8
-            shadowHorizontalOffset: 0
+        property real progress: 0
+        
+        Rectangle {
+            anchors.fill: parent
+            radius: Commons.Config.notifications.centerRadius
+            color: Commons.Theme.surfaceBase
+
+            border.width: 1
+            border.color: Commons.Theme.border
+            
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                shadowEnabled: true
+                shadowColor: Qt.rgba(0, 0, 0, 0.25)
+                shadowBlur: 0.8
+                shadowVerticalOffset: 8
+                shadowHorizontalOffset: 0
+            }
         }
-    }
-    
-    ColumnLayout {
-        id: contentColumn
+        
+        ColumnLayout {
+            id: contentColumn
         anchors.fill: parent
         anchors.margins: 16
         spacing: 16
@@ -164,7 +167,7 @@ PanelWindow {
                 color: Commons.Theme.secondary
                 radius: 3
                 
-                width: parent.width * (popupWindow.progress)
+                width: parent.width * (contentItem.progress)
 
                 Behavior on width {
                     NumberAnimation { duration: 80 }
@@ -176,7 +179,7 @@ PanelWindow {
             Layout.fillWidth: true
             
             Text {
-                text: formatTime(popupWindow.playerPosition ?? 0)
+                text: popupWindow.formatTime(popupWindow.playerPosition ?? 0)
                 color: Commons.Theme.surfaceTextVariant
                 font.pixelSize: 10
                 font.family: "JetBrainsMono Nerd Font"
@@ -185,7 +188,7 @@ PanelWindow {
             Item { Layout.fillWidth: true }
             
             Text {
-                text: formatTime(popupWindow.playerLength ?? 0)
+                text: popupWindow.formatTime(popupWindow.playerLength ?? 0)
                 color: Commons.Theme.surfaceTextVariant
                 font.pixelSize: 10
                 font.family: "JetBrainsMono Nerd Font"
@@ -257,30 +260,26 @@ PanelWindow {
             
             Item { Layout.fillWidth: true }
         }
-    }
-    
-    HoverHandler {
-        id: hoverHandler
-        onHoveredChanged: popupWindow.isHovered = hovered
-    }
-
-    property real progress: 0
-    Timer {
-        id: progressTimer
-        interval: 250
-        repeat: true
-        running: true
-        onTriggered: {
-            if (!popupWindow.player || !popupWindow.playerLength || popupWindow.playerLength <= 0) {
-                popupWindow.progress = 0
-            } else {
-                var p = popupWindow.playerPosition / popupWindow.playerLength
-                if (!isFinite(p) || p < 0) p = 0
-                popupWindow.progress = Math.max(0, Math.min(1, p))
+        }
+        
+        Timer {
+            id: progressTimer
+            interval: 250
+            repeat: true
+            running: true
+            onTriggered: {
+                if (!popupWindow.player || !popupWindow.playerLength || popupWindow.playerLength <= 0) {
+                    contentItem.progress = 0
+                } else {
+                    var p = popupWindow.playerPosition / popupWindow.playerLength
+                    if (!isFinite(p) || p < 0) p = 0
+                    contentItem.progress = Math.max(0, Math.min(1, p))
+                }
             }
         }
     }
     
+    readonly property real progress: contentItem.progress
     function formatTime(seconds) {
         if (!seconds || seconds <= 0) return "0:00"
         const mins = Math.floor(seconds / 60)
