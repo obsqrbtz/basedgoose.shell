@@ -23,6 +23,7 @@ PanelWindow {
     signal showAppLauncher()
 
     property var bluetoothPopup
+    property var calendarPopup
     property var mediaPopup
     property var volumePopup
     property var notificationPopups
@@ -58,9 +59,14 @@ PanelWindow {
         id: volPopup
     }
 
+    Clock.CalendarPopup {
+        id: calPopup
+    }
+
     Component.onCompleted: {
         bar.bluetoothPopup = btPopup
         bar.volumePopup = volPopup
+        bar.calendarPopup = calPopup
     }
 
     RowLayout {
@@ -114,7 +120,10 @@ PanelWindow {
                     Layout.rightMargin: Commons.Config.componentPadding / 2
                 }
 
-                Clock.Clock {}
+                Clock.Clock {
+                    barWindow: bar
+                    calendarPopup: bar.calendarPopup
+                }
 
                 SystemTray.SystemTrayComponent {
                     barWindow: bar
