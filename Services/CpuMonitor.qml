@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import "../Commons" as Commons
 
 Item {
     id: cpuMonitor
@@ -40,7 +41,7 @@ Item {
     
     Timer {
         id: cpuTimer
-        interval: Config.cpuUpdateInterval
+        interval: Commons.Config.cpuUpdateInterval
         running: true
         onTriggered: cpuProc.running = true
     }

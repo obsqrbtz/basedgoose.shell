@@ -1,6 +1,6 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
-import "../../Commons" as Commons
+import "../Commons" as Commons
 
 ColumnLayout {
     id: root

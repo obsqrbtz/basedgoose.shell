@@ -1,5 +1,5 @@
 import QtQuick 6.10
-import "../../Commons" as Commons
+import "../Commons" as Commons
 
 Rectangle {
     id: root

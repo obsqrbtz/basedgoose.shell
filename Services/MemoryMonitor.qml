@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import "../Commons" as Commons
 
 Item {
     id: memoryMonitor
@@ -29,7 +30,7 @@ Item {
     
     Timer {
         id: memTimer
-        interval: Config.memoryUpdateInterval
+        interval: Commons.Config.memoryUpdateInterval
         running: true
         onTriggered: memProc.running = true
     }
