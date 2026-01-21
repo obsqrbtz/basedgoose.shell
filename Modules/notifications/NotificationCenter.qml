@@ -75,7 +75,7 @@ Widgets.PopupWindow {
                 text: "Notifications"
                 font.pixelSize: 20
                 font.weight: Font.Bold
-                font.family: "Inter"
+                font.family: Commons.Theme.fontUI
                 color: surfaceText
                 Layout.fillWidth: true
             }
@@ -201,7 +201,7 @@ Widgets.PopupWindow {
                                 text: modelData.appName || "Notification"
                                 font.pixelSize: 11
                                 font.weight: Font.Medium
-                                font.family: "Inter"
+                                font.family: Commons.Theme.fontUI
                                 color: surfaceTextVariant
                                 Layout.fillWidth: true
                                 elide: Text.ElideRight
@@ -210,7 +210,7 @@ Widgets.PopupWindow {
                             Text {
                                 text: modelData.timeString || "now"
                                 font.pixelSize: 9
-                                font.family: "Inter"
+                                font.family: Commons.Theme.fontUI
                                 color: Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.35)
                             }
                         }
@@ -233,7 +233,7 @@ Widgets.PopupWindow {
                         text: modelData.summary || ""
                         font.pixelSize: 13
                         font.weight: Font.DemiBold
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         color: surfaceText
                         wrapMode: Text.Wrap
                         maximumLineCount: 2
@@ -245,7 +245,7 @@ Widgets.PopupWindow {
                         Layout.fillWidth: true
                         text: modelData.body || ""
                         font.pixelSize: 11
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         color: surfaceTextVariant
                         wrapMode: Text.Wrap
                         maximumLineCount: 3

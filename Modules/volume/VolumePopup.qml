@@ -71,7 +71,7 @@ Widgets.PopupWindow {
         
         Text {
             text: "Volume"
-            font.family: "Inter"
+            font.family: Commons.Theme.fontUI
             font.pixelSize: 14
             font.weight: Font.DemiBold
             color: Commons.Theme.foreground
@@ -87,7 +87,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: audio.muted ? "󰖁" : "󰕾"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 20
                     color: Commons.Theme.foreground
                 }
@@ -99,7 +99,7 @@ Widgets.PopupWindow {
                     Text {
                         id: outputLabel
                         text: "Output"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
                         color: outputMuteArea.containsMouse ? Commons.Theme.primary : Commons.Theme.foreground
                         
@@ -119,7 +119,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: audio.percentage + "%"
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     font.pixelSize: 12
                     font.weight: Font.Medium
                     color: Commons.Theme.foreground
@@ -186,7 +186,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: audio.sourceMuted ? "󰍭" : "󰍬"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 20
                     color: Commons.Theme.foreground
                 }
@@ -198,7 +198,7 @@ Widgets.PopupWindow {
                     Text {
                         id: inputLabel
                         text: "Input"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
                         color: inputMuteArea.containsMouse ? Commons.Theme.primary : Commons.Theme.foreground
                         
@@ -218,7 +218,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: audio.sourcePercentage + "%"
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     font.pixelSize: 12
                     font.weight: Font.Medium
                     color: Commons.Theme.foreground

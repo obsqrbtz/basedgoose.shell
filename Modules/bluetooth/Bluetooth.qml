@@ -41,7 +41,7 @@ Rectangle {
                 if (hasConnection) return "󰂱"
                 return "󰂯"
             }
-            font.family: "Material Design Icons"
+            font.family: Commons.Theme.fontIcon
             font.pixelSize: 14
             color: {
                 if (!isEnabled) return Commons.Theme.foreground
@@ -63,7 +63,7 @@ Rectangle {
                 if (deviceCount > 1) return deviceName + " +" + (deviceCount - 1)
                 return deviceName
             }
-            font.family: "Inter"
+            font.family: Commons.Theme.fontUI
             font.pixelSize: 10
             font.weight: hasConnection ? Font.Medium : Font.Normal
             elide: Text.ElideRight

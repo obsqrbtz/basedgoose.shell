@@ -32,7 +32,7 @@ Rectangle {
     Text {
         anchors.centerIn: parent
         text: root.icon
-        font.family: "Material Design Icons"
+        font.family: Commons.Theme.fontIcon
         font.pixelSize: root.iconSize
         color: buttonMouse.containsMouse ? root.hoverIconColor : root.iconColor
         

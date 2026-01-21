@@ -16,7 +16,7 @@ ColumnLayout {
     
     Text {
         text: root.icon
-        font.family: "Material Design Icons"
+        font.family: Commons.Theme.fontIcon
         font.pixelSize: root.iconSize
         color: Commons.Theme.surfaceTextVariant
         opacity: root.iconOpacity
@@ -27,7 +27,7 @@ ColumnLayout {
         text: root.title
         font.pixelSize: 16
         font.weight: Font.Medium
-        font.family: "Inter"
+        font.family: Commons.Theme.fontUI
         color: Commons.Theme.surfaceTextVariant
         opacity: root.textOpacity
         Layout.alignment: Qt.AlignHCenter
@@ -37,7 +37,7 @@ ColumnLayout {
     Text {
         text: root.subtitle
         font.pixelSize: 13
-        font.family: "Inter"
+        font.family: Commons.Theme.fontUI
         color: Commons.Theme.surfaceTextVariant
         opacity: root.textOpacity * 0.67
         Layout.alignment: Qt.AlignHCenter

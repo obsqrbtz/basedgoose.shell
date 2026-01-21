@@ -83,7 +83,7 @@ Widgets.PopupWindow {
                     Text {
                         anchors.centerIn: parent
                         text: "󰌌"
-                        font.family: "Material Design Icons"
+                        font.family: Commons.Theme.fontIcon
                         font.pixelSize: 18
                         color: cPrimary
                     }
@@ -95,7 +95,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "IPC Cheatsheet"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 15
                         font.weight: Font.Bold
                         color: cText
@@ -103,7 +103,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "Available IPC commands"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 11
                         color: cSubText
                     }
@@ -165,7 +165,7 @@ Widgets.PopupWindow {
                                         
                                         Text {
                                             text: modelData.command
-                                            font.family: "JetBrainsMono Nerd Font"
+                                            font.family: Commons.Theme.font
                                             font.pixelSize: 11
                                             color: copyFeedback.running ? cPrimary : cPrimary
                                             Layout.fillWidth: true
@@ -173,7 +173,7 @@ Widgets.PopupWindow {
                                         
                                         Text {
                                             text: copyFeedback.running ? "Copied to clipboard!" : modelData.description
-                                            font.family: "Inter"
+                                            font.family: Commons.Theme.fontUI
                                             font.pixelSize: 10
                                             color: copyFeedback.running ? cPrimary : cSubText
                                             Layout.fillWidth: true

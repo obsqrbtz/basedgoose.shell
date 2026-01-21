@@ -16,7 +16,7 @@ Rectangle {
         anchors.centerIn: parent
         text: "\uf219"
         color: Commons.Theme.primary
-        font { family: "Material Design Icons"; pixelSize: Commons.Theme.fontSize + 2; }
+        font { family: Commons.Theme.fontIcon; pixelSize: Commons.Theme.fontSize + 2; }
     }
     
     MouseArea {

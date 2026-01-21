@@ -64,14 +64,14 @@ Rectangle {
         
         Text {
             text: "󰎇"
-            font.family: "Material Design Icons"
+            font.family: Commons.Theme.fontIcon
             font.pixelSize: 14
             color: Commons.Theme.foreground
         }
         
         Text {
             text: "No media"
-            font.family: "Inter"
+            font.family: Commons.Theme.fontUI
             font.pixelSize: 10
             font.weight: Font.Medium
             color: Commons.Theme.foreground
@@ -187,7 +187,7 @@ Rectangle {
                 Text {
                     anchors.centerIn: parent
                     text: "󰒮"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 13
                     color: Commons.Theme.foreground
                 }
@@ -220,7 +220,7 @@ Rectangle {
                     anchors.centerIn: parent
                     anchors.horizontalCenterOffset: root.isPlaying ? 0 : 1
                     text: root.isPlaying ? "󰏤" : "󰐊"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 14
                     color: Commons.Theme.background
                 }
@@ -252,7 +252,7 @@ Rectangle {
                 Text {
                     anchors.centerIn: parent
                     text: "󰒭"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 13
                     color: Commons.Theme.foreground
                 }

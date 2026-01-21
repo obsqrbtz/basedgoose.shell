@@ -90,7 +90,7 @@ Widgets.PopupWindow {
                         Text {
                             anchors.centerIn: parent
                             text: "󰌌"
-                            font.family: "Material Design Icons"
+                            font.family: Commons.Theme.fontIcon
                             font.pixelSize: 14
                             color: cPrimary
                         }
@@ -98,7 +98,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "IPC Cheatsheet"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
                         font.weight: Font.Medium
                         color: cText
@@ -142,7 +142,7 @@ Widgets.PopupWindow {
                         Text {
                             anchors.centerIn: parent
                             text: "\uf03e"
-                            font.family: "Material Design Icons"
+                            font.family: Commons.Theme.fontIcon
                             font.pixelSize: 14
                             color: cPrimary
                         }
@@ -150,7 +150,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "Wallpaper Selector"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
                         font.weight: Font.Medium
                         color: cText

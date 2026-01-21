@@ -31,7 +31,7 @@ Rectangle {
         text: root.text
         font.pixelSize: root.fontSize
         font.weight: Font.Medium
-        font.family: "Inter"
+        font.family: Commons.Theme.fontUI
         color: root.textColor
     }
     

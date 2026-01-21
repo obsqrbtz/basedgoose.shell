@@ -47,7 +47,7 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             text: root.icon || ""
-            font.family: "Material Design Icons"
+            font.family: Commons.Theme.fontIcon
             font.pixelSize: 14
             color: root.iconColor
             visible: root.icon.length > 0

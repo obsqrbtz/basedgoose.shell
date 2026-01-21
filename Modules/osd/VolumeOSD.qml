@@ -103,7 +103,7 @@ PanelWindow {
                       : (root.currentVolume > 66
                          ? "󰕾"
                          : (root.currentVolume > 33 ? "󰖀" : "󰕿"))
-                font.family: "Material Design Icons"
+                font.family: Commons.Theme.fontIcon
                 font.pixelSize: 20
                 color: root.currentMuted
                        ? Commons.Theme.foreground
@@ -147,7 +147,7 @@ PanelWindow {
             Text {
                 text: root.currentVolume + "%"
                 color: Commons.Theme.foreground
-                font.family: "Inter"
+                font.family: Commons.Theme.fontUI
                 font.pixelSize: 13
                 font.weight: Font.DemiBold
                 Layout.preferredWidth: 36

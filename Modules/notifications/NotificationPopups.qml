@@ -228,7 +228,7 @@ PanelWindow {
                                         text: modelData.appName || "Notification"
                                         font.pixelSize: 12
                                         font.weight: Font.Medium
-                                        font.family: "Inter"
+                                        font.family: Commons.Theme.fontUI
                                         font.letterSpacing: 0.3
                                         color: root.surfaceTextVariant
                                         Layout.fillWidth: true
@@ -238,7 +238,7 @@ PanelWindow {
                                     Text {
                                         text: modelData.timeString || "now"
                                         font.pixelSize: 10
-                                        font.family: "Inter"
+                                        font.family: Commons.Theme.fontUI
                                         font.letterSpacing: 0.2
                                         color: Qt.rgba(root.surfaceText.r, root.surfaceText.g, root.surfaceText.b, 0.35)
                                     }
@@ -263,7 +263,7 @@ PanelWindow {
                                 text: modelData.summary || ""
                                 font.pixelSize: 13
                                 font.weight: Font.DemiBold
-                                font.family: "Inter"
+                                font.family: Commons.Theme.fontUI
                                 font.letterSpacing: -0.1
                                 color: root.surfaceText
                                 wrapMode: Text.Wrap
@@ -277,7 +277,7 @@ PanelWindow {
                                 Layout.fillWidth: true
                                 text: modelData.body || ""
                                 font.pixelSize: 12
-                                font.family: "Inter"
+                                font.family: Commons.Theme.fontUI
                                 font.letterSpacing: 0.1
                                 color: root.surfaceTextVariant
                                 wrapMode: Text.Wrap

@@ -60,7 +60,7 @@ Widgets.PopupWindow {
             
             Text {
                 text: "Power Menu"
-                font.family: "Inter"
+                font.family: Commons.Theme.fontUI
                 font.pixelSize: 14
                 font.weight: Font.DemiBold
                 color: Commons.Theme.foreground
@@ -105,7 +105,7 @@ Widgets.PopupWindow {
                         Text {
                             text: "Shutdown"
                             Layout.fillWidth: true
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 13
                             font.weight: Font.Medium
                             color: Commons.Theme.foreground
@@ -159,7 +159,7 @@ Widgets.PopupWindow {
                         Text {
                             text: "Reboot"
                             Layout.fillWidth: true
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 13
                             font.weight: Font.Medium
                             color: Commons.Theme.foreground
@@ -213,7 +213,7 @@ Widgets.PopupWindow {
                         Text {
                             text: "Logout"
                             Layout.fillWidth: true
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 13
                             font.weight: Font.Medium
                             color: Commons.Theme.foreground

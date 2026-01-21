@@ -85,7 +85,7 @@ Widgets.PopupWindow {
                         Text {
                             anchors.centerIn: parent
                             text: "󰂯"
-                            font.family: "Material Design Icons"
+                            font.family: Commons.Theme.fontIcon
                             font.pixelSize: 18
                             color: cPrimary
                         }
@@ -96,7 +96,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: "Bluetooth"
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 15
                             font.weight: Font.Bold
                             color: cText
@@ -105,7 +105,7 @@ Widgets.PopupWindow {
                         Text {
                             property var connected: devices.filter(d => d.connected)
                             text: connected.length > 0 ? connected[0].name : "No device connected"
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 11
                             color: cSubText
                         }
@@ -141,7 +141,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: adapter?.discovering ? "󰑐" : "󰑓"
-                            font.family: "Material Design Icons"
+                            font.family: Commons.Theme.fontIcon
                             font.pixelSize: 16
                             color: adapter?.discovering ? cPrimary : cText
                             
@@ -153,7 +153,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: adapter?.discovering ? "Scanning..." : "Scan for devices"
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 12
                             font.weight: Font.Medium
                             color: cText
@@ -212,7 +212,7 @@ Widgets.PopupWindow {
                                         if (icon.includes("keyboard")) return "󰌌"
                                         return "󰂯"
                                     }
-                                    font.family: "Material Design Icons"
+                                    font.family: Commons.Theme.fontIcon
                                     font.pixelSize: 18
                                     color: isConnected ? cPrimary : cText
                                 }
@@ -223,7 +223,7 @@ Widgets.PopupWindow {
                                     
                                     Text {
                                         text: deviceItem.modelData.name
-                                        font.family: "Inter"
+                                        font.family: Commons.Theme.fontUI
                                         font.pixelSize: 12
                                         font.weight: Font.Medium
                                         color: cText
@@ -238,7 +238,7 @@ Widgets.PopupWindow {
                                             if (deviceItem.modelData.bonded) return "Paired"
                                             return "Available"
                                         }
-                                        font.family: "Inter"
+                                        font.family: Commons.Theme.fontUI
                                         font.pixelSize: 10
                                         color: isConnected ? cPrimary : cSubText
                                     }
@@ -298,14 +298,14 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: "󰒓"
-                            font.family: "Material Design Icons"
+                            font.family: Commons.Theme.fontIcon
                             font.pixelSize: 14
                             color: cSubText
                         }
                         
                         Text {
                             text: "Bluetooth Settings"
-                            font.family: "Inter"
+                            font.family: Commons.Theme.fontUI
                             font.pixelSize: 12
                             color: cSubText
                         }

@@ -38,7 +38,7 @@ Rectangle {
     Text {
         anchors.centerIn: parent
         text: root.fallbackIcon
-        font.family: "Material Design Icons"
+        font.family: Commons.Theme.fontIcon
         font.pixelSize: root.iconSize - 4
         color: root.iconColor
         visible: !root.iconSource || root.iconSource.length === 0 || iconImage.status === Image.Error

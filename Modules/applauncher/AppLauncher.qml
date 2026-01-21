@@ -122,7 +122,7 @@ Widgets.PopupWindow {
                 text: "Applications"
                 font.pixelSize: 20
                 font.weight: Font.Bold
-                font.family: "Inter"
+                font.family: Commons.Theme.fontUI
                 color: cText
                 Layout.fillWidth: true
             }
@@ -142,7 +142,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "󰍉"
-                        font.family: "Material Design Icons"
+                        font.family: Commons.Theme.fontIcon
                         font.pixelSize: 18
                         color: cSubText
                     }
@@ -151,7 +151,7 @@ Widgets.PopupWindow {
                         id: searchInput
                         Layout.fillWidth: true
                         color: cText
-                        font { family: "Inter"; pixelSize: 13; weight: Font.Medium }
+                        font { family: Commons.Theme.fontUI; pixelSize: 13; weight: Font.Medium }
                         selectByMouse: true
                         focus: true
                         activeFocusOnPress: true
@@ -261,7 +261,7 @@ Widgets.PopupWindow {
                         Text {
                             text: name
                             color: cText
-                            font { family: "Inter"; pixelSize: 13; weight: Font.Medium }
+                            font { family: Commons.Theme.fontUI; pixelSize: 13; weight: Font.Medium }
                             Layout.fillWidth: true
                             elide: Text.ElideRight
                         }

@@ -72,7 +72,7 @@ Widgets.PopupWindow {
                     Text {
                         anchors.centerIn: parent
                         text: "\uf03e"
-                        font.family: "Material Design Icons"
+                        font.family: Commons.Theme.fontIcon
                         font.pixelSize: 18
                         color: cPrimary
                     }
@@ -84,7 +84,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "Wallpaper Selector"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 15
                         font.weight: Font.Bold
                         color: cText
@@ -92,7 +92,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: wallpaperList.count > 0 ? wallpaperList.count + " wallpapers found" : "Loading..."
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 11
                         color: cSubText
                     }
@@ -115,7 +115,7 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: "Directory:"
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
                         color: cText
                     }
@@ -124,7 +124,7 @@ Widgets.PopupWindow {
                         id: directoryInput
                         Layout.fillWidth: true
                         text: Services.ConfigService.wallpaperDirectory
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 11
                         color: cText
                         selectByMouse: true
@@ -246,7 +246,7 @@ Widgets.PopupWindow {
                                     id: errorIcon
                                     anchors.centerIn: parent
                                     text: "󰈙"
-                                    font.family: "Material Design Icons"
+                                    font.family: Commons.Theme.fontIcon
                                     font.pixelSize: 24
                                     color: cSubText
                                     visible: false

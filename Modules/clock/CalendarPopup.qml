@@ -66,7 +66,7 @@ Widgets.PopupWindow {
             Text {
                 id: monthYearText
                 text: Qt.formatDateTime(currentDate, "MMMM yyyy")
-                font.family: "Inter"
+                font.family: Commons.Theme.fontUI
                 font.pixelSize: 16
                 font.weight: Font.DemiBold
                 color: Commons.Theme.foreground
@@ -87,7 +87,7 @@ Widgets.PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text: "󰁍"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 14
                     color: prevMouseArea.containsMouse ? Commons.Theme.background : Commons.Theme.foreground
                 }
@@ -119,7 +119,7 @@ Widgets.PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text: "󰁔"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 14
                     color: nextMouseArea.containsMouse ? Commons.Theme.background : Commons.Theme.foreground
                 }
@@ -147,7 +147,7 @@ Widgets.PopupWindow {
                 Text {
                     Layout.fillWidth: true
                     text: modelData
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     font.pixelSize: 11
                     font.weight: Font.Medium
                     color: Commons.Theme.foregroundMuted
@@ -217,7 +217,7 @@ Widgets.PopupWindow {
                                 return parent.dayNum - calendarRepeater.daysInMonth
                             }
                         }
-                        font.family: "Inter"
+                        font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
                         font.weight: parent.isToday ? Font.DemiBold : Font.Medium
                         color: {
@@ -255,7 +255,7 @@ Widgets.PopupWindow {
             Text {
                 anchors.centerIn: parent
                 text: "Today"
-                font.family: "Inter"
+                font.family: Commons.Theme.fontUI
                 font.pixelSize: 12
                 font.weight: Font.Medium
                 color: Commons.Theme.foreground

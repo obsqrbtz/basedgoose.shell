@@ -26,6 +26,8 @@ QtObject {
     readonly property color surfaceAccent: Qt.rgba(secondary.r, secondary.g, secondary.b, 0.12)
 
     readonly property string font: "JetBrainsMono Nerd Font"
+    readonly property string fontUI: "Inter"
+    readonly property string fontIcon: "JetBrainsMono Nerd Font"
     readonly property int fontSize: 13
     readonly property int radius: 8
 }

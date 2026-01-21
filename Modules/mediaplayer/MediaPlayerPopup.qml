@@ -87,7 +87,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: "Media Player"
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     font.pixelSize: 20
                     font.weight: Font.Bold
                     color: surfaceText
@@ -147,7 +147,7 @@ Widgets.PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text: "󰎈"
-                    font.family: "Material Design Icons"
+                    font.family: Commons.Theme.fontIcon
                     font.pixelSize: 80
                     color: surfaceTextVariant
                     visible: !(player?.trackArtUrl ?? false)
@@ -165,7 +165,7 @@ Widgets.PopupWindow {
                     color: surfaceText
                     font.pixelSize: 15
                     font.weight: Font.DemiBold
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     elide: Text.ElideRight
                     horizontalAlignment: Text.AlignHCenter
                     maximumLineCount: 2
@@ -177,7 +177,7 @@ Widgets.PopupWindow {
                     text: player?.trackArtist ?? ""
                     color: surfaceTextVariant
                     font.pixelSize: 12
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     font.weight: Font.Medium
                     elide: Text.ElideRight
                     horizontalAlignment: Text.AlignHCenter
@@ -188,7 +188,7 @@ Widgets.PopupWindow {
                     text: player?.trackAlbum ?? ""
                     color: surfaceTextVariant
                     font.pixelSize: 11
-                    font.family: "Inter"
+                    font.family: Commons.Theme.fontUI
                     opacity: 0.8
                     elide: Text.ElideRight
                     horizontalAlignment: Text.AlignHCenter
@@ -284,7 +284,7 @@ Widgets.PopupWindow {
                         text: popupWindow.formatTime(popupWindow.playerPosition ?? 0)
                         color: surfaceTextVariant
                         font.pixelSize: 10
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: Commons.Theme.font
                     }
                     
                     Item { Layout.fillWidth: true }
@@ -293,7 +293,7 @@ Widgets.PopupWindow {
                         text: popupWindow.formatTime(popupWindow.playerLength ?? 0)
                         color: surfaceTextVariant
                         font.pixelSize: 10
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: Commons.Theme.font
                     }
                 }
             }
@@ -321,7 +321,7 @@ Widgets.PopupWindow {
                     Text {
                         anchors.centerIn: parent
                         text: "󰒮"
-                        font.family: "Material Design Icons"
+                        font.family: Commons.Theme.fontIcon
                         font.pixelSize: 18
                         color: surfaceText
                     }
@@ -355,7 +355,7 @@ Widgets.PopupWindow {
                         anchors.centerIn: parent
                         anchors.horizontalCenterOffset: (player?.isPlaying ?? false) ? 0 : 1
                         text: (player?.isPlaying ?? false) ? "󰏤" : "󰐊"
-                        font.family: "Material Design Icons"
+                        font.family: Commons.Theme.fontIcon
                         font.pixelSize: 24
                         color: Commons.Theme.background
                     }
@@ -388,7 +388,7 @@ Widgets.PopupWindow {
                     Text {
                         anchors.centerIn: parent
                         text: "󰒭"
-                        font.family: "Material Design Icons"
+                        font.family: Commons.Theme.fontIcon
                         font.pixelSize: 18
                         color: surfaceText
                     }

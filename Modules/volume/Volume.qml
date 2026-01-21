@@ -34,7 +34,7 @@ Item {
                 return "󰕿"
             }
             
-            font.family: "Material Design Icons"
+            font.family: Commons.Theme.fontIcon
             font.pixelSize: 14
             
             color: {
@@ -57,7 +57,7 @@ Item {
             id: volumeText
             
             text: percentage
-            font.family: "Inter"
+            font.family: Commons.Theme.fontUI
             font.pixelSize: 10
             font.weight: Font.Medium
             

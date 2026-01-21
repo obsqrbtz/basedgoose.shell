@@ -45,7 +45,7 @@ Rectangle {
             text: root.unreadCount > 99 ? "99+" : root.unreadCount
             font.pixelSize: 8
             font.weight: Font.Bold
-            font.family: "Inter"
+            font.family: Commons.Theme.fontUI
             color: Commons.Theme.background
         }
     }
@@ -68,7 +68,7 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             text: "󰂛"
-            font.family: "Material Design Icons"
+            font.family: Commons.Theme.fontIcon
             font.pixelSize: 7
             color: Commons.Theme.background
         }
@@ -77,7 +77,7 @@ Rectangle {
     Text {
         anchors.centerIn: parent
         text: root.hasDnd ? "󰂛" : (root.unreadCount > 0 ? "󰵅" : "󰂚")
-        font.family: "Material Design Icons"
+        font.family: Commons.Theme.fontIcon
         font.pixelSize: 16
         color: mouseArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.foreground
         
