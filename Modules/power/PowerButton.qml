@@ -19,7 +19,7 @@ Rectangle {
         anchors.centerIn: parent
         text: "\udb81\udc25"
         color: Commons.Theme.error
-        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; weight: Font.Bold }
+        font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.Bold }
     }
     
     MouseArea {

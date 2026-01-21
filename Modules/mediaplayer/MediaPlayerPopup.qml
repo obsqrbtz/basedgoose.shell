@@ -284,7 +284,7 @@ Widgets.PopupWindow {
                         text: popupWindow.formatTime(popupWindow.playerPosition ?? 0)
                         color: surfaceTextVariant
                         font.pixelSize: 10
-                        font.family: Commons.Theme.font
+                        font.family: Commons.Theme.fontMono
                     }
                     
                     Item { Layout.fillWidth: true }
@@ -293,7 +293,7 @@ Widgets.PopupWindow {
                         text: popupWindow.formatTime(popupWindow.playerLength ?? 0)
                         color: surfaceTextVariant
                         font.pixelSize: 10
-                        font.family: Commons.Theme.font
+                        font.family: Commons.Theme.fontMono
                     }
                 }
             }

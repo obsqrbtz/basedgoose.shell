@@ -97,7 +97,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: "\udb81\udc25"
-                            font.family: Commons.Theme.font
+                            font.family: Commons.Theme.fontMono
                             font.pixelSize: 20
                             color: Commons.Theme.error
                         }
@@ -151,7 +151,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: "\udb81\udf09"
-                            font.family: Commons.Theme.font
+                            font.family: Commons.Theme.fontMono
                             font.pixelSize: 20
                             color: Commons.Theme.warning
                         }
@@ -205,7 +205,7 @@ Widgets.PopupWindow {
                         
                         Text {
                             text: "\udb81\uddfd"
-                            font.family: Commons.Theme.font
+                            font.family: Commons.Theme.fontMono
                             font.pixelSize: 20
                             color: Commons.Theme.secondary
                         }

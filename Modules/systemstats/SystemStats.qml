@@ -28,12 +28,12 @@ Rectangle {
             Text {
                 text: "\uf4bc"
                 color: Commons.Theme.primary
-                font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
             }
             Text {
                 text: systemStats.cpuUsage + "%"
                 color: Commons.Theme.foreground
-                font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
             }
         }
         
@@ -50,12 +50,12 @@ Rectangle {
             Text {
                 text: "\uefc5"
                 color: Commons.Theme.primary
-                font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
             }
             Text {
                 text: Math.round(systemStats.memUsed) + "M / " + Math.round(systemStats.memTotal) + "M"
                 color: Commons.Theme.foreground
-                font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
             }
         }
     }

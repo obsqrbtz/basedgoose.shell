@@ -18,7 +18,7 @@ Item {
         anchors.centerIn: parent
         
         color: Commons.Theme.foreground
-        font { family: Commons.Theme.font; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
+        font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
         text: Qt.formatDateTime(new Date(), Commons.Config.clockFormat)
         
         scale: isHovered ? 1.05 : 1.0

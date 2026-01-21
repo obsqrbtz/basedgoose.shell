@@ -165,7 +165,7 @@ Widgets.PopupWindow {
                                         
                                         Text {
                                             text: modelData.command
-                                            font.family: Commons.Theme.font
+                                            font.family: Commons.Theme.fontMono
                                             font.pixelSize: 11
                                             color: copyFeedback.running ? cPrimary : cPrimary
                                             Layout.fillWidth: true

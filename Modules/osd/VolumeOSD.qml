@@ -147,7 +147,7 @@ PanelWindow {
             Text {
                 text: root.currentVolume + "%"
                 color: Commons.Theme.foreground
-                font.family: Commons.Theme.fontUI
+                font.family: Commons.Theme.fontMono
                 font.pixelSize: 13
                 font.weight: Font.DemiBold
                 Layout.preferredWidth: 36

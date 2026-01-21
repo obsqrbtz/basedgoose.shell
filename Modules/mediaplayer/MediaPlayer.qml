@@ -112,6 +112,7 @@ Rectangle {
                         return artist && artist.trim() !== "" ? artist + " - " : ""
                     }
                     color: Commons.Theme.surfaceTextVariant
+                    font.family: Commons.Theme.fontUI
                     font.pixelSize: 10
                     font.weight: Font.Medium
                     visible: text !== ""
@@ -121,6 +122,7 @@ Rectangle {
                     id: trackText
                     text: root.player?.trackTitle ?? "Unknown"
                     color: Commons.Theme.foreground
+                    font.family: Commons.Theme.fontUI
                     font.pixelSize: 10
                     font.weight: Font.Medium
                 }

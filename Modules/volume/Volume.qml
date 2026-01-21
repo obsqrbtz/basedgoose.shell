@@ -57,7 +57,7 @@ Item {
             id: volumeText
             
             text: percentage
-            font.family: Commons.Theme.fontUI
+            font.family: Commons.Theme.fontMono
             font.pixelSize: 10
             font.weight: Font.Medium
             

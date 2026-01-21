@@ -119,7 +119,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: audio.percentage + "%"
-                    font.family: Commons.Theme.fontUI
+                    font.family: Commons.Theme.fontMono
                     font.pixelSize: 12
                     font.weight: Font.Medium
                     color: Commons.Theme.foreground
@@ -218,7 +218,7 @@ Widgets.PopupWindow {
                 
                 Text {
                     text: audio.sourcePercentage + "%"
-                    font.family: Commons.Theme.fontUI
+                    font.family: Commons.Theme.fontMono
                     font.pixelSize: 12
                     font.weight: Font.Medium
                     color: Commons.Theme.foreground
