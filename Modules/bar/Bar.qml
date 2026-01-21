@@ -107,7 +107,7 @@ PanelWindow {
             Layout.preferredWidth: rightRow.width + 20
             height: Commons.Config.componentHeight
             color: Commons.Theme.surfaceBase
-            radius: Commons.Config.componentRadius
+            radius: Commons.Theme.radius
 
             RowLayout {
                 id: rightRow

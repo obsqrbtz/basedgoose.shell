@@ -12,7 +12,6 @@ QtObject {
     
     readonly property int componentHeight: 30
     readonly property int componentPadding: 8
-    readonly property int componentRadius: 8
     
     readonly property int workspaceCount: 9
     readonly property int workspaceIndicatorWidth: 10
@@ -56,7 +55,7 @@ QtObject {
         centerMargin: 12,
         itemHeight: 100,
         itemSpacing: 8,
-        centerRadius: 16,
+        centerRadius: 16, // Use Theme.radius * 2 instead
         groupSpacing: 16
     })
     

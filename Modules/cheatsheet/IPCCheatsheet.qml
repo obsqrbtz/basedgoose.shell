@@ -47,7 +47,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: cSurface
-        radius: 16
+        radius: Commons.Theme.radius * 2
         border.color: cBorder
         border.width: 1
         
@@ -146,7 +146,7 @@ Widgets.PopupWindow {
                                 id: commandItem
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: commandRow.implicitHeight + 16
-                                radius: 8
+                                radius: Commons.Theme.radius
                                 color: itemMouse.containsMouse ? cHover : "transparent"
                                 border.width: 1
                                 border.color: copyFeedback.running ? cPrimary : cBorder

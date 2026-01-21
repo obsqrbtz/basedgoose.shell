@@ -33,7 +33,7 @@ Rectangle {
         
         width: Math.max(16, badgeText.implicitWidth + 6)
         height: 16
-        radius: 8
+        radius: Commons.Theme.radius
         
         color: Commons.Theme.secondary
         border.width: 2

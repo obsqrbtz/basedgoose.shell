@@ -50,7 +50,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: Commons.Theme.surfaceBase
-        radius: 16
+        radius: Commons.Theme.radius * 2
         
         border.color: Commons.Theme.border
         border.width: 1

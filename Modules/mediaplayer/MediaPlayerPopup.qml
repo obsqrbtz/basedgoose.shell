@@ -53,7 +53,7 @@ Widgets.PopupWindow {
             id: backgroundRect
             anchors.fill: parent
             color: surfaceBase
-            radius: 16
+            radius: Commons.Theme.radius * 2
             border.color: Commons.Theme.border
             border.width: 1
             
@@ -307,7 +307,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
                     Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                    radius: 8
+                    radius: Commons.Theme.radius
                     color: prevArea.containsMouse ? Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.15) : "transparent"
                     
                     Behavior on color {
@@ -374,7 +374,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
                     Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                    radius: 8
+                    radius: Commons.Theme.radius
                     color: nextArea.containsMouse ? Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.15) : "transparent"
                     
                     Behavior on color {

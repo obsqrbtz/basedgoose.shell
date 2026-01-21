@@ -57,7 +57,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: Commons.Theme.surfaceBase
-        radius: 16
+        radius: Commons.Theme.radius * 2
         
         border.color: Commons.Theme.border
         border.width: 1
@@ -71,7 +71,7 @@ Widgets.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
-                radius: 8
+                radius: Commons.Theme.radius
                 color: cheatsheetMouse.containsMouse ? cHover : "transparent"
                 border.width: 1
                 border.color: cBorder
@@ -123,7 +123,7 @@ Widgets.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
-                radius: 8
+                radius: Commons.Theme.radius
                 color: wallpaperMouse.containsMouse ? cHover : "transparent"
                 border.width: 1
                 border.color: cBorder

@@ -47,7 +47,7 @@ Widgets.PopupWindow {
         
     Rectangle {
         anchors.fill: parent
-        radius: Commons.Config.notifications.centerRadius
+        radius: Commons.Theme.radius * 2
         color: surfaceBase
         border.width: 1
         border.color: Commons.Theme.border

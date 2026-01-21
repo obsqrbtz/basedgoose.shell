@@ -41,7 +41,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: cSurface
-        radius: 16
+        radius: Commons.Theme.radius * 2
         border.color: cBorder
         border.width: 1
         
@@ -208,7 +208,7 @@ Widgets.PopupWindow {
                             id: wallpaperItem
                             width: wallpaperGrid.cellWidth - 8
                             height: 120 * 9 / 16
-                            radius: 8
+                            radius: Commons.Theme.radius
                             color: itemArea.containsMouse ? cHover : "transparent"
                             border.width: itemArea.containsMouse ? 2 : 1
                             border.color: itemArea.containsMouse ? cPrimary : cBorder

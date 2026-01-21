@@ -76,7 +76,7 @@ PanelWindow {
     Rectangle {
         id: container
         anchors.fill: parent
-        radius: 16
+        radius: Commons.Theme.radius * 2
 
         color: Qt.rgba(
                    Commons.Theme.background.r,

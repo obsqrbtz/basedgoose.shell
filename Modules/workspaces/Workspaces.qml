@@ -12,7 +12,7 @@ Rectangle {
     Layout.preferredHeight: Commons.Config.componentHeight
     implicitHeight: Commons.Config.componentHeight
     color: Commons.Theme.surfaceBase
-    radius: Commons.Config.componentRadius
+    radius: Commons.Theme.radius
     clip: true
     
     RowLayout {
