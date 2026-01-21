@@ -285,9 +285,12 @@ Widgets.PopupWindow {
         
         Process {
             id: loadingProcess
-            running: Services.ConfigService.initialized
+            running: false
             property string wallpaperDir: {
-                var dir = Services.ConfigService.initialized ? Services.ConfigService.wallpaperDirectory : Commons.Config.wallpaperDirectory
+                if (!Services.ConfigService.initialized) {
+                    return ""
+                }
+                var dir = Services.ConfigService.wallpaperDirectory
                 return dir.startsWith("~") ? dir.replace("~", "$HOME") : dir
             }
             command: ["sh", "-c", "find " + wallpaperDir + " -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.webp' -o -iname '*.bmp' -o -iname '*.tiff' -o -iname '*.svg' -o -iname '*.avif' -o -iname '*.jxl' \\) 2>/dev/null | head -100"]
@@ -348,6 +351,12 @@ Widgets.PopupWindow {
             function onWallpaperDirectoryChanged() {
                 directoryInput.text = Services.ConfigService.wallpaperDirectory
                 refresh()
+            }
+            function onInitializedChanged() {
+                if (Services.ConfigService.initialized) {
+                    directoryInput.text = Services.ConfigService.wallpaperDirectory
+                    refresh()
+                }
             }
         }
     }
