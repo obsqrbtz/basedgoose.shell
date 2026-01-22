@@ -139,7 +139,8 @@ Widgets.PopupWindow {
                                 { target: "volume", command: "qs -c basedgoose.shell ipc call volume toggle", description: "Toggle volume popup" },
                                 { target: "cheatsheet", command: "qs -c basedgoose.shell ipc call cheatsheet toggle", description: "Toggle IPC cheatsheet" },
                                 { target: "shellmenu", command: "qs -c basedgoose.shell ipc call shellmenu toggle", description: "Toggle shell menu" },
-                                { target: "notification center", command: "qs -c basedgoose.shell ipc call notificatios toggle", description: "Toggle notification center" }
+                                { target: "notification center", command: "qs -c basedgoose.shell ipc call notificatios toggle", description: "Toggle notification center" },
+                                { target: "display", command: "qs -c basedgoose.shell ipc call display toggle", description: "Toggle display manager" }
                             ]
                             
                             Rectangle {

@@ -7,8 +7,8 @@ Item {
     id: memoryMonitor
     
     property int memUsage: 0
-    property real memTotal: 0
-    property real memUsed: 0
+    property real memTotal: 0.0
+    property real memUsed: 0.0
     
     Process {
         id: memProc
@@ -20,8 +20,8 @@ Item {
             onStreamFinished: {
                 var output = text.trim();
                 var line = output.split(/\s+/);
-                memoryMonitor.memTotal = parseFloat(line[1]);
-                memoryMonitor.memUsed = parseFloat(line[2]);
+                memoryMonitor.memTotal = parseFloat(line[1]) / 1024;
+                memoryMonitor.memUsed = parseFloat(line[2]) / 1024;
                 memoryMonitor.memUsage = Math.round(100 * memoryMonitor.memUsed / memoryMonitor.memTotal);
                 memTimer.start();
             }

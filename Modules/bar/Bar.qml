@@ -72,8 +72,12 @@ PanelWindow {
         bar.calendarPopup = calPopup
     }
 
+    // Left section
     RowLayout {
-        anchors.fill: parent
+        id: leftSection
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.margins: Commons.Config.barPadding
         spacing: Commons.Config.barSpacing
 
@@ -91,60 +95,61 @@ PanelWindow {
             barWindow: bar.barWindow
             mediaPopup: bar.mediaPopup
         }
+    }
 
-        Item { Layout.fillWidth: true }
+    // Center section - anchored to true center
+    SystemStats.SystemStats {
+        id: centerStats
+        anchors.centerIn: parent
+        width: implicitWidth
+        height: implicitHeight
+        cpuUsage: cpuMonitor.cpuUsage
+        memUsed: memoryMonitor.memUsed
+        memTotal: memoryMonitor.memTotal
+    }
 
-        SystemStats.SystemStats {
-            cpuUsage: cpuMonitor.cpuUsage
-            memUsed: memoryMonitor.memUsed
-            memTotal: memoryMonitor.memTotal
-        }
+    // Right section
+    Rectangle {
+        anchors.right: parent.right
+        anchors.rightMargin: Commons.Config.barPadding
+        anchors.verticalCenter: parent.verticalCenter
+        width: rightRow.width + 20
+        height: Commons.Config.componentHeight
+        color: Commons.Theme.surfaceBase
+        radius: Commons.Theme.radius
 
-        Item { Layout.fillWidth: true }
+        RowLayout {
+            id: rightRow
+            anchors.centerIn: parent
+            spacing: 10
 
-        Rectangle {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: rightRow.width + 20
-            height: Commons.Config.componentHeight
-            color: Commons.Theme.surfaceBase
-            radius: Commons.Theme.radius
+            Clock.Clock {
+                barWindow: bar
+                calendarPopup: bar.calendarPopup
+            }
 
-            RowLayout {
-                id: rightRow
-                spacing: 10
+            SystemTray.SystemTrayComponent {
+                barWindow: bar
+            }
 
-                Item { width: Commons.Config.componentPadding / 2 }
+            Volume.Volume {
+                barWindow: bar
+                volumePopup: bar.volumePopup
+            }
 
-                Volume.Volume {
-                    barWindow: bar
-                    volumePopup: bar.volumePopup
-                    Layout.leftMargin: Commons.Config.componentPadding / 2
-                }
+            Bluetooth.Bluetooth {
+                barWindow: bar
+                bluetoothPopup: bar.bluetoothPopup
+            }
 
-                Bluetooth.Bluetooth {
-                    barWindow: bar
-                    bluetoothPopup: bar.bluetoothPopup
-                    Layout.rightMargin: Commons.Config.componentPadding / 2
-                }
+            Notifications.NotificationButton {
+                notificationCenter: bar.notificationCenter
+            }
 
-                Clock.Clock {
-                    barWindow: bar
-                    calendarPopup: bar.calendarPopup
-                }
-
-                SystemTray.SystemTrayComponent {
-                    barWindow: bar
-                }
-
-                Notifications.NotificationButton {
-                    notificationCenter: bar.notificationCenter
-                }
-
-                Power.PowerButton {
-                    barWindow: bar
-                    powerMenuPopup: bar.powerMenuPopup
-                    onClicked: bar.showPowerMenu()
-                }
+            Power.PowerButton {
+                barWindow: bar
+                powerMenuPopup: bar.powerMenuPopup
+                onClicked: bar.showPowerMenu()
             }
         }
     }

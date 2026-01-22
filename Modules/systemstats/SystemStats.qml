@@ -12,6 +12,7 @@ Rectangle {
     
     Layout.preferredWidth: statsRow.implicitWidth + 20
     Layout.preferredHeight: Commons.Config.componentHeight
+    implicitWidth: statsRow.implicitWidth + 20
     implicitHeight: Commons.Config.componentHeight
     color: Commons.Theme.surfaceBase
     radius: Commons.Theme.radius
@@ -53,7 +54,7 @@ Rectangle {
                 font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
             }
             Text {
-                text: Math.round(systemStats.memUsed) + "M / " + Math.round(systemStats.memTotal) + "M"
+                text: systemStats.memUsed.toFixed(2) + "GB / " + systemStats.memTotal.toFixed(2) + "GB"
                 color: Commons.Theme.foreground
                 font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
             }
