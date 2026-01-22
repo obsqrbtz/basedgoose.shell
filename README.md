@@ -17,6 +17,7 @@ Quickshell setup for Hyprland
 - Power menu
 - Volume controls
 - Wallpaper selector
+- Display manager
 
 ## Installation
 
@@ -54,5 +55,6 @@ Available targets and actions:
 - `cheatsheet` - IPC cheatsheet
 - `shellmenu` - Shell menu
 - `notificatios` - Notification center
+- `display` - Display manager
 
 Each target supports `toggle`, `open`, and `close` actions.

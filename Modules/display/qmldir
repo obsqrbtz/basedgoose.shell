@@ -1,0 +1,10 @@
+module Display
+DisplayManagerWindow 1.0 DisplayManagerWindow.qml
+
+# Internal components (used within DisplayManagerWindow)
+internal MonitorCard MonitorCard.qml
+internal MonitorLayoutPreview MonitorLayoutPreview.qml
+internal ConfirmationDialog ConfirmationDialog.qml
+internal ConfigPathEditor ConfigPathEditor.qml
+internal DisplayHeader DisplayHeader.qml
+internal DropdownPopup DropdownPopup.qml

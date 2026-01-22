@@ -13,6 +13,7 @@ import "./Modules/osd" as Osd
 import "./Modules/wallpaper" as Wallpaper
 import "./Modules/cheatsheet" as Cheatsheet
 import "./Modules/shellmenu" as ShellMenu
+import "./Modules/display" as DisplayModule
 import "./Services" as Services
 
 Scope {
@@ -77,6 +78,11 @@ Scope {
         id: shellMenuPopup
         cheatsheetPopup: ipcCheatsheet
         wallpaperSelector: wallpaperSelector
+        displayManager: displayManagement
+    }
+    
+    DisplayModule.DisplayManagerWindow {
+        id: displayManagement
     }
     
     Process {
