@@ -17,6 +17,7 @@ Quickshell setup for Hyprland
 - Power menu
 - Volume controls
 - Wallpaper selector
+- Display manager
 
 ## Installation
 
@@ -25,6 +26,7 @@ Quickshell setup for Hyprland
    - `wl-clipboard`
    - `awww`
    - `zenity` or `yad`
+   - `wlr-randr`
 
 2. Clone this repository to your Quickshell config directory:
    ```bash
@@ -54,5 +56,6 @@ Available targets and actions:
 - `cheatsheet` - IPC cheatsheet
 - `shellmenu` - Shell menu
 - `notificatios` - Notification center
+- `display` - Display manager
 
 Each target supports `toggle`, `open`, and `close` actions.

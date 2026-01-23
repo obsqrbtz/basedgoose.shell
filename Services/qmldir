@@ -1,5 +1,6 @@
 CpuMonitor 1.0 CpuMonitor.qml
 MemoryMonitor 1.0 MemoryMonitor.qml
+DisplayManagerService 1.0 DisplayManagerService.qml
 
 singleton Audio 1.0 Audio.qml
 singleton Notifs 1.0 Notifs.qml

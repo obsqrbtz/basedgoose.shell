@@ -10,6 +10,7 @@ Singleton {
     readonly property string configPath: "$HOME/.config/basedgoose.shell/config.json"
     
     property string wallpaperDirectory: "~/Pictures/walls"
+    property string hyprlandMonitorsConfigPath: "~/.config/hypr/hyprland/monitors.conf"
     property bool initialized: false
     
     Component.onCompleted: {
@@ -48,7 +49,12 @@ Singleton {
                     var config = JSON.parse(configText)
                     if (config.wallpaperDirectory) {
                         root.wallpaperDirectory = config.wallpaperDirectory
-                    } else {
+                    }
+                    if (config.hyprlandMonitorsConfigPath) {
+                        root.hyprlandMonitorsConfigPath = config.hyprlandMonitorsConfigPath
+                    }
+                    // Save config if any defaults are missing
+                    if (!config.wallpaperDirectory || !config.hyprlandMonitorsConfigPath) {
                         root.saveConfig()
                     }
                 } catch (e) {
@@ -63,7 +69,8 @@ Singleton {
     
     function saveConfig() {
         var config = {
-            wallpaperDirectory: root.wallpaperDirectory
+            wallpaperDirectory: root.wallpaperDirectory,
+            hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath
         }
         
         var configJson = JSON.stringify(config, null, 2)
@@ -84,6 +91,11 @@ Singleton {
     
     function setWallpaperDirectory(path) {
         root.wallpaperDirectory = path
+        root.saveConfig()
+    }
+    
+    function setHyprlandMonitorsConfigPath(path) {
+        root.hyprlandMonitorsConfigPath = path
         root.saveConfig()
     }
 }

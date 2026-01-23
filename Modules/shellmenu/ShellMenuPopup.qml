@@ -16,6 +16,7 @@ Widgets.PopupWindow {
     
     property var cheatsheetPopup: null
     property var wallpaperSelector: null
+    property var displayManager: null
     
     readonly property color cSurface: Commons.Theme.background
     readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
@@ -167,6 +168,58 @@ Widgets.PopupWindow {
                         popupWindow.shouldShow = false
                         if (wallpaperSelector) {
                             wallpaperSelector.shouldShow = true
+                        }
+                    }
+                }
+            }
+            
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 48
+                radius: Commons.Theme.radius
+                color: displayMouse.containsMouse ? cHover : "transparent"
+                border.width: 1
+                border.color: cBorder
+                
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 12
+                    
+                    Rectangle {
+                        width: 28
+                        height: 28
+                        radius: 6
+                        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                        
+                        Text {
+                            anchors.centerIn: parent
+                            text: "󰍹"
+                            font.family: Commons.Theme.fontIcon
+                            font.pixelSize: 14
+                            color: cPrimary
+                        }
+                    }
+                    
+                    Text {
+                        text: "Display Manager"
+                        font.family: Commons.Theme.fontUI
+                        font.pixelSize: 12
+                        font.weight: Font.Medium
+                        color: cText
+                        Layout.fillWidth: true
+                    }
+                }
+                
+                MouseArea {
+                    id: displayMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        popupWindow.shouldShow = false
+                        if (displayManager) {
+                            displayManager.shouldShow = true
                         }
                     }
                 }
