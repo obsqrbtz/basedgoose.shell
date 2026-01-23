@@ -9,3 +9,5 @@ singleton VolumeMonitor 1.0 VolumeMonitor.qml
 singleton NotificationServer 1.0 NotificationServer.qml
 singleton Bluetooth 1.0 Bluetooth.qml
 singleton ConfigService 1.0 ConfigService.qml
+singleton WallpaperService 1.0 WallpaperService.qml
+singleton WallhavenAPIService 1.0 WallhavenAPIService.qml

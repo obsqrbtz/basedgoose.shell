@@ -10,6 +10,7 @@ Singleton {
     readonly property string configPath: "$HOME/.config/basedgoose.shell/config.json"
     
     property string wallpaperDirectory: "~/Pictures/walls"
+    property string wallpaperResizeMode: "fit"  // no, crop, fit, stretch
     property string hyprlandMonitorsConfigPath: "~/.config/hypr/hyprland/monitors.conf"
     property bool initialized: false
     
@@ -53,8 +54,11 @@ Singleton {
                     if (config.hyprlandMonitorsConfigPath) {
                         root.hyprlandMonitorsConfigPath = config.hyprlandMonitorsConfigPath
                     }
+                    if (config.wallpaperResizeMode) {
+                        root.wallpaperResizeMode = config.wallpaperResizeMode
+                    }
                     // Save config if any defaults are missing
-                    if (!config.wallpaperDirectory || !config.hyprlandMonitorsConfigPath) {
+                    if (!config.wallpaperDirectory || !config.wallpaperResizeMode || !config.hyprlandMonitorsConfigPath) {
                         root.saveConfig()
                     }
                 } catch (e) {
@@ -70,6 +74,7 @@ Singleton {
     function saveConfig() {
         var config = {
             wallpaperDirectory: root.wallpaperDirectory,
+            wallpaperResizeMode: root.wallpaperResizeMode,
             hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath
         }
         
@@ -91,6 +96,11 @@ Singleton {
     
     function setWallpaperDirectory(path) {
         root.wallpaperDirectory = path
+        root.saveConfig()
+    }
+
+    function setWallpaperResizeMode(mode) {
+        root.wallpaperResizeMode = mode
         root.saveConfig()
     }
     

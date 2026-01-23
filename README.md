@@ -16,7 +16,7 @@ Quickshell setup for Hyprland
 - Notification center
 - Power menu
 - Volume controls
-- Wallpaper selector
+- Wallpaper selector (local + Wallhaven)
 - Display manager
 
 ## Installation
@@ -27,6 +27,7 @@ Quickshell setup for Hyprland
    - `awww`
    - `zenity` or `yad`
    - `wlr-randr`
+   - `curl` (for Wallhaven wallpaper integration)
 
 2. Clone this repository to your Quickshell config directory:
    ```bash
