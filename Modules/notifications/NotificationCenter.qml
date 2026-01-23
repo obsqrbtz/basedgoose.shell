@@ -160,24 +160,13 @@ Widgets.PopupWindow {
                 border.width: 1
                 border.color: surfaceBorder
                 
-                opacity: modelData.closed ? 0.5 : 1.0
-                                
-                Rectangle {
-                    width: 3
-                    height: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 8
-                    anchors.verticalCenter: parent.verticalCenter
-                    radius: 1.5
-                    visible: modelData.urgency >= 1
-                    color: modelData.urgency === 2 ? error : Commons.Theme.warning
-                }
+                opacity: modelData.closed ? 0.85 : 1.0
                 
                 ColumnLayout {
                     id: contentCol
                     anchors.fill: parent
                     anchors.margins: 12
-                    anchors.leftMargin: modelData.urgency >= 1 ? 20 : 12
+                    anchors.leftMargin: 12
                     spacing: 6
                     
                     RowLayout {

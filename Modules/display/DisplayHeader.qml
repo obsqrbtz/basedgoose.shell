@@ -33,7 +33,6 @@ RowLayout {
     }
 
     ColumnLayout {
-        Layout.fillWidth: true
         spacing: 2
 
         Text {
@@ -52,10 +51,15 @@ RowLayout {
         }
     }
 
+    Item {
+        Layout.fillWidth: true
+        Layout.minimumWidth: 0
+    }
+
     Widgets.IconButton {
         width: 32
         height: 32
-        Layout.alignment: Qt.AlignVCenter
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         icon: "󰑓"
         iconSize: 14
         iconColor: cSubText

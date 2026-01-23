@@ -134,26 +134,6 @@ PanelWindow {
                         }
                         
                         Rectangle {
-                            width: 3
-                            height: 24
-                            anchors.left: parent.left
-                            anchors.leftMargin: 8
-                            anchors.verticalCenter: parent.verticalCenter
-                            radius: 1.5
-                            visible: modelData.urgency >= 1
-                            opacity: 0.8
-                            
-                            color: modelData.urgency === 2 ? root.error : root.warning
-                            
-                            SequentialAnimation on opacity {
-                                running: modelData.urgency === 2
-                                loops: Animation.Infinite
-                                NumberAnimation { to: 0.4; duration: 1200; easing.type: Easing.InOutQuad }
-                                NumberAnimation { to: 0.8; duration: 1200; easing.type: Easing.InOutQuad }
-                            }
-                        }
-                        
-                        Rectangle {
                             id: hoverLayer
                             anchors.fill: parent
                             radius: parent.radius
