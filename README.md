@@ -27,7 +27,7 @@ Quickshell setup for Hyprland
    - `awww`
    - `zenity` or `yad`
    - `wlr-randr`
-   - `curl` (for Wallhaven wallpaper integration)
+   - `curl`
 
 2. Clone this repository to your Quickshell config directory:
    ```bash
