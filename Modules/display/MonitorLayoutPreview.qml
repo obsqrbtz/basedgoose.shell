@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick 6.10
 import "../../Commons" as Commons
 import "../../Widgets" as Widgets
@@ -283,7 +284,7 @@ Rectangle {
                 readonly property int effectivePosX: (root.pendingChanges[name] && root.pendingChanges[name].positionX !== undefined) ? root.pendingChanges[name].positionX : positionX
                 readonly property int effectivePosY: (root.pendingChanges[name] && root.pendingChanges[name].positionY !== undefined) ? root.pendingChanges[name].positionY : positionY
 
-                readonly property bool hasPendingPosition: root.pendingChanges[name] && (root.pendingChanges[name].positionX !== undefined || root.pendingChanges[name].positionY !== undefined)
+                readonly property bool hasPendingPosition: !!(root.pendingChanges[name] && (root.pendingChanges[name].positionX !== undefined || root.pendingChanges[name].positionY !== undefined))
 
                 property real baseX: root.offsetX + (effectivePosX - root.minX) * root.displayScale
                 property real baseY: root.offsetY + (effectivePosY - root.minY) * root.displayScale

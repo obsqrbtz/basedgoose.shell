@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Effects
-import "../../Services" as Services
 import "../../Commons" as Commons
 import "../../Widgets" as Widgets
 
@@ -279,13 +278,6 @@ Widgets.PopupWindow {
                         }
                     }
                 }
-            }
-        }
-        
-        Connections {
-            target: bar
-            function onShowAppLauncher() {
-                appLauncher.toggle();
             }
         }
     }

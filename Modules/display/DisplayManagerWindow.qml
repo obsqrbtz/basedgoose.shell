@@ -2,7 +2,6 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Io
 import "../../Commons" as Commons
 import "../../Widgets" as Widgets
 import "../../Services" as Services
