@@ -79,9 +79,9 @@ Widgets.PopupWindow {
                     color: shutdownMa.pressed ? shutdownPressedColor : 
                            (shutdownMa.containsMouse ? shutdownHoverColor : shutdownBaseColor)
                     
-                    property color shutdownBaseColor: Qt.rgba(Commons.Theme.error.r, Commons.Theme.error.g, Commons.Theme.error.b, 0.1)
-                    property color shutdownHoverColor: Qt.rgba(Commons.Theme.error.r, Commons.Theme.error.g, Commons.Theme.error.b, 0.18)
-                    property color shutdownPressedColor: Qt.rgba(Commons.Theme.error.r, Commons.Theme.error.g, Commons.Theme.error.b, 0.25)
+                    property color shutdownBaseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.1)
+                    property color shutdownHoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.18)
+                    property color shutdownPressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
                     
                     Behavior on color {
                         ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
@@ -99,7 +99,7 @@ Widgets.PopupWindow {
                             text: "\udb81\udc25"
                             font.family: Commons.Theme.fontMono
                             font.pixelSize: 20
-                            color: Commons.Theme.error
+                            color: Commons.Theme.secondary
                         }
                         
                         Text {
@@ -133,10 +133,10 @@ Widgets.PopupWindow {
                     color: rebootMa.pressed ? rebootPressedColor : 
                            (rebootMa.containsMouse ? rebootHoverColor : rebootBaseColor)
                     
-                    property color rebootBaseColor: Qt.rgba(Commons.Theme.warning.r, Commons.Theme.warning.g, Commons.Theme.warning.b, 0.1)
-                    property color rebootHoverColor: Qt.rgba(Commons.Theme.warning.r, Commons.Theme.warning.g, Commons.Theme.warning.b, 0.18)
-                    property color rebootPressedColor: Qt.rgba(Commons.Theme.warning.r, Commons.Theme.warning.g, Commons.Theme.warning.b, 0.25)
-                    
+                    property color rebootBaseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.1)
+                    property color rebootHoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.18)
+                    property color rebootPressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
+
                     Behavior on color {
                         ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
                     }
@@ -153,7 +153,7 @@ Widgets.PopupWindow {
                             text: "\udb81\udf09"
                             font.family: Commons.Theme.fontMono
                             font.pixelSize: 20
-                            color: Commons.Theme.warning
+                            color: Commons.Theme.secondary
                         }
                         
                         Text {

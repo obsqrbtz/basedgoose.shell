@@ -32,7 +32,7 @@ Rectangle {
                 Layout.preferredWidth: isActive ? Commons.Config.workspaceIndicatorActiveWidth : Commons.Config.workspaceIndicatorWidth
                 Layout.preferredHeight: Commons.Config.workspaceIndicatorHeight
                 radius: Commons.Config.workspaceIndicatorRadius
-                color: isActive ? Commons.Theme.primary : (hasWindows ? Commons.Theme.primaryMuted : Commons.Theme.border)
+                color: isActive ? Commons.Theme.primary : (hasWindows ? Commons.Theme.secondary : Commons.Theme.foregroundMuted)
                 
                 Behavior on Layout.preferredWidth { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 200 } }

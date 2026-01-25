@@ -18,7 +18,7 @@ Rectangle {
     Text {
         anchors.centerIn: parent
         text: "\udb81\udc25"
-        color: Commons.Theme.error
+        color: Commons.Theme.secondary
         font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.Bold }
     }
     

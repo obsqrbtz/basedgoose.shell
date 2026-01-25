@@ -17,7 +17,7 @@ Rectangle {
     radius: 14
     
     color: mouseArea.containsMouse ? 
-           Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.15) :
+           Commons.Theme.background :
            "transparent"
     
     Behavior on color {

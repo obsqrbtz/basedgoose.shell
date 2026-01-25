@@ -45,7 +45,7 @@ Rectangle {
             font.pixelSize: 14
             color: {
                 if (!isEnabled) return Commons.Theme.foreground
-                if (isHovered) return Commons.Theme.primary
+                if (isHovered) return Commons.Theme.secondary
                 if (hasConnection) return Commons.Theme.success
                 return Commons.Theme.foreground
             }
