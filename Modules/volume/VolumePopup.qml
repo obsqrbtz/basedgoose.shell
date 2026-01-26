@@ -101,7 +101,7 @@ Widgets.PopupWindow {
                         text: "Output"
                         font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
-                        color: outputMuteArea.containsMouse ? Commons.Theme.primary : Commons.Theme.foreground
+                        color: outputMuteArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.foreground
                         
                         Behavior on color {
                             ColorAnimation { duration: 100 }
@@ -133,9 +133,9 @@ Widgets.PopupWindow {
                 to: 100
                 value: audio.percentage
                 trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
-                progressColor: Commons.Theme.primary
+                progressColor: Commons.Theme.secondary
                 handleColor: Commons.Theme.foreground
-                handleBorderColor: Commons.Theme.primary
+                handleBorderColor: Commons.Theme.secondary
                 
                 onMoved: {
                     audio.setVolume(value / 100)
@@ -167,7 +167,7 @@ Widgets.PopupWindow {
                         text: "Input"
                         font.family: Commons.Theme.fontUI
                         font.pixelSize: 12
-                        color: inputMuteArea.containsMouse ? Commons.Theme.primary : Commons.Theme.foreground
+                        color: inputMuteArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.foreground
                         
                         Behavior on color {
                             ColorAnimation { duration: 100 }
@@ -199,9 +199,9 @@ Widgets.PopupWindow {
                 to: 100
                 value: audio.sourcePercentage
                 trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
-                progressColor: Commons.Theme.primary
+                progressColor: Commons.Theme.secondary
                 handleColor: Commons.Theme.foreground
-                handleBorderColor: Commons.Theme.primary
+                handleBorderColor: Commons.Theme.secondary
                 
                 onMoved: {
                     audio.setSourceVolume(value / 100)

@@ -88,7 +88,7 @@ Widgets.PopupWindow {
                 Widgets.HeaderWithIcon {
                     icon: "󰎈"
                     title: "Media Player"
-                    iconColor: surfaceText
+                    iconColor: Commons.Theme.secondary
                     titleColor: surfaceText
                 }
                 
@@ -206,9 +206,9 @@ Widgets.PopupWindow {
                     to: popupWindow.playerLength > 0 ? popupWindow.playerLength : 1
                     enabled: player && player.canSeek && player.positionSupported
                     trackColor: Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.15)
-                    progressColor: Commons.Theme.primary
+                    progressColor: Commons.Theme.secondary
                     handleColor: surfaceText
-                    handleBorderColor: Commons.Theme.primary
+                    handleBorderColor: Commons.Theme.secondary
                     
                     property bool userInteracting: false
                     
@@ -282,7 +282,7 @@ Widgets.PopupWindow {
                     icon: (player?.isPlaying ?? false) ? "󰏤" : "󰐊"
                     iconSize: 24
                     iconColor: Commons.Theme.background
-                    baseColor: Commons.Theme.primary
+                    baseColor: Commons.Theme.secondary
                     hoverColor: Commons.Theme.secondary
                     onClicked: {
                         if (player) player.togglePlaying()
