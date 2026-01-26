@@ -316,59 +316,6 @@ Widgets.PopupWindow {
                                     Services.WallpaperService.setWallpaper(wallpaperItem.filePath)
                                 }
                             }
-
-                            /* Action buttons (visible on hover) */
-                            RowLayout {
-                                id: actionButtons
-                                anchors.top: parent.top
-                                anchors.right: parent.right
-                                anchors.margins: 8
-                                spacing: 6
-                                z: 5
-                                visible: wallpaperItem.containsMouse
-
-                                Widgets.IconButton {
-                                    width: 28
-                                    height: 28
-                                    icon: "\uf0c5"
-                                    iconSize: 12
-                                    iconColor: cSubText
-                                    hoverIconColor: cPrimary
-                                    baseColor: Qt.rgba(0,0,0,0.25)
-                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12)
-                                    onClicked: {
-                                        popupWindow.copyToClipboard(wallpaperItem.filePath)
-                                    }
-                                }
-
-                                Widgets.IconButton {
-                                    width: 28
-                                    height: 28
-                                    icon: "\uf07c"
-                                    iconSize: 12
-                                    iconColor: cSubText
-                                    hoverIconColor: cPrimary
-                                    baseColor: Qt.rgba(0,0,0,0.25)
-                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12)
-                                    onClicked: {
-                                        popupWindow.openFile(wallpaperItem.filePath)
-                                    }
-                                }
-
-                                Widgets.IconButton {
-                                    width: 28
-                                    height: 28
-                                    icon: "󰆐"
-                                    iconSize: 12
-                                    iconColor: cSubText
-                                    hoverIconColor: "#e86767"
-                                    baseColor: Qt.rgba(0,0,0,0.25)
-                                    hoverColor: Qt.rgba(0.9,0.1,0.1,0.12)
-                                    onClicked: {
-                                        popupWindow.deleteFile(wallpaperItem.filePath, wallpaperItem.fileName)
-                                    }
-                                }
-                            }
                         }
                     }
                 }
