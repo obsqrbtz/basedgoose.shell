@@ -18,7 +18,7 @@ Widgets.PopupWindow {
     readonly property real playerLength: Services.Players.trackLength
     readonly property bool playerIsPlaying: Services.Players.isPlaying
     
-    initialScale: 0.94
+    initialScale: 0.96
     transformOriginX: 0.0
     transformOriginY: 0.0
     
@@ -32,16 +32,10 @@ Widgets.PopupWindow {
         left: Commons.Config.popupMargin
     }
     
-    implicitWidth: 360
-    implicitHeight: player ? contentColumn.implicitHeight + 40 : 0
+    implicitWidth: 340
+    implicitHeight: popupWindow.player ? contentColumn.implicitHeight + 40 : 0
     
-    visible: shouldShow && player !== null
-    
-    readonly property color surfaceBase: Commons.Theme.background
-    readonly property color surfaceContainer: Commons.Theme.surfaceContainer
-    readonly property color surfaceText: Commons.Theme.surfaceText
-    readonly property color surfaceTextVariant: Commons.Theme.surfaceTextVariant
-    readonly property color surfaceBorder: Commons.Theme.surfaceBorder
+    visible: shouldShow && popupWindow.player !== null
     
     Item {
         id: contentItem
@@ -52,7 +46,7 @@ Widgets.PopupWindow {
         Rectangle {
             id: backgroundRect
             anchors.fill: parent
-            color: surfaceBase
+            color: Commons.Theme.background
             radius: Commons.Theme.radius * 2
             border.color: Commons.Theme.border
             border.width: 1
@@ -67,9 +61,9 @@ Widgets.PopupWindow {
             layer.enabled: true
             layer.effect: MultiEffect {
                 shadowEnabled: true
-                shadowColor: Qt.rgba(0, 0, 0, 0.25)
-                shadowBlur: 0.8
-                shadowVerticalOffset: 8
+                shadowColor: Qt.rgba(0, 0, 0, 0.4)
+                shadowBlur: 1.0
+                shadowVerticalOffset: 12
                 shadowHorizontalOffset: 0
             }
         }
@@ -79,92 +73,126 @@ Widgets.PopupWindow {
             anchors.fill: parent
             anchors.margins: 20
             spacing: 16
-            visible: player !== null
+            visible: popupWindow.player !== null
             
+            // Header
             RowLayout {
                 Layout.fillWidth: true
-                spacing: 12
+                spacing: 10
                 
-                Widgets.HeaderWithIcon {
-                    icon: "󰎈"
-                    title: "Media Player"
-                    iconColor: Commons.Theme.secondary
-                    titleColor: surfaceText
+                Text {
+                    text: "󰎈"
+                    font.family: Commons.Theme.fontIcon
+                    font.pixelSize: 18
+                    color: Commons.Theme.secondary
+                }
+                
+                Text {
+                    text: "Now Playing"
+                    font.family: Commons.Theme.fontUI
+                    font.pixelSize: 13
+                    font.weight: Font.DemiBold
+                    color: Commons.Theme.surfaceText
                 }
                 
                 Item { Layout.fillWidth: true }
                 
                 Widgets.IconButton {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    implicitWidth: 32
+                    implicitHeight: 32
                     icon: "󰅖"
-                    iconSize: 18
-                    iconColor: surfaceTextVariant
+                    iconSize: 16
+                    iconColor: Commons.Theme.surfaceTextVariant
+                    hoverIconColor: Commons.Theme.surfaceText
+                    baseColor: "transparent"
+                    hoverColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.06)
                     onClicked: popupWindow.shouldShow = false
                 }
             }
             
-            Widgets.Divider {
-                Layout.fillWidth: true
-                dividerColor: surfaceBorder
-            }
-            
-            Rectangle {
+            // Album Art
+            Item {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: Commons.Config.mediaPlayer.albumArtSize
-                Layout.preferredHeight: Commons.Config.mediaPlayer.albumArtSize
-                radius: 14
-                color: surfaceContainer
-                clip: true
+                Layout.preferredWidth: 260
+                Layout.preferredHeight: 260
+                Layout.topMargin: 0
                 
-                border.width: 1
-                border.color: surfaceBorder
-                
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    source: player?.trackArtUrl ?? ""
-                    sourceSize: Qt.size(Commons.Config.mediaPlayer.albumArtSize * 2, Commons.Config.mediaPlayer.albumArtSize * 2)
-                    fillMode: Image.PreserveAspectCrop
-                    asynchronous: true
-                    smooth: true
-                    visible: player?.trackArtUrl ?? false
+                // Glow effect background
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: parent.width - 20
+                    height: parent.height - 20
+                    radius: 16
+                    color: Commons.Theme.secondary
+                    opacity: (popupWindow.player?.trackArtUrl ?? false) ? 0.08 : 0
                     
-                    layer.enabled: true
-                    layer.effect: MultiEffect {
-                        maskEnabled: true
-                        maskThresholdMin: 0.5
-                        maskSpreadAtMin: 1.0
-                        maskSource: ShaderEffectSource {
-                            sourceItem: Rectangle {
-                                width: 1
-                                height: 1
-                                radius: 0.5
-                            }
-                        }
+                    Behavior on opacity {
+                        NumberAnimation { duration: 300 }
                     }
                 }
                 
-                Text {
+                Rectangle {
+                    id: albumArtContainer
                     anchors.centerIn: parent
-                    text: "󰎈"
-                    font.family: Commons.Theme.fontIcon
-                    font.pixelSize: 80
-                    color: surfaceTextVariant
-                    visible: !(player?.trackArtUrl ?? false)
-                    opacity: 0.3
+                    width: parent.width - 32
+                    height: parent.height - 32
+                    radius: 12
+                    color: Commons.Theme.surfaceContainer
+                    clip: true
+                    border.width: 1
+                    border.color: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08)
+                    
+                    Image {
+                        id: albumArt
+                        anchors.fill: parent
+                        source: popupWindow.player?.trackArtUrl ?? ""
+                        sourceSize: Qt.size(600, 600)
+                        fillMode: Image.PreserveAspectCrop
+                        asynchronous: true
+                        smooth: true
+                        visible: popupWindow.player?.trackArtUrl ?? false
+                        
+                        layer.enabled: true
+                        layer.effect: MultiEffect {
+                            maskEnabled: true
+                            maskThresholdMin: 0.5
+                            maskSpreadAtMin: 1.0
+                            maskSource: ShaderEffectSource {
+                                sourceItem: Rectangle {
+                                    width: albumArt.width
+                                    height: albumArt.height
+                                    radius: 12
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Placeholder icon
+                    Text {
+                        anchors.centerIn: parent
+                        text: "󰎈"
+                        font.family: Commons.Theme.fontIcon
+                        font.pixelSize: 72
+                        color: Commons.Theme.surfaceTextVariant
+                        visible: !(popupWindow.player?.trackArtUrl ?? false)
+                        opacity: 0.2
+                    }
                 }
             }
             
+            // Track Info
             ColumnLayout {
                 Layout.fillWidth: true
+                Layout.topMargin: 0
                 spacing: 4
                 
                 Text {
                     Layout.fillWidth: true
-                    text: player?.trackTitle ?? "Unknown"
-                    color: surfaceText
+                    text: popupWindow.player?.trackTitle ?? "Unknown Track"
+                    color: Commons.Theme.surfaceText
                     font.pixelSize: 15
-                    font.weight: Font.DemiBold
+                    font.weight: Font.Bold
                     font.family: Commons.Theme.fontUI
                     elide: Text.ElideRight
                     horizontalAlignment: Text.AlignHCenter
@@ -174,8 +202,8 @@ Widgets.PopupWindow {
                 
                 Text {
                     Layout.fillWidth: true
-                    text: player?.trackArtist ?? ""
-                    color: surfaceTextVariant
+                    text: popupWindow.player?.trackArtist ?? "Unknown Artist"
+                    color: Commons.Theme.secondary
                     font.pixelSize: 12
                     font.family: Commons.Theme.fontUI
                     font.weight: Font.Medium
@@ -185,18 +213,21 @@ Widgets.PopupWindow {
                 
                 Text {
                     Layout.fillWidth: true
-                    text: player?.trackAlbum ?? ""
-                    color: surfaceTextVariant
+                    text: popupWindow.player?.trackAlbum ?? ""
+                    color: Commons.Theme.surfaceTextVariant
                     font.pixelSize: 11
                     font.family: Commons.Theme.fontUI
-                    opacity: 0.8
+                    opacity: 0.7
                     elide: Text.ElideRight
                     horizontalAlignment: Text.AlignHCenter
+                    visible: text.length > 0
                 }
             }
             
+            // Progress Section
             ColumnLayout {
                 Layout.fillWidth: true
+                Layout.topMargin: 4
                 spacing: 6
                 
                 Widgets.CustomSlider {
@@ -204,11 +235,13 @@ Widgets.PopupWindow {
                     Layout.fillWidth: true
                     from: 0
                     to: popupWindow.playerLength > 0 ? popupWindow.playerLength : 1
-                    enabled: player && player.canSeek && player.positionSupported
-                    trackColor: Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.15)
+                    enabled: popupWindow.player && popupWindow.player.canSeek && popupWindow.player.positionSupported
+                    trackColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.12)
                     progressColor: Commons.Theme.secondary
-                    handleColor: surfaceText
-                    handleBorderColor: Commons.Theme.secondaryMuted
+                    handleColor: Commons.Theme.surfaceText
+                    handleBorderColor: Commons.Theme.secondary
+                    trackHeight: 4
+                    handleSize: 16
                     
                     property bool userInteracting: false
                     
@@ -221,18 +254,18 @@ Widgets.PopupWindow {
                     
                     onPressedChanged: {
                         userInteracting = pressed
-                        if (pressed && player && player.positionSupported) {
-                            player.positionChanged()
+                        if (pressed && popupWindow.player && popupWindow.player.positionSupported) {
+                            popupWindow.player.positionChanged()
                         }
                     }
                     
                     onMoved: {
-                        if (player && player.canSeek && player.positionSupported) {
+                        if (popupWindow.player && popupWindow.player.canSeek && popupWindow.player.positionSupported) {
                             var newPosition = value
-                            var currentPosition = player.position || 0
+                            var currentPosition = popupWindow.player.position || 0
                             var offset = newPosition - currentPosition
                             if (Math.abs(offset) > 0.05) {
-                                player.seek(offset)
+                                popupWindow.player.seek(offset)
                             }
                         }
                     }
@@ -243,68 +276,121 @@ Widgets.PopupWindow {
                     
                     Text {
                         text: popupWindow.formatTime(popupWindow.playerPosition ?? 0)
-                        color: surfaceTextVariant
-                        font.pixelSize: 10
+                        color: Commons.Theme.surfaceTextVariant
+                        font.pixelSize: 11
                         font.family: Commons.Theme.fontMono
+                        font.weight: Font.Medium
                     }
                     
                     Item { Layout.fillWidth: true }
                     
                     Text {
                         text: popupWindow.formatTime(popupWindow.playerLength ?? 0)
-                        color: surfaceTextVariant
-                        font.pixelSize: 10
+                        color: Commons.Theme.surfaceTextVariant
+                        font.pixelSize: 11
                         font.family: Commons.Theme.fontMono
+                        font.weight: Font.Medium
                     }
                 }
             }
             
+            // Controls
             RowLayout {
                 Layout.fillWidth: true
+                Layout.topMargin: 0
                 spacing: 12
                 
                 Item { Layout.fillWidth: true }
                 
-                Widgets.MediaControlButton {
-                    Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
-                    Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                    icon: "󰒮"
-                    iconColor: surfaceText
-                    onClicked: {
-                        if (player) player.previous()
+                // Previous button
+                Rectangle {
+                    Layout.preferredWidth: 44
+                    Layout.preferredHeight: 44
+                    radius: 22
+                    color: prevMouse.containsMouse ? Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08) : "transparent"
+                    
+                    Behavior on color { ColorAnimation { duration: 150 } }
+                    
+                    Text {
+                        anchors.centerIn: parent
+                        text: "󰒮"
+                        font.family: Commons.Theme.fontIcon
+                        font.pixelSize: 20
+                        color: Commons.Theme.surfaceText
+                    }
+                    
+                    MouseArea {
+                        id: prevMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (popupWindow.player) popupWindow.player.previous()
+                        }
                     }
                 }
                 
-                Widgets.MediaControlButton {
-                    Layout.preferredWidth: Commons.Config.mediaPlayer.playButtonSize
-                    Layout.preferredHeight: Commons.Config.mediaPlayer.playButtonSize
-                    radius: Commons.Config.mediaPlayer.playButtonSize / 2
-                    icon: (player?.isPlaying ?? false) ? "󰏤" : "󰐊"
-                    iconSize: 24
-                    iconColor: Commons.Theme.background
-                    baseColor: Commons.Theme.secondary
-                    hoverColor: Commons.Theme.secondary
-                    onClicked: {
-                        if (player) player.togglePlaying()
+                // Play/Pause button
+                Rectangle {
+                    Layout.preferredWidth: 56
+                    Layout.preferredHeight: 56
+                    radius: 28
+                    color: playMouse.pressed ? Qt.darker(Commons.Theme.secondary, 1.1) : 
+                           (playMouse.containsMouse ? Qt.lighter(Commons.Theme.secondary, 1.1) : Commons.Theme.secondary)
+                    
+                    Behavior on color { ColorAnimation { duration: 150 } }
+                    
+                    scale: playMouse.pressed ? 0.95 : 1.0
+                    
+                    Behavior on scale {
+                        NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
                     }
                     
                     Text {
                         anchors.centerIn: parent
-                        anchors.horizontalCenterOffset: (player?.isPlaying ?? false) ? 0 : 1
-                        text: (player?.isPlaying ?? false) ? "󰏤" : "󰐊"
+                        anchors.horizontalCenterOffset: (popupWindow.player?.isPlaying ?? false) ? 0 : 2
+                        text: (popupWindow.player?.isPlaying ?? false) ? "󰏤" : "󰐊"
                         font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 24
+                        font.pixelSize: 26
                         color: Commons.Theme.background
+                    }
+                    
+                    MouseArea {
+                        id: playMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (popupWindow.player) popupWindow.player.togglePlaying()
+                        }
                     }
                 }
                 
-                Widgets.MediaControlButton {
-                    Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
-                    Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                    icon: "󰒭"
-                    iconColor: surfaceText
-                    onClicked: {
-                        if (player) player.next()
+                // Next button
+                Rectangle {
+                    Layout.preferredWidth: 44
+                    Layout.preferredHeight: 44
+                    radius: 22
+                    color: nextMouse.containsMouse ? Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08) : "transparent"
+                    
+                    Behavior on color { ColorAnimation { duration: 150 } }
+                    
+                    Text {
+                        anchors.centerIn: parent
+                        text: "󰒭"
+                        font.family: Commons.Theme.fontIcon
+                        font.pixelSize: 20
+                        color: Commons.Theme.surfaceText
+                    }
+                    
+                    MouseArea {
+                        id: nextMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (popupWindow.player) popupWindow.player.next()
+                        }
                     }
                 }
                 
