@@ -86,14 +86,16 @@ Widgets.PopupWindow {
                 spacing: 12
                 
                 Widgets.HeaderWithIcon {
-                    Layout.fillWidth: true
                     icon: "󰎈"
                     title: "Media Player"
                     iconColor: surfaceText
                     titleColor: surfaceText
                 }
                 
+                Item { Layout.fillWidth: true }
+                
                 Widgets.IconButton {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     icon: "󰅖"
                     iconSize: 18
                     iconColor: surfaceTextVariant

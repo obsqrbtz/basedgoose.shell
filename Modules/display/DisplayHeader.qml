@@ -17,12 +17,13 @@ RowLayout {
     spacing: 12
 
     Widgets.HeaderWithIcon {
-        Layout.fillWidth: true
         icon: "󰍹"
         title: "Display Management"
         subtitle: root.isLoading ? "Loading..." : (root.monitorCount > 0 ? root.monitorCount + " display(s)" : "No displays")
         iconColor: root.cPrimary
     }
+
+    Item { Layout.fillWidth: true }
 
     Widgets.IconButton {
         width: 32
