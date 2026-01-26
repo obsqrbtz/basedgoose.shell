@@ -407,34 +407,50 @@ Rectangle {
                     visible: parent.width > 60 && parent.height > 40
 
                     Repeater {
-                        model: isMirrored ? monitorsAtThisPosition.length : 1
+                        model: monitorRect.isMirrored ? monitorRect.monitorsAtThisPosition.length : 1
 
                         delegate: Column {
+                            required property int index
                             spacing: 1
 
                             Text {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: isMirrored ? monitorsAtThisPosition[index].name : name
+                                anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
+                                text: {
+                                    if (monitorRect.isMirrored && monitorRect.monitorsAtThisPosition && monitorRect.monitorsAtThisPosition[parent.index]) {
+                                        return monitorRect.monitorsAtThisPosition[parent.index].name;
+                                    }
+                                    return monitorRect.name;
+                                }
                                 font.family: Commons.Theme.fontUI
-                                font.pixelSize: Math.max(9, Math.min(12, parent.parent.parent.width / (isMirrored ? 10 : 8)))
+                                font.pixelSize: {
+                                    if (parent && parent.parent && parent.parent.parent) {
+                                        return Math.max(9, Math.min(12, parent.parent.parent.width / (monitorRect.isMirrored ? 10 : 8)));
+                                    }
+                                    return 10;
+                                }
                                 font.weight: Font.Medium
                                 color: root.cText
                                 opacity: 0.9
                             }
 
                             Text {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                visible: (isMirrored && index === 0) || !isMirrored
+                                anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
+                                visible: (monitorRect.isMirrored && parent.index === 0) || !monitorRect.isMirrored
                                 text: {
-                                    if (isMirrored) {
-                                        var m = monitorsAtThisPosition[index];
+                                    if (monitorRect.isMirrored && monitorRect.monitorsAtThisPosition && monitorRect.monitorsAtThisPosition[parent.index]) {
+                                        var m = monitorRect.monitorsAtThisPosition[parent.index];
                                         return m.monitorWidth + "x" + m.monitorHeight;
                                     } else {
-                                        return monitorWidth + "x" + monitorHeight;
+                                        return monitorRect.monitorWidth + "x" + monitorRect.monitorHeight;
                                     }
                                 }
                                 font.family: Commons.Theme.fontUI
-                                font.pixelSize: Math.max(7, Math.min(9, parent.parent.parent.width / 14))
+                                font.pixelSize: {
+                                    if (parent && parent.parent && parent.parent.parent) {
+                                        return Math.max(7, Math.min(9, parent.parent.parent.width / 14));
+                                    }
+                                    return 8;
+                                }
                                 color: root.cSubText
                             }
                         }
@@ -447,13 +463,13 @@ Rectangle {
                     hoverEnabled: true
                     cursorShape: drag.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor
 
-                    drag.target: parent
+                    drag.target: monitorRect
                     drag.axis: Drag.XAndYAxis
 
                     onPressed: function (mouse) {
-                        root.selectedMonitor = name;
-                        originalMonitorX = effectivePosX;
-                        originalMonitorY = effectivePosY;
+                        root.selectedMonitor = monitorRect.name;
+                        monitorRect.originalMonitorX = monitorRect.effectivePosX;
+                        monitorRect.originalMonitorY = monitorRect.effectivePosY;
                         root.isDragging = true;
                     }
 
@@ -463,15 +479,15 @@ Rectangle {
                         var draggedPreviewX = monitorRect.x;
                         var draggedPreviewY = monitorRect.y;
 
-                        var monitorPos = previewToMonitor(draggedPreviewX, draggedPreviewY);
+                        var monitorPos = monitorRect.previewToMonitor(draggedPreviewX, draggedPreviewY);
 
                         var clampedX = Math.max(0, monitorPos.x);
                         var clampedY = Math.max(0, monitorPos.y);
 
                         var currentMonitor = {
-                            name: name,
-                            monitorWidth: monitorWidth,
-                            monitorHeight: monitorHeight
+                            name: monitorRect.name,
+                            monitorWidth: monitorRect.monitorWidth,
+                            monitorHeight: monitorRect.monitorHeight
                         };
 
                         var testPos = {
@@ -481,7 +497,7 @@ Rectangle {
                         var isAdjacent = false;
                         for (var i = 0; i < root.monitorsModel.count; i++) {
                             var other = root.monitorsModel.get(i);
-                            if (other.name === name)
+                            if (other.name === monitorRect.name)
                                 continue;
                             var otherPos = root.getEffectivePosition(other);
                             if (root.areMonitorsAdjacent(currentMonitor, testPos, other, otherPos)) {
@@ -500,17 +516,17 @@ Rectangle {
 
                         root.isDragging = false;
 
-                        if (snappedX !== originalMonitorX || snappedY !== originalMonitorY) {
+                        if (snappedX !== monitorRect.originalMonitorX || snappedY !== monitorRect.originalMonitorY) {
                             var positions = {};
 
-                            positions[name] = {
+                            positions[monitorRect.name] = {
                                 x: snappedX,
                                 y: snappedY
                             };
 
                             for (var i = 0; i < root.monitorsModel.count; i++) {
                                 var other = root.monitorsModel.get(i);
-                                if (other.name !== name) {
+                                if (other.name !== monitorRect.name) {
                                     var otherPos = root.getEffectivePosition(other);
                                     positions[other.name] = {
                                         x: otherPos.x,

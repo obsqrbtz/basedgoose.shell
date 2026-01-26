@@ -87,9 +87,36 @@ Scope {
     
     Process {
         id: awwwDaemon
-        running: true
+        running: false
         command: ["awww-daemon"]
         onStarted: console.log("[Shell] awww-daemon started")
+    }
+
+    Process {
+        id: awwwKillProcess
+        running: false
+        command: ["awww", "kill"]
+        stdout: StdioCollector {}
+        stderr: StdioCollector {}
+        onExited: {
+            startTimer.restart()
+        }
+    }
+
+    Timer {
+        id: startTimer
+        interval: 100
+        repeat: false
+        running: true
+        onTriggered: {
+            awwwDaemon.running = true
+        }
+    }
+
+    Component.onDestruction: {
+        console.log("[Shell] Cleaning up awww-daemon")
+        awwwDaemon.running = false
+        awwwKillProcess.running = true
     }
 
     QtObject {
