@@ -1,2 +1,6 @@
 module Wallpaper
+singleton WallpaperColors 1.0 WallpaperColors.qml
+LocalWallpaperTab 1.0 LocalWallpaperTab.qml
+WallhavenTab 1.0 WallhavenTab.qml
+SettingsTab 1.0 SettingsTab.qml
 WallpaperSelector 1.0 WallpaperSelector.qml

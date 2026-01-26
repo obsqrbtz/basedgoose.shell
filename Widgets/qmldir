@@ -5,3 +5,7 @@ ToggleSwitch 1.0 ToggleSwitch.qml
 EmptyState 1.0 EmptyState.qml
 ActionButton 1.0 ActionButton.qml
 AppIcon 1.0 AppIcon.qml
+FilterButton 1.0 FilterButton.qml
+ImageGrid 1.0 ImageGrid.qml
+ImageGridItem 1.0 ImageGridItem.qml
+TabButton 1.0 TabButton.qml
