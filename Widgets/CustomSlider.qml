@@ -8,7 +8,7 @@ Slider {
     property color trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
     property color progressColor: Commons.Theme.primary
     property color handleColor: Commons.Theme.foreground
-    property color handleBorderColor: Commons.Theme.primary
+    property color handleBorderColor: Commons.Theme.primaryMuted
     property int trackHeight: 6
     property int trackRadius: 3
     property int handleSize: 18

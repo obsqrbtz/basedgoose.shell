@@ -5,10 +5,10 @@ Rectangle {
     id: root
     
     property string text: ""
-    property color textColor: Commons.Theme.secondary
-    property color baseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.08)
-    property color hoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.15)
-    property color pressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
+    property color textColor: Commons.Theme.primary
+    property color baseColor: Commons.Theme.primaryMuted
+    property color hoverColor: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.15)
+    property color pressedColor: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.25)
     property int fontSize: 10
     property int horizontalPadding: 16
     property int animationDuration: 150

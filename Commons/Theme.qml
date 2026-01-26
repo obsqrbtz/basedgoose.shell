@@ -21,9 +21,10 @@ QtObject {
     readonly property color foregroundMuted: Qt.darker(foreground, 2.0)
 
     readonly property color primary: '#6C79D6'
-    readonly property color primaryMuted: Qt.darker(primary, 2.0)
+    readonly property color primaryMuted: Qt.rgba(primary.r, primary.g, primary.b, 0.1)
+    
     readonly property color secondary: '#D18B6B'
-    readonly property color secondaryMuted: Qt.darker(secondary, 2.0)
+    readonly property color secondaryMuted: Qt.rgba(secondary.r, secondary.g, secondary.b, 0.1)
 
     readonly property color warning: '#D4C87D'
     readonly property color success: '#7EC87E'

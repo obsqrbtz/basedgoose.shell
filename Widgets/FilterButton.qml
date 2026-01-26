@@ -7,7 +7,7 @@ Rectangle {
     property string text: ""
     property string value: ""
     property string currentValue: ""
-    property color activeColor: Commons.Theme.secondary
+    property color activeColor: Commons.Theme.primary
     property color inactiveColor: Qt.lighter(Commons.Theme.background, 1.15)
     property color textColor: Commons.Theme.foreground
     property color borderColor: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.08)

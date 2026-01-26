@@ -9,11 +9,11 @@ Rectangle {
     property string text: ""
     property int iconSize: 20
     property int textSize: 13
-    property color iconColor: Commons.Theme.secondary
+    property color iconColor: Commons.Theme.primary
     property color textColor: Commons.Theme.foreground
-    property color baseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.1)
-    property color hoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.18)
-    property color pressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
+    property color baseColor: Commons.Theme.primaryMuted
+    property color hoverColor: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.18)
+    property color pressedColor: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.25)
     property int animationDuration: 150
     
     signal clicked()

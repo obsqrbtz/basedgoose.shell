@@ -212,7 +212,7 @@ Rectangle {
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
                 radius: 12
-                color: playArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.primary
+                color: playArea.containsMouse ? Qt.lighter(Commons.Theme.secondary, 1.2) : Commons.Theme.secondary
                 
                 Behavior on color { ColorAnimation { duration: 100 } }
                 Behavior on scale { NumberAnimation { duration: 80 } }

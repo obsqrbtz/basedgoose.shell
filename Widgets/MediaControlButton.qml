@@ -8,7 +8,7 @@ Rectangle {
     property int iconSize: 18
     property color iconColor: Commons.Theme.foreground
     property color baseColor: "transparent"
-    property color hoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.15)
+    property color hoverColor: Commons.Theme.secondaryMuted
     property bool scaleOnInteraction: true
     property real hoverScale: 1.05
     property real pressedScale: 0.85

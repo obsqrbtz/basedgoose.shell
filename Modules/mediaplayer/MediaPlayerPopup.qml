@@ -208,7 +208,7 @@ Widgets.PopupWindow {
                     trackColor: Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.15)
                     progressColor: Commons.Theme.secondary
                     handleColor: surfaceText
-                    handleBorderColor: Commons.Theme.secondary
+                    handleBorderColor: Commons.Theme.secondaryMuted
                     
                     property bool userInteracting: false
                     

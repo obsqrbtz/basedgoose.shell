@@ -9,7 +9,7 @@ Rectangle {
     property string placeholderText: "Select..."
     property color textColor: Commons.Theme.foreground
     property color placeholderColor: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.6)
-    property color highlightColor: Commons.Theme.secondary
+    property color highlightColor: Commons.Theme.primary
     property color baseColor: Qt.lighter(Commons.Theme.background, 1.15)
     property color hoverColor: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.06)
     property color borderColor: Commons.Theme.border

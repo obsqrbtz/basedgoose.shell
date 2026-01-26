@@ -135,7 +135,7 @@ Widgets.PopupWindow {
                 trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
                 progressColor: Commons.Theme.secondary
                 handleColor: Commons.Theme.foreground
-                handleBorderColor: Commons.Theme.secondary
+                handleBorderColor: Commons.Theme.secondaryMuted
                 
                 onMoved: {
                     audio.setVolume(value / 100)
@@ -201,7 +201,7 @@ Widgets.PopupWindow {
                 trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
                 progressColor: Commons.Theme.secondary
                 handleColor: Commons.Theme.foreground
-                handleBorderColor: Commons.Theme.secondary
+                handleBorderColor: Commons.Theme.secondaryMuted
                 
                 onMoved: {
                     audio.setSourceVolume(value / 100)

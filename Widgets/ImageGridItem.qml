@@ -11,7 +11,7 @@ Rectangle {
     property string overlayText: ""
     property bool showOverlay: overlayText.length > 0
     property color hoverColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.06)
-    property color primaryColor: Commons.Theme.secondary
+    property color primaryColor: Commons.Theme.primary
     property color borderColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.08)
     property color surfaceColor: Commons.Theme.background
     property color textColor: Commons.Theme.foreground

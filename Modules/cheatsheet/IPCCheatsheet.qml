@@ -24,7 +24,7 @@ Widgets.PopupWindow {
     
     readonly property color cSurface: Commons.Theme.background
     readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
-    readonly property color cPrimary: Commons.Theme.secondary
+    readonly property color cPrimary: Commons.Theme.primary
     readonly property color cText: Commons.Theme.foreground
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
@@ -78,7 +78,7 @@ Widgets.PopupWindow {
                     width: 36
                     height: 36
                     radius: 12
-                    color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                    color: Commons.Theme.primaryMuted
                     
                     Text {
                         anchors.centerIn: parent

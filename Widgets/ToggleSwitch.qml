@@ -5,11 +5,11 @@ Rectangle {
     id: root
     
     property bool checked: false
-    property color checkedColor: Commons.Theme.secondary
+    property color checkedColor: Commons.Theme.primary
     property color uncheckedColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.15)
     property color thumbColor: "#ffffff"
     property string icon: ""
-    property color iconColor: Commons.Theme.secondary
+    property color iconColor: Commons.Theme.primary
     property int animationDuration: 200
     
     signal toggled()
