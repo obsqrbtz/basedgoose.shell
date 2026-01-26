@@ -26,6 +26,7 @@ Widgets.PopupWindow {
     property string wallhavenSorting: "date_added"
     property string wallhavenTopRange: "1M"
     property int wallhavenPage: 1
+    property string wallhavenQuery: ""
 
     implicitWidth: 600
     implicitHeight: 540
@@ -118,6 +119,7 @@ Widgets.PopupWindow {
                     sorting: wallhavenSorting
                     topRange: wallhavenTopRange
                     currentPage: wallhavenPage
+                    searchQuery: wallhavenQuery
                     
                     onSortingRequested: function(newSorting) {
                         wallhavenSorting = newSorting
@@ -136,6 +138,11 @@ Widgets.PopupWindow {
                     onRefreshRequested: refreshWallhaven
                     onWallpaperSelected: function(id, fullUrl) {
                         Services.WallhavenAPIService.downloadAndSet(id, fullUrl)
+                    }
+                    onSearchRequested: function(query) {
+                        wallhavenQuery = query
+                        wallhavenPage = 1
+                        refreshWallhaven()
                     }
                 }
 
@@ -216,6 +223,6 @@ function openDirectoryDialog() {
     }
 
     function refreshWallhaven() {
-        Services.WallhavenAPIService.refresh(wallhavenSorting, wallhavenPage, wallhavenTopRange, Services.WallhavenAPIService.seed)
+        Services.WallhavenAPIService.refresh(wallhavenSorting, wallhavenPage, wallhavenTopRange, Services.WallhavenAPIService.seed, wallhavenQuery)
     }
 }

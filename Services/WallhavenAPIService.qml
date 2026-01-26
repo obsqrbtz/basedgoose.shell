@@ -69,7 +69,7 @@ Singleton {
         }
     }
 
-    function buildUrl(sorting, page, topRange, seedParam) {
+    function buildUrl(sorting, page, topRange, seedParam, query) {
         var url = "https://wallhaven.cc/api/v1/search?purity=100&page=" + page + "&sorting=" + sorting
         if (sorting === "toplist")
             url += "&topRange=" + topRange + "&order=desc"
@@ -77,11 +77,13 @@ Singleton {
             url += "&order=desc"
         if (sorting === "random" && page > 1 && seedParam)
             url += "&seed=" + seedParam
+        if (query && query.length > 0)
+            url += "&q=" + encodeURIComponent(query)
         return url
     }
 
-    function refresh(sorting, page, topRange, seedParam) {
-        var url = buildUrl(sorting, page, topRange, seedParam)
+    function refresh(sorting, page, topRange, seedParam, query) {
+        var url = buildUrl(sorting, page, topRange, seedParam, query)
         apiProcess.command = ["sh", "-c", "curl -s \"" + url.replace(/"/g, '\\"') + "\""]
         apiProcess.running = true
     }

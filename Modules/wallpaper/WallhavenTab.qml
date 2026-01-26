@@ -11,16 +11,86 @@ ColumnLayout {
     property string sorting: "date_added"
     property string topRange: "1M"
     property int currentPage: 1
+    property string searchQuery: ""
     
     signal sortingRequested(string newSorting)
     signal topRangeRequested(string newRange)
     signal pageRequested(int newPage)
     signal refreshRequested()
     signal wallpaperSelected(string id, string fullUrl)
+    signal searchRequested(string query)
     
     Layout.fillWidth: true
     Layout.fillHeight: true
     spacing: 8
+    
+    // Search input
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 32
+        color: Wallpaper.WallpaperColors.surfaceContainer
+        radius: 6
+        border.width: searchQueryInput.activeFocus ? 1 : 0
+        border.color: Wallpaper.WallpaperColors.primary
+        
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            spacing: 6
+            
+            Text {
+                text: "\uf002"
+                font.family: Commons.Theme.fontIcon
+                font.pixelSize: 12
+                color: Wallpaper.WallpaperColors.subText
+            }
+            
+            TextInput {
+                id: searchQueryInput
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                verticalAlignment: TextInput.AlignVCenter
+                font.family: Commons.Theme.fontUI
+                font.pixelSize: 12
+                color: Wallpaper.WallpaperColors.text
+                selectionColor: Wallpaper.WallpaperColors.primary
+                selectedTextColor: Wallpaper.WallpaperColors.text
+                text: root.searchQuery
+                
+                Text {
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    text: "Search wallpapers..."
+                    font: parent.font
+                    color: Wallpaper.WallpaperColors.subText
+                    visible: !parent.text && !parent.activeFocus
+                }
+                
+                onAccepted: {
+                    root.searchQuery = text
+                    root.searchRequested(text)
+                }
+            }
+            
+            Widgets.IconButton {
+                visible: searchQueryInput.text.length > 0
+                width: 20
+                height: 20
+                icon: "\uf00d"
+                iconSize: 10
+                iconColor: Wallpaper.WallpaperColors.subText
+                hoverIconColor: Wallpaper.WallpaperColors.text
+                baseColor: "transparent"
+                hoverColor: "transparent"
+                onClicked: {
+                    searchQueryInput.text = ""
+                    root.searchQuery = ""
+                    root.searchRequested("")
+                }
+            }
+        }
+    }
     
     // Sorting buttons
     RowLayout {
