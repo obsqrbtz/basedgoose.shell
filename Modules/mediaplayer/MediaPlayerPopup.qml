@@ -37,7 +37,7 @@ Widgets.PopupWindow {
     
     visible: shouldShow && player !== null
     
-    readonly property color surfaceBase: Commons.Theme.surfaceBase
+    readonly property color surfaceBase: Commons.Theme.background
     readonly property color surfaceContainer: Commons.Theme.surfaceContainer
     readonly property color surfaceText: Commons.Theme.surfaceText
     readonly property color surfaceTextVariant: Commons.Theme.surfaceTextVariant
@@ -85,13 +85,12 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
                 spacing: 12
                 
-                Text {
-                    text: "Media Player"
-                    font.family: Commons.Theme.fontUI
-                    font.pixelSize: 20
-                    font.weight: Font.Bold
-                    color: surfaceText
+                Widgets.HeaderWithIcon {
                     Layout.fillWidth: true
+                    icon: "󰎈"
+                    title: "Media Player"
+                    iconColor: surfaceText
+                    titleColor: surfaceText
                 }
                 
                 Widgets.IconButton {
@@ -102,10 +101,9 @@ Widgets.PopupWindow {
                 }
             }
             
-            Rectangle {
+            Widgets.Divider {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: surfaceBorder
+                dividerColor: surfaceBorder
             }
             
             Rectangle {
@@ -199,12 +197,16 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
                 spacing: 6
                 
-                Slider {
+                Widgets.CustomSlider {
                     id: progressSlider
                     Layout.fillWidth: true
                     from: 0
                     to: popupWindow.playerLength > 0 ? popupWindow.playerLength : 1
                     enabled: player && player.canSeek && player.positionSupported
+                    trackColor: Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.15)
+                    progressColor: Commons.Theme.primary
+                    handleColor: surfaceText
+                    handleBorderColor: Commons.Theme.primary
                     
                     property bool userInteracting: false
                     
@@ -230,49 +232,6 @@ Widgets.PopupWindow {
                             if (Math.abs(offset) > 0.05) {
                                 player.seek(offset)
                             }
-                        }
-                    }
-                    
-                    background: Rectangle {
-                        x: progressSlider.leftPadding
-                        y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
-                        implicitWidth: 200
-                        implicitHeight: 6
-                        width: progressSlider.availableWidth
-                        height: implicitHeight
-                        radius: 3
-                        color: surfaceText
-                        opacity: 0.15
-                        
-                        Rectangle {
-                            width: progressSlider.visualPosition * parent.width
-                            height: parent.height
-                            color: Commons.Theme.primary
-                            radius: 3
-                            
-                            Behavior on width {
-                                NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-                            }
-                        }
-                    }
-                    
-                    handle: Rectangle {
-                        x: progressSlider.leftPadding + progressSlider.visualPosition * (progressSlider.availableWidth - width)
-                        y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
-                        implicitWidth: 18
-                        implicitHeight: 18
-                        radius: 9
-                        color: surfaceText
-                        border.color: Commons.Theme.primary
-                        border.width: 2
-                        visible: progressSlider.hovered || progressSlider.pressed
-                        opacity: visible ? 1.0 : 0.0
-                        
-                        Behavior on x {
-                            NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-                        }
-                        Behavior on opacity {
-                            NumberAnimation { duration: 150 }
                         }
                     }
                 }
@@ -304,52 +263,28 @@ Widgets.PopupWindow {
                 
                 Item { Layout.fillWidth: true }
                 
-                Rectangle {
+                Widgets.MediaControlButton {
                     Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
                     Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                    radius: Commons.Theme.radius
-                    color: prevArea.containsMouse ? Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.15) : "transparent"
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 100 }
-                    }
-                    Behavior on scale {
-                        NumberAnimation { duration: 80 }
-                    }
-                    scale: prevArea.pressed ? 0.85 : (prevArea.containsMouse ? 1.05 : 1.0)
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: "󰒮"
-                        font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 18
-                        color: surfaceText
-                    }
-                    
-                    MouseArea {
-                        id: prevArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (player) player.previous()
-                        }
+                    icon: "󰒮"
+                    iconColor: surfaceText
+                    onClicked: {
+                        if (player) player.previous()
                     }
                 }
                 
-                Rectangle {
+                Widgets.MediaControlButton {
                     Layout.preferredWidth: Commons.Config.mediaPlayer.playButtonSize
                     Layout.preferredHeight: Commons.Config.mediaPlayer.playButtonSize
                     radius: Commons.Config.mediaPlayer.playButtonSize / 2
-                    color: playHover.containsMouse ? Commons.Theme.secondary : Commons.Theme.primary
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 100 }
+                    icon: (player?.isPlaying ?? false) ? "󰏤" : "󰐊"
+                    iconSize: 24
+                    iconColor: Commons.Theme.background
+                    baseColor: Commons.Theme.primary
+                    hoverColor: Commons.Theme.secondary
+                    onClicked: {
+                        if (player) player.togglePlaying()
                     }
-                    Behavior on scale {
-                        NumberAnimation { duration: 80 }
-                    }
-                    scale: playHover.pressed ? 0.85 : (playHover.containsMouse ? 1.05 : 1.0)
                     
                     Text {
                         anchors.centerIn: parent
@@ -359,48 +294,15 @@ Widgets.PopupWindow {
                         font.pixelSize: 24
                         color: Commons.Theme.background
                     }
-                    
-                    MouseArea {
-                        id: playHover
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (player) player.togglePlaying()
-                        }
-                    }
                 }
                 
-                Rectangle {
+                Widgets.MediaControlButton {
                     Layout.preferredWidth: Commons.Config.mediaPlayer.controlSize
                     Layout.preferredHeight: Commons.Config.mediaPlayer.controlSize
-                    radius: Commons.Theme.radius
-                    color: nextArea.containsMouse ? Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.15) : "transparent"
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 100 }
-                    }
-                    Behavior on scale {
-                        NumberAnimation { duration: 80 }
-                    }
-                    scale: nextArea.pressed ? 0.85 : (nextArea.containsMouse ? 1.05 : 1.0)
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: "󰒭"
-                        font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 18
-                        color: surfaceText
-                    }
-                    
-                    MouseArea {
-                        id: nextArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (player) player.next()
-                        }
+                    icon: "󰒭"
+                    iconColor: surfaceText
+                    onClicked: {
+                        if (player) player.next()
                     }
                 }
                 

@@ -30,7 +30,7 @@ Widgets.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: cSurface
+        color: Commons.Theme.background
         radius: Commons.Theme.radius * 2
         border.color: cBorder
         border.width: 1

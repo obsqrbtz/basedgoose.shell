@@ -68,7 +68,9 @@ Widgets.PopupWindow {
         
         ColumnLayout {
             id: contentColumn
-            anchors.fill: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
             anchors.margins: 16
             spacing: 12
                 
@@ -76,39 +78,17 @@ Widgets.PopupWindow {
                     Layout.fillWidth: true
                     spacing: 12
                     
-                    Rectangle {
-                        width: 36
-                        height: 36
-                        radius: 12
-                        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                        
-                        Text {
-                            anchors.centerIn: parent
-                            text: "󰂯"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 18
-                            color: cPrimary
+                    Widgets.HeaderWithIcon {
+                        Layout.fillWidth: true
+                        icon: "󰂯"
+                        title: "Bluetooth"
+                        subtitle: {
+                            var connected = devices.filter(d => d.connected)
+                            return connected.length > 0 ? connected[0].name : "No device connected"
                         }
-                    }
-                    
-                    ColumnLayout {
-                        spacing: 2
-                        
-                        Text {
-                            text: "Bluetooth"
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 15
-                            font.weight: Font.Bold
-                            color: cText
-                        }
-                        
-                        Text {
-                            property var connected: devices.filter(d => d.connected)
-                            text: connected.length > 0 ? connected[0].name : "No device connected"
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 11
-                            color: cSubText
-                        }
+                        iconColor: cPrimary
+                        titleColor: cText
+                        subtitleColor: cSubText
                     }
                     
                     Item {
@@ -127,51 +107,41 @@ Widgets.PopupWindow {
                     }
                 }
                 
-                Rectangle {
+                Widgets.HoverButton {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 36
                     radius: 10
-                    color: scanArea.containsMouse ? cHover : cSurfaceContainer
+                    icon: adapter?.discovering ? "󰑐" : "󰑓"
+                    text: adapter?.discovering ? "Scanning..." : "Scan for devices"
+                    iconSize: 16
+                    textSize: 12
+                    iconColor: adapter?.discovering ? cPrimary : cText
+                    hoverIconColor: adapter?.discovering ? cPrimary : cPrimary
+                    textColor: cText
+                    hoverTextColor: cText
+                    baseColor: cSurfaceContainer
+                    hoverColor: cHover
+                    onClicked: if (adapter) adapter.discovering = !adapter.discovering
                     
-                    Behavior on color { ColorAnimation { duration: 100 } }
-                    
-                    RowLayout {
+                    Text {
                         anchors.centerIn: parent
-                        spacing: 8
+                        anchors.horizontalCenterOffset: -40
+                        text: "󰑐"
+                        font.family: Commons.Theme.fontIcon
+                        font.pixelSize: 16
+                        color: cPrimary
+                        visible: adapter?.discovering ?? false
                         
-                        Text {
-                            text: adapter?.discovering ? "󰑐" : "󰑓"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 16
-                            color: adapter?.discovering ? cPrimary : cText
-                            
-                            RotationAnimation on rotation {
-                                running: adapter?.discovering ?? false
-                                from: 0; to: 360; duration: 1000; loops: Animation.Infinite
-                            }
+                        RotationAnimation on rotation {
+                            running: adapter?.discovering ?? false
+                            from: 0; to: 360; duration: 1000; loops: Animation.Infinite
                         }
-                        
-                        Text {
-                            text: adapter?.discovering ? "Scanning..." : "Scan for devices"
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 12
-                            font.weight: Font.Medium
-                            color: cText
-                        }
-                    }
-                    
-                    MouseArea {
-                        id: scanArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: if (adapter) adapter.discovering = !adapter.discovering
                     }
                 }
                 
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: Math.min(deviceList.contentHeight + 8, 260)
+                    Layout.preferredHeight: devices.length === 0 ? 120 : Math.min(deviceList.contentHeight + 8, 260)
                     radius: 12
                     color: cSurfaceContainer
                     clip: true
@@ -184,92 +154,58 @@ Widgets.PopupWindow {
                         model: devices
                         clip: true
                         
-                        delegate: Rectangle {
+                        delegate: Widgets.ListItem {
                             id: deviceItem
                             width: deviceList.width
                             height: 52
-                            radius: 10
-                            color: itemArea.containsMouse ? cHover : "transparent"
                             
                             required property var modelData
                             property bool isConnected: modelData.connected
                             
-                            Behavior on color { ColorAnimation { duration: 80 } }
-                            
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 12
-                                anchors.rightMargin: 12
-                                spacing: 10
-                                
-                                Text {
-                                    text: {
-                                        const icon = deviceItem.modelData.icon || ""
-                                        if (icon.includes("audio")) return "󰋋"
-                                        if (icon.includes("phone")) return "󰄜"
-                                        if (icon.includes("computer")) return "󰌢"
-                                        if (icon.includes("mouse")) return "󰍽"
-                                        if (icon.includes("keyboard")) return "󰌌"
-                                        return "󰂯"
-                                    }
-                                    font.family: Commons.Theme.fontIcon
-                                    font.pixelSize: 18
-                                    color: isConnected ? cPrimary : cText
-                                }
-                                
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 2
-                                    
-                                    Text {
-                                        text: deviceItem.modelData.name
-                                        font.family: Commons.Theme.fontUI
-                                        font.pixelSize: 12
-                                        font.weight: Font.Medium
-                                        color: cText
-                                        elide: Text.ElideRight
-                                        Layout.fillWidth: true
-                                    }
-                                    
-                                    Text {
-                                        text: {
-                                            if (deviceItem.modelData.state === BluetoothDeviceState.Connecting) return "Connecting..."
-                                            if (isConnected) return "Connected"
-                                            if (deviceItem.modelData.bonded) return "Paired"
-                                            return "Available"
-                                        }
-                                        font.family: Commons.Theme.fontUI
-                                        font.pixelSize: 10
-                                        color: isConnected ? cPrimary : cSubText
-                                    }
-                                }
-                                
-                                Widgets.IconButton {
-                                    width: 28
-                                    height: 28
-                                    icon: isConnected ? "󰌊" : "󰌘"
-                                    iconSize: 14
-                                    iconColor: isConnected ? cPrimary : cSubText
-                                    hoverIconColor: isConnected ? cPrimary : cPrimary
-                                    baseColor: "transparent"
-                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                                    border.width: 1
-                                    border.color: isConnected ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
-                                    onClicked: {
-                                        if (isConnected) {
-                                            deviceItem.modelData.connected = false
-                                        } else {
-                                            deviceItem.modelData.connected = true
-                                        }
-                                    }
-                                }
+                            icon: {
+                                const iconStr = deviceItem.modelData.icon || ""
+                                if (iconStr.includes("audio")) return "󰋋"
+                                if (iconStr.includes("phone")) return "󰄜"
+                                if (iconStr.includes("computer")) return "󰌢"
+                                if (iconStr.includes("mouse")) return "󰍽"
+                                if (iconStr.includes("keyboard")) return "󰌌"
+                                return "󰂯"
                             }
+                            title: deviceItem.modelData.name
+                            subtitle: {
+                                if (deviceItem.modelData.state === BluetoothDeviceState.Connecting) return "Connecting..."
+                                if (isConnected) return "Connected"
+                                if (deviceItem.modelData.bonded) return "Paired"
+                                return "Available"
+                            }
+                            iconColor: isConnected ? cPrimary : cText
+                            titleColor: cText
+                            subtitleColor: isConnected ? cPrimary : cSubText
+                            hoverColor: cHover
+                            borderColor: "transparent"
+                            showBorder: false
                             
-                            MouseArea {
-                                id: itemArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                z: -1
+                            Widgets.IconButton {
+                                anchors.right: parent.right
+                                anchors.rightMargin: 12
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: 28
+                                height: 28
+                                icon: deviceItem.isConnected ? "󰌊" : "󰌘"
+                                iconSize: 14
+                                iconColor: deviceItem.isConnected ? cPrimary : cSubText
+                                hoverIconColor: deviceItem.isConnected ? cPrimary : cPrimary
+                                baseColor: "transparent"
+                                hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                                borderWidth: 1
+                                borderColor: deviceItem.isConnected ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                                onClicked: {
+                                    if (deviceItem.isConnected) {
+                                        deviceItem.modelData.connected = false
+                                    } else {
+                                        deviceItem.modelData.connected = true
+                                    }
+                                }
                             }
                         }
                     }
@@ -286,38 +222,16 @@ Widgets.PopupWindow {
                     }
                 }
                 
-                Rectangle {
+                Widgets.TextButton {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 36
-                    radius: 10
-                    color: settingsArea.containsMouse ? cHover : "transparent"
-                    
-                    RowLayout {
-                        anchors.centerIn: parent
-                        spacing: 6
-                        
-                        Text {
-                            text: "󰒓"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 14
-                            color: cSubText
-                        }
-                        
-                        Text {
-                            text: "Bluetooth Settings"
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 12
-                            color: cSubText
-                        }
-                    }
-                    
-                    MouseArea {
-                        id: settingsArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: settingsProcess.running = true
-                    }
+                    icon: "󰒓"
+                    text: "Bluetooth Settings"
+                    iconColor: cSubText
+                    textColor: cSubText
+                    hoverColor: cHover
+                    showBorder: false
+                    onClicked: settingsProcess.running = true
                 }
             }
         }

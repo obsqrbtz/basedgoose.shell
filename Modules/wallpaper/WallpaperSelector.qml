@@ -33,7 +33,7 @@ Widgets.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: Wallpaper.WallpaperColors.surface
+        color: Commons.Theme.background
         radius: Commons.Theme.radius * 2
         border.color: Wallpaper.WallpaperColors.border
         border.width: 1
@@ -53,44 +53,14 @@ Widgets.PopupWindow {
             spacing: 12
 
             // Header
-            RowLayout {
+            Widgets.HeaderWithIcon {
                 Layout.fillWidth: true
-                spacing: 12
-
-                Rectangle {
-                    width: 36
-                    height: 36
-                    radius: 12
-                    color: Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.15)
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "\uf03e"
-                        font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 18
-                        color: Wallpaper.WallpaperColors.primary
-                    }
-                }
-
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 2
-
-                    Text {
-                        text: "Wallpaper Selector"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 15
-                        font.weight: Font.Bold
-                        color: Wallpaper.WallpaperColors.text
-                    }
-
-                    Text {
-                        text: getSubtitleText()
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 11
-                        color: Wallpaper.WallpaperColors.subText
-                    }
-                }
+                icon: "\uf03e"
+                title: "Wallpaper Selector"
+                subtitle: getSubtitleText()
+                iconColor: Wallpaper.WallpaperColors.primary
+                titleColor: Wallpaper.WallpaperColors.text
+                subtitleColor: Wallpaper.WallpaperColors.subText
             }
 
             // Tab buttons

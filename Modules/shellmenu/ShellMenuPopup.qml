@@ -57,7 +57,7 @@ Widgets.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: Commons.Theme.surfaceBase
+        color: Commons.Theme.background
         radius: Commons.Theme.radius * 2
         
         border.color: Commons.Theme.border
@@ -69,207 +69,74 @@ Widgets.PopupWindow {
             anchors.margins: 12
             spacing: 8
             
-            Rectangle {
+            Widgets.HeaderWithIcon {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                radius: Commons.Theme.radius
-                color: cheatsheetMouse.containsMouse ? cHover : "transparent"
-                border.width: 1
-                border.color: cBorder
-                
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
-                    
-                    Rectangle {
-                        width: 28
-                        height: 28
-                        radius: 6
-                        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                        
-                        Text {
-                            anchors.centerIn: parent
-                            text: "󰌌"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 14
-                            color: cPrimary
-                        }
-                    }
-                    
-                    Text {
-                        text: "IPC Cheatsheet"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 12
-                        font.weight: Font.Medium
-                        color: cText
-                        Layout.fillWidth: true
-                    }
-                }
-                
-                MouseArea {
-                    id: cheatsheetMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        popupWindow.shouldShow = false
-                        if (cheatsheetPopup) {
-                            cheatsheetPopup.shouldShow = true
-                        }
+                icon: "\uf219"
+                title: "Shell Menu"
+                iconColor: cPrimary
+            }
+            
+            Widgets.Divider {
+                Layout.fillWidth: true
+            }
+            
+            Widgets.MenuItem {
+                Layout.fillWidth: true
+                icon: "󰌌"
+                text: "IPC Cheatsheet"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    popupWindow.shouldShow = false
+                    if (cheatsheetPopup) {
+                        cheatsheetPopup.shouldShow = true
                     }
                 }
             }
             
-            Rectangle {
+            Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                radius: Commons.Theme.radius
-                color: wallpaperMouse.containsMouse ? cHover : "transparent"
-                border.width: 1
-                border.color: cBorder
-                
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
-                    
-                    Rectangle {
-                        width: 28
-                        height: 28
-                        radius: 6
-                        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                        
-                        Text {
-                            anchors.centerIn: parent
-                            text: "\uf03e"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 14
-                            color: cPrimary
-                        }
-                    }
-                    
-                    Text {
-                        text: "Wallpaper Selector"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 12
-                        font.weight: Font.Medium
-                        color: cText
-                        Layout.fillWidth: true
-                    }
-                }
-                
-                MouseArea {
-                    id: wallpaperMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        popupWindow.shouldShow = false
-                        if (wallpaperSelector) {
-                            wallpaperSelector.shouldShow = true
-                        }
+                icon: "\uf03e"
+                text: "Wallpaper Selector"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    popupWindow.shouldShow = false
+                    if (wallpaperSelector) {
+                        wallpaperSelector.shouldShow = true
                     }
                 }
             }
             
-            Rectangle {
+            Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                radius: Commons.Theme.radius
-                color: displayMouse.containsMouse ? cHover : "transparent"
-                border.width: 1
-                border.color: cBorder
-                
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
-                    
-                    Rectangle {
-                        width: 28
-                        height: 28
-                        radius: 6
-                        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                        
-                        Text {
-                            anchors.centerIn: parent
-                            text: "󰍹"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 14
-                            color: cPrimary
-                        }
-                    }
-                    
-                    Text {
-                        text: "Display Manager"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 12
-                        font.weight: Font.Medium
-                        color: cText
-                        Layout.fillWidth: true
-                    }
-                }
-                
-                MouseArea {
-                    id: displayMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        popupWindow.shouldShow = false
-                        if (displayManager) {
-                            displayManager.shouldShow = true
-                        }
+                icon: "󰍹"
+                text: "Display Manager"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    popupWindow.shouldShow = false
+                    if (displayManager) {
+                        displayManager.shouldShow = true
                     }
                 }
             }
 
-            Rectangle {
+            Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                radius: Commons.Theme.radius
-                color: reloadMouse.containsMouse ? cHover : "transparent"
-                border.width: 1
-                border.color: cBorder
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
-
-                    Rectangle {
-                        width: 28
-                        height: 28
-                        radius: 6
-                        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: "󰑐"
-                            font.family: Commons.Theme.fontIcon
-                            font.pixelSize: 14
-                            color: cPrimary
-                        }
-                    }
-
-                    Text {
-                        text: "Reload Quickshell"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 12
-                        font.weight: Font.Medium
-                        color: cText
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    id: reloadMouse
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: Quickshell.reload(true)
-                }
+                icon: "󰑐"
+                text: "Reload Quickshell"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: Quickshell.reload(true)
             }
         }
     }

@@ -2,6 +2,7 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import "../../Services" as Services
 import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
 Rectangle {
     id: root
@@ -24,54 +25,31 @@ Rectangle {
         ColorAnimation { duration: 150 }
     }
     
-    Rectangle {
+    Widgets.Badge {
         visible: root.unreadCount > 0 && !root.hasDnd
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.rightMargin: 2
         anchors.topMargin: 2
-        
-        width: Math.max(16, badgeText.implicitWidth + 6)
-        height: 16
-        radius: Commons.Theme.radius
-        
-        color: Commons.Theme.secondary
-        border.width: 2
-        border.color: Commons.Theme.surfaceBase
-        
-        Text {
-            id: badgeText
-            anchors.centerIn: parent
-            text: root.unreadCount > 99 ? "99+" : root.unreadCount
-            font.pixelSize: 8
-            font.weight: Font.Bold
-            font.family: Commons.Theme.fontUI
-            color: Commons.Theme.background
-        }
+        count: root.unreadCount
+        badgeColor: Commons.Theme.secondary
+        textColor: Commons.Theme.background
+        borderColor: Commons.Theme.surfaceBase
     }
     
-    Rectangle {
+    Widgets.Badge {
         visible: root.hasDnd
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.rightMargin: 2
         anchors.topMargin: 2
-        
-        width: 12
-        height: 12
-        radius: 6
-        
-        color: Commons.Theme.error
-        border.width: 2
-        border.color: Commons.Theme.surfaceBase
-        
-        Text {
-            anchors.centerIn: parent
-            text: "󰂛"
-            font.family: Commons.Theme.fontIcon
-            font.pixelSize: 7
-            color: Commons.Theme.background
-        }
+        count: 1
+        icon: "󰂛"
+        badgeColor: Commons.Theme.error
+        textColor: Commons.Theme.background
+        borderColor: Commons.Theme.surfaceBase
+        minWidth: 12
+        badgeHeight: 12
     }
     
     Text {

@@ -1,29 +1,18 @@
 import QtQuick
-import "../../Services" as Services
 import "../../Commons" as Commons
+import "../../Widgets" as Widgets
 
-Rectangle {
+Widgets.HoverButton {
     id: shellMenuButton
     
-    signal clicked()
+    icon: "\uf219"
+    iconSize: Commons.Theme.fontSize + 2
+    iconColor: Commons.Theme.primary
+    hoverIconColor: Commons.Theme.primary
+    baseColor: "transparent"
+    hoverColor: Commons.Theme.surfaceBase
     
     width: Commons.Config.powerButtonSize
     height: Commons.Config.powerButtonSize
-    color: menuMa.containsMouse ? Commons.Theme.surfaceBase : "transparent"
     radius: Commons.Config.powerButtonRadius
-   
-    Text {
-        anchors.centerIn: parent
-        text: "\uf219"
-        color: Commons.Theme.primary
-        font { family: Commons.Theme.fontIcon; pixelSize: Commons.Theme.fontSize + 2; }
-    }
-    
-    MouseArea {
-        id: menuMa
-        anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
-        onClicked: shellMenuButton.clicked()
-    }
 }

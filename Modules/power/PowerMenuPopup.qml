@@ -47,7 +47,7 @@ Widgets.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: Commons.Theme.surfaceBase
+        color: Commons.Theme.background
         radius: Commons.Theme.radius * 2
         border.color: Commons.Theme.border
         border.width: 1
@@ -58,177 +58,48 @@ Widgets.PopupWindow {
             anchors.margins: 16
             spacing: 12
             
-            Text {
-                text: "Power Menu"
-                font.family: Commons.Theme.fontUI
-                font.pixelSize: 14
-                font.weight: Font.DemiBold
-                color: Commons.Theme.foreground
+            Widgets.HeaderWithIcon {
+                Layout.fillWidth: true
+                icon: "\udb81\udc25"
+                title: "Power Menu"
+                iconColor: Commons.Theme.secondary
+            }
+            
+            Widgets.Divider {
+                Layout.fillWidth: true
             }
             
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 8
                 
-                // Shutdown Button
-                Rectangle {
-                    id: shutdownButton
+                Widgets.MenuButton {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 52
-                    radius: 10
-                    color: shutdownMa.pressed ? shutdownPressedColor : 
-                           (shutdownMa.containsMouse ? shutdownHoverColor : shutdownBaseColor)
-                    
-                    property color shutdownBaseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.1)
-                    property color shutdownHoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.18)
-                    property color shutdownPressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-                    
-                    RowLayout {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 16
-                        anchors.rightMargin: 16
-                        spacing: 12
-                        
-                        Text {
-                            text: "\udb81\udc25"
-                            font.family: Commons.Theme.fontMono
-                            font.pixelSize: 20
-                            color: Commons.Theme.secondary
-                        }
-                        
-                        Text {
-                            text: "Shutdown"
-                            Layout.fillWidth: true
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 13
-                            font.weight: Font.Medium
-                            color: Commons.Theme.foreground
-                        }
-                    }
-                    
-                    MouseArea {
-                        id: shutdownMa
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            powerMenu.shouldShow = false;
-                            processComponent.createObject(powerMenu, { cmd: ["systemctl", "poweroff"] });
-                        }
+                    icon: "\udb81\udc25"
+                    text: "Shutdown"
+                    onClicked: {
+                        powerMenu.shouldShow = false
+                        processComponent.createObject(powerMenu, { cmd: ["systemctl", "poweroff"] })
                     }
                 }
                 
-                // Reboot Button
-                Rectangle {
-                    id: rebootButton
+                Widgets.MenuButton {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 52
-                    radius: 10
-                    color: rebootMa.pressed ? rebootPressedColor : 
-                           (rebootMa.containsMouse ? rebootHoverColor : rebootBaseColor)
-                    
-                    property color rebootBaseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.1)
-                    property color rebootHoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.18)
-                    property color rebootPressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-                    
-                    RowLayout {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 16
-                        anchors.rightMargin: 16
-                        spacing: 12
-                        
-                        Text {
-                            text: "\udb81\udf09"
-                            font.family: Commons.Theme.fontMono
-                            font.pixelSize: 20
-                            color: Commons.Theme.secondary
-                        }
-                        
-                        Text {
-                            text: "Reboot"
-                            Layout.fillWidth: true
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 13
-                            font.weight: Font.Medium
-                            color: Commons.Theme.foreground
-                        }
-                    }
-                    
-                    MouseArea {
-                        id: rebootMa
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            powerMenu.shouldShow = false;
-                            processComponent.createObject(powerMenu, { cmd: ["systemctl", "reboot"] });
-                        }
+                    icon: "\udb81\udf09"
+                    text: "Reboot"
+                    onClicked: {
+                        powerMenu.shouldShow = false
+                        processComponent.createObject(powerMenu, { cmd: ["systemctl", "reboot"] })
                     }
                 }
                 
-                // Logout Button
-                Rectangle {
-                    id: logoutButton
+                Widgets.MenuButton {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 52
-                    radius: 10
-                    color: logoutMa.pressed ? logoutPressedColor : 
-                           (logoutMa.containsMouse ? logoutHoverColor : logoutBaseColor)
-                    
-                    property color logoutBaseColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.1)
-                    property color logoutHoverColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.18)
-                    property color logoutPressedColor: Qt.rgba(Commons.Theme.secondary.r, Commons.Theme.secondary.g, Commons.Theme.secondary.b, 0.25)
-                    
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                    }
-                    
-                    RowLayout {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 16
-                        anchors.rightMargin: 16
-                        spacing: 12
-                        
-                        Text {
-                            text: "\udb81\uddfd"
-                            font.family: Commons.Theme.fontMono
-                            font.pixelSize: 20
-                            color: Commons.Theme.secondary
-                        }
-                        
-                        Text {
-                            text: "Logout"
-                            Layout.fillWidth: true
-                            font.family: Commons.Theme.fontUI
-                            font.pixelSize: 13
-                            font.weight: Font.Medium
-                            color: Commons.Theme.foreground
-                        }
-                    }
-                    
-                    MouseArea {
-                        id: logoutMa
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            powerMenu.shouldShow = false;
-                            processComponent.createObject(powerMenu, { cmd: ["hyprctl", "dispatch", "exit"] });
-                        }
+                    icon: "\udb81\uddfd"
+                    text: "Logout"
+                    onClicked: {
+                        powerMenu.shouldShow = false
+                        processComponent.createObject(powerMenu, { cmd: ["hyprctl", "dispatch", "exit"] })
                     }
                 }
             }

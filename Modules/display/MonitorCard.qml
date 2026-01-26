@@ -113,69 +113,26 @@ Rectangle {
             spacing: 8
             visible: root.enabled
 
-            Text {
+            Widgets.SectionLabel {
                 text: "Resolution & Refresh Rate"
-                font.family: Commons.Theme.fontUI
-                font.pixelSize: 11
-                color: cSubText
+                labelColor: cSubText
             }
 
-            Rectangle {
+            Widgets.DropdownButton {
                 id: modeDropdownButton
                 Layout.fillWidth: true
-                Layout.preferredHeight: 40
-                radius: 8
-                color: modeDropdownArea.containsMouse ? cHover : cSurfaceContainer
-                border.color: modeDropdownArea.containsMouse ? cPrimary : cBorder
-                border.width: 1
-
-                Behavior on color {
-                    ColorAnimation {
-                        duration: 100
-                    }
-                }
-                Behavior on border.color {
-                    ColorAnimation {
-                        duration: 100
-                    }
-                }
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 8
-                    spacing: 8
-
-                    Text {
-                        Layout.fillWidth: true
-                        text: root.effectiveMode || "Select mode..."
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 12
-                        color: (pendingChanges && pendingChanges.mode) ? cPrimary : (root.effectiveMode ? cText : cSubText)
-                        elide: Text.ElideRight
-                    }
-
-                    Text {
-                        text: modeDropdownArea.containsMouse ? "󰅀" : "󰅂"
-                        font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 12
-                        color: cSubText
-
-                        Behavior on text {
-                            PropertyAnimation {
-                                duration: 100
-                            }
-                        }
-                    }
-                }
-
-                MouseArea {
-                    id: modeDropdownArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        root.modeDropdownRequested(modeDropdownButton, root.availableModes, root.effectiveMode, root.name);
-                    }
+                text: root.effectiveMode
+                placeholderText: "Select mode..."
+                textColor: cText
+                placeholderColor: cSubText
+                highlightColor: cPrimary
+                baseColor: cSurfaceContainer
+                hoverColor: cHover
+                borderColor: cBorder
+                hoverBorderColor: cPrimary
+                isHighlighted: pendingChanges && pendingChanges.mode
+                onClicked: {
+                    root.modeDropdownRequested(modeDropdownButton, root.availableModes, root.effectiveMode, root.name);
                 }
             }
 
@@ -189,51 +146,24 @@ Rectangle {
                     Layout.fillWidth: true
                     spacing: 4
 
-                    Text {
+                    Widgets.SectionLabel {
                         text: "Scale"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 11
-                        color: cSubText
+                        labelColor: cSubText
                     }
 
-                    Rectangle {
+                    Widgets.DropdownButton {
                         id: scaleDropdownButton
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 40
-                        radius: 8
-                        color: scaleDropdownArea.containsMouse ? cHover : cSurfaceContainer
-                        border.color: scaleDropdownArea.containsMouse ? cPrimary : cBorder
-                        border.width: 1
-
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 8
-                            spacing: 8
-
-                            Text {
-                                Layout.fillWidth: true
-                                text: root.effectiveScale.toFixed(1) + "x"
-                                font.family: Commons.Theme.fontUI
-                                font.pixelSize: 12
-                                color: (pendingChanges && pendingChanges.scale !== undefined) ? cPrimary : cText
-                            }
-
-                            Text {
-                                text: scaleDropdownArea.containsMouse ? "󰅀" : "󰅂"
-                                font.family: Commons.Theme.fontIcon
-                                font.pixelSize: 12
-                                color: cSubText
-                            }
-                        }
-
-                        MouseArea {
-                            id: scaleDropdownArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                root.scaleDropdownRequested(scaleDropdownButton, root.name, root.effectiveScale);
-                            }
+                        text: root.effectiveScale.toFixed(1) + "x"
+                        textColor: cText
+                        highlightColor: cPrimary
+                        baseColor: cSurfaceContainer
+                        hoverColor: cHover
+                        borderColor: cBorder
+                        hoverBorderColor: cPrimary
+                        isHighlighted: pendingChanges && pendingChanges.scale !== undefined
+                        onClicked: {
+                            root.scaleDropdownRequested(scaleDropdownButton, root.name, root.effectiveScale);
                         }
                     }
                 }
@@ -242,51 +172,24 @@ Rectangle {
                     Layout.fillWidth: true
                     spacing: 4
 
-                    Text {
+                    Widgets.SectionLabel {
                         text: "Rotation"
-                        font.family: Commons.Theme.fontUI
-                        font.pixelSize: 11
-                        color: cSubText
+                        labelColor: cSubText
                     }
 
-                    Rectangle {
+                    Widgets.DropdownButton {
                         id: rotateDropdownButton
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 40
-                        radius: 8
-                        color: rotateDropdownArea.containsMouse ? cHover : cSurfaceContainer
-                        border.color: rotateDropdownArea.containsMouse ? cPrimary : cBorder
-                        border.width: 1
-
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 8
-                            spacing: 8
-
-                            Text {
-                                Layout.fillWidth: true
-                                text: DisplayUtils.getTransformLabel(root.effectiveTransform)
-                                font.family: Commons.Theme.fontUI
-                                font.pixelSize: 12
-                                color: (pendingChanges && pendingChanges.transform !== undefined) ? cPrimary : cText
-                            }
-
-                            Text {
-                                text: rotateDropdownArea.containsMouse ? "󰅀" : "󰅂"
-                                font.family: Commons.Theme.fontIcon
-                                font.pixelSize: 12
-                                color: cSubText
-                            }
-                        }
-
-                        MouseArea {
-                            id: rotateDropdownArea
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                root.rotateDropdownRequested(rotateDropdownButton, root.name, root.effectiveTransform);
-                            }
+                        text: DisplayUtils.getTransformLabel(root.effectiveTransform)
+                        textColor: cText
+                        highlightColor: cPrimary
+                        baseColor: cSurfaceContainer
+                        hoverColor: cHover
+                        borderColor: cBorder
+                        hoverBorderColor: cPrimary
+                        isHighlighted: pendingChanges && pendingChanges.transform !== undefined
+                        onClicked: {
+                            root.rotateDropdownRequested(rotateDropdownButton, root.name, root.effectiveTransform);
                         }
                     }
                 }

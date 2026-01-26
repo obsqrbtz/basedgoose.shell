@@ -23,7 +23,7 @@ Widgets.PopupWindow {
     readonly property var groupedNotifs: notifService.groupedNotifications
     readonly property bool hasDnd: notifService.dnd
     
-    readonly property color surfaceBase: Commons.Theme.surfaceBase
+    readonly property color surfaceBase: Commons.Theme.background
     readonly property color surfaceContainer: Commons.Theme.surfaceContainer
     readonly property color secondary: Commons.Theme.secondary
     readonly property color surfaceText: Commons.Theme.surfaceText
@@ -71,12 +71,14 @@ Widgets.PopupWindow {
             Layout.fillWidth: true
             spacing: 12
             
-            Text {
-                text: "Notifications"
-                font.pixelSize: 20
-                font.weight: Font.Bold
-                font.family: Commons.Theme.fontUI
-                color: surfaceText
+            Widgets.HeaderWithIcon {
+                icon: "󰂚"
+                title: "Notifications"
+                iconColor: secondary
+                titleSize: 20
+            }
+            
+            Item {
                 Layout.fillWidth: true
             }
             
@@ -108,10 +110,8 @@ Widgets.PopupWindow {
             }
         }
         
-        Rectangle {
+        Widgets.Divider {
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: surfaceBorder
         }
         
         ListView {

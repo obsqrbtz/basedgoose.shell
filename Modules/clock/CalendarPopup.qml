@@ -46,7 +46,7 @@ Widgets.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: Commons.Theme.surfaceBase
+        color: Commons.Theme.background
         radius: Commons.Theme.radius * 2
         
         border.color: Commons.Theme.border
@@ -63,79 +63,37 @@ Widgets.PopupWindow {
             Layout.fillWidth: true
             spacing: 8
             
-            Text {
-                id: monthYearText
-                text: Qt.formatDateTime(currentDate, "MMMM yyyy")
-                font.family: Commons.Theme.fontUI
-                font.pixelSize: 16
-                font.weight: Font.DemiBold
-                color: Commons.Theme.foreground
+            Widgets.HeaderWithIcon {
+                icon: "󰃭"
+                title: Qt.formatDateTime(currentDate, "MMMM yyyy")
+                iconColor: Commons.Theme.secondary
+            }
+            
+            Item {
                 Layout.fillWidth: true
             }
             
-            Rectangle {
-                id: prevButton
-                width: 28
-                height: 28
-                radius: 6
-                color: prevMouseArea.containsMouse ? Commons.Theme.primary : Commons.Theme.surfaceAccent
-                
-                Behavior on color {
-                    ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                }
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰁍"
-                    font.family: Commons.Theme.fontIcon
-                    font.pixelSize: 14
-                    color: prevMouseArea.containsMouse ? Commons.Theme.background : Commons.Theme.foreground
-                }
-                
-                MouseArea {
-                    id: prevMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        var newDate = new Date(currentDate)
-                        newDate.setMonth(newDate.getMonth() - 1)
-                        currentDate = newDate
-                    }
+            Widgets.NavButton {
+                icon: "󰁍"
+                onClicked: {
+                    var newDate = new Date(currentDate)
+                    newDate.setMonth(newDate.getMonth() - 1)
+                    currentDate = newDate
                 }
             }
             
-            Rectangle {
-                id: nextButton
-                width: 28
-                height: 28
-                radius: 6
-                color: nextMouseArea.containsMouse ? Commons.Theme.primary : Commons.Theme.surfaceAccent
-                
-                Behavior on color {
-                    ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
-                }
-                
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰁔"
-                    font.family: Commons.Theme.fontIcon
-                    font.pixelSize: 14
-                    color: nextMouseArea.containsMouse ? Commons.Theme.background : Commons.Theme.foreground
-                }
-                
-                MouseArea {
-                    id: nextMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        var newDate = new Date(currentDate)
-                        newDate.setMonth(newDate.getMonth() + 1)
-                        currentDate = newDate
-                    }
+            Widgets.NavButton {
+                icon: "󰁔"
+                onClicked: {
+                    var newDate = new Date(currentDate)
+                    newDate.setMonth(newDate.getMonth() + 1)
+                    currentDate = newDate
                 }
             }
+        }
+        
+        Widgets.Divider {
+            Layout.fillWidth: true
         }
         
         RowLayout {
@@ -244,35 +202,14 @@ Widgets.PopupWindow {
             }
         }
         
-        Rectangle {
+        Widgets.TextButton {
             Layout.fillWidth: true
             Layout.preferredHeight: 32
-            radius: 6
-            color: todayMouseArea.containsMouse ? Commons.Theme.surfaceContainer : "transparent"
-            border.color: Commons.Theme.surfaceBorder
-            border.width: 1
-            
-            Text {
-                anchors.centerIn: parent
-                text: "Today"
-                font.family: Commons.Theme.fontUI
-                font.pixelSize: 12
-                font.weight: Font.Medium
-                color: Commons.Theme.foreground
-            }
-            
-            MouseArea {
-                id: todayMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    currentDate = new Date()
-                }
-            }
-            
-            Behavior on color {
-                ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
+            text: "Today"
+            textColor: Commons.Theme.foreground
+            hoverColor: Commons.Theme.surfaceContainer
+            onClicked: {
+                currentDate = new Date()
             }
         }
     }

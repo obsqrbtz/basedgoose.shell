@@ -76,9 +76,8 @@ PanelWindow {
     RowLayout {
         id: leftSection
         anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.margins: Commons.Config.barPadding
+        anchors.leftMargin: Commons.Config.barPadding
+        anchors.verticalCenter: parent.verticalCenter
         spacing: Commons.Config.barSpacing
 
         ShellMenu.ShellMenuButton {

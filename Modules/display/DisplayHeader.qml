@@ -10,50 +10,18 @@ RowLayout {
     property bool isLoading: false
 
     readonly property color cPrimary: Commons.Theme.secondary
-    readonly property color cText: Commons.Theme.foreground
-    readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
+    readonly property color cSubText: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.6)
 
     signal refreshClicked
 
     spacing: 12
 
-    Rectangle {
-        width: 36
-        height: 36
-        radius: 12
-        color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-
-        Text {
-            anchors.centerIn: parent
-            text: "󰍹"
-            font.family: Commons.Theme.fontIcon
-            font.pixelSize: 18
-            color: cPrimary
-        }
-    }
-
-    ColumnLayout {
-        spacing: 2
-
-        Text {
-            text: "Display Management"
-            font.family: Commons.Theme.fontUI
-            font.pixelSize: 15
-            font.weight: Font.Bold
-            color: cText
-        }
-
-        Text {
-            text: root.isLoading ? "Loading..." : (root.monitorCount > 0 ? root.monitorCount + " display(s)" : "No displays")
-            font.family: Commons.Theme.fontUI
-            font.pixelSize: 11
-            color: cSubText
-        }
-    }
-
-    Item {
+    Widgets.HeaderWithIcon {
         Layout.fillWidth: true
-        Layout.minimumWidth: 0
+        icon: "󰍹"
+        title: "Display Management"
+        subtitle: root.isLoading ? "Loading..." : (root.monitorCount > 0 ? root.monitorCount + " display(s)" : "No displays")
+        iconColor: root.cPrimary
     }
 
     Widgets.IconButton {
@@ -62,10 +30,10 @@ RowLayout {
         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         icon: "󰑓"
         iconSize: 14
-        iconColor: cSubText
-        hoverIconColor: cPrimary
+        iconColor: root.cSubText
+        hoverIconColor: root.cPrimary
         baseColor: "transparent"
-        hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+        hoverColor: Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, 0.15)
         onClicked: {
             root.refreshClicked();
         }

@@ -49,7 +49,7 @@ Widgets.PopupWindow {
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
-        color: Commons.Theme.surfaceBase
+        color: Commons.Theme.background
         radius: Commons.Theme.radius * 2
         
         border.color: Commons.Theme.border
@@ -126,52 +126,19 @@ Widgets.PopupWindow {
                 }
             }
             
-            Slider {
+            Widgets.CustomSlider {
                 id: volumeSlider
                 Layout.fillWidth: true
                 from: 0
                 to: 100
                 value: audio.percentage
+                trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
+                progressColor: Commons.Theme.primary
+                handleColor: Commons.Theme.foreground
+                handleBorderColor: Commons.Theme.primary
                 
                 onMoved: {
                     audio.setVolume(value / 100)
-                }
-                
-                background: Rectangle {
-                    x: volumeSlider.leftPadding
-                    y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
-                    implicitWidth: 200
-                    implicitHeight: 6
-                    width: volumeSlider.availableWidth
-                    height: implicitHeight
-                    radius: 3
-                    color: Commons.Theme.foreground
-                    
-                    Rectangle {
-                        width: volumeSlider.visualPosition * parent.width
-                        height: parent.height
-                        color: Commons.Theme.primary
-                        radius: 3
-                        
-                        Behavior on width {
-                            NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-                        }
-                    }
-                }
-                
-                handle: Rectangle {
-                    x: volumeSlider.leftPadding + volumeSlider.visualPosition * (volumeSlider.availableWidth - width)
-                    y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
-                    implicitWidth: 18
-                    implicitHeight: 18
-                    radius: 9
-                    color: Commons.Theme.foreground
-                    border.color: Commons.Theme.primary
-                    border.width: 2
-                    
-                    Behavior on x {
-                        NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-                    }
                 }
             }
         }
@@ -225,52 +192,19 @@ Widgets.PopupWindow {
                 }
             }
             
-            Slider {
+            Widgets.CustomSlider {
                 id: inputSlider
                 Layout.fillWidth: true
                 from: 0
                 to: 100
                 value: audio.sourcePercentage
+                trackColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.15)
+                progressColor: Commons.Theme.primary
+                handleColor: Commons.Theme.foreground
+                handleBorderColor: Commons.Theme.primary
                 
                 onMoved: {
                     audio.setSourceVolume(value / 100)
-                }
-                
-                background: Rectangle {
-                    x: inputSlider.leftPadding
-                    y: inputSlider.topPadding + inputSlider.availableHeight / 2 - height / 2
-                    implicitWidth: 200
-                    implicitHeight: 6
-                    width: inputSlider.availableWidth
-                    height: implicitHeight
-                    radius: 3
-                    color: Commons.Theme.foreground
-                    
-                    Rectangle {
-                        width: inputSlider.visualPosition * parent.width
-                        height: parent.height
-                        color: Commons.Theme.primary
-                        radius: 3
-                        
-                        Behavior on width {
-                            NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-                        }
-                    }
-                }
-                
-                handle: Rectangle {
-                    x: inputSlider.leftPadding + inputSlider.visualPosition * (inputSlider.availableWidth - width)
-                    y: inputSlider.topPadding + inputSlider.availableHeight / 2 - height / 2
-                    implicitWidth: 18
-                    implicitHeight: 18
-                    radius: 9
-                    color: Commons.Theme.foreground
-                    border.color: Commons.Theme.primary
-                    border.width: 2
-                    
-                    Behavior on x {
-                        NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-                    }
                 }
             }
         }
