@@ -220,21 +220,21 @@ Widgets.PopupWindow {
                             
                             GridView {
                                 id: wallpaperGrid
-                        anchors.centerIn: parent
-                        width: Math.floor((parent.width / 120)) * 120
-                        height: Math.min(
-                            parent.height,
-                            Math.ceil(Services.WallpaperService.wallpaperList.count / Math.max(1, Math.floor(parent.width / 120))) * (120 * 9 / 16 + 8)
-                        )
-                        cellWidth: 120
-                        cellHeight: 120 * 9 / 16 + 8
-                        model: Services.WallpaperService.wallpaperList
-                        clip: true
-                    
-                    delegate: Rectangle {
-                            id: wallpaperItem
-                            width: wallpaperGrid.cellWidth - 8
-                            height: 120 * 9 / 16
+                                anchors.centerIn: parent
+                                width: Math.floor((parent.width / wallpaperGrid.cellWidth)) * wallpaperGrid.cellWidth
+                                height: Math.min(
+                                    parent.height,
+                                    Math.ceil(Services.WallpaperService.wallpaperList.count / Math.max(1, Math.floor(parent.width / wallpaperGrid.cellWidth))) * wallpaperGrid.cellHeight
+                                )
+                                cellWidth: 180
+                                cellHeight: 180 * 9 / 16 + 8
+                                model: Services.WallpaperService.wallpaperList
+                                clip: true
+
+                                delegate: Rectangle {
+                                    id: wallpaperItem
+                                    width: wallpaperGrid.cellWidth - 8
+                                    height: wallpaperGrid.cellHeight - 8
                             radius: Commons.Theme.radius
                             color: itemArea.containsMouse ? cHover : "transparent"
                             border.width: itemArea.containsMouse ? 2 : 1
@@ -253,14 +253,14 @@ Widgets.PopupWindow {
                                 color: cSurface
                                 clip: true
                                 
-                                Image {
-                                    id: wallpaperImage
-                                    anchors.fill: parent
-                                    source: "file://" + wallpaperItem.filePath
-                                    sourceSize: Qt.size(240, 240)
-                                    fillMode: Image.PreserveAspectCrop
-                                    asynchronous: true
-                                    smooth: true
+                                        Image {
+                                            id: wallpaperImage
+                                            anchors.fill: parent
+                                            source: "file://" + wallpaperItem.filePath
+                                            sourceSize: Qt.size(wallpaperGrid.cellWidth * 2, wallpaperGrid.cellHeight * 2)
+                                            fillMode: Image.PreserveAspectCrop
+                                            asynchronous: true
+                                            smooth: true
                                     
                                     onStatusChanged: {
                                         if (status === Image.Error) {
@@ -278,15 +278,95 @@ Widgets.PopupWindow {
                                     color: cSubText
                                     visible: false
                                 }
+
+                                Rectangle {
+                                    id: tooltipRect
+                                    anchors.left: parent.left
+                                    anchors.top: parent.top
+                                    anchors.margins: 6
+                                    radius: 6
+                                    color: Qt.rgba(0, 0, 0, 0.6)
+                                    visible: itemArea.containsMouse
+                                    z: 2
+                                    implicitHeight: 22
+                                    implicitWidth: Math.min(parent.width - 12, 220)
+
+                                    Text {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 8
+                                        anchors.rightMargin: 8
+                                        text: wallpaperItem.fileName
+                                        font.family: Commons.Theme.fontUI
+                                        font.pixelSize: 11
+                                        color: "white"
+                                        elide: Text.ElideRight
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
                             }
                             
-                            MouseArea {
+                                MouseArea {
                                 id: itemArea
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+
                                 onClicked: {
                                     Services.WallpaperService.setWallpaper(wallpaperItem.filePath)
+                                }
+                            }
+
+                            /* Action buttons (visible on hover) */
+                            RowLayout {
+                                id: actionButtons
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                anchors.margins: 8
+                                spacing: 6
+                                z: 5
+                                visible: wallpaperItem.containsMouse
+
+                                Widgets.IconButton {
+                                    width: 28
+                                    height: 28
+                                    icon: "\uf0c5"
+                                    iconSize: 12
+                                    iconColor: cSubText
+                                    hoverIconColor: cPrimary
+                                    baseColor: Qt.rgba(0,0,0,0.25)
+                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12)
+                                    onClicked: {
+                                        popupWindow.copyToClipboard(wallpaperItem.filePath)
+                                    }
+                                }
+
+                                Widgets.IconButton {
+                                    width: 28
+                                    height: 28
+                                    icon: "\uf07c"
+                                    iconSize: 12
+                                    iconColor: cSubText
+                                    hoverIconColor: cPrimary
+                                    baseColor: Qt.rgba(0,0,0,0.25)
+                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12)
+                                    onClicked: {
+                                        popupWindow.openFile(wallpaperItem.filePath)
+                                    }
+                                }
+
+                                Widgets.IconButton {
+                                    width: 28
+                                    height: 28
+                                    icon: "󰆐"
+                                    iconSize: 12
+                                    iconColor: cSubText
+                                    hoverIconColor: "#e86767"
+                                    baseColor: Qt.rgba(0,0,0,0.25)
+                                    hoverColor: Qt.rgba(0.9,0.1,0.1,0.12)
+                                    onClicked: {
+                                        popupWindow.deleteFile(wallpaperItem.filePath, wallpaperItem.fileName)
+                                    }
                                 }
                             }
                         }
@@ -408,20 +488,20 @@ Widgets.PopupWindow {
                             GridView {
                                 id: wallhavenGrid
                                 anchors.centerIn: parent
-                                width: Math.floor((parent.width / 120)) * 120
+                                width: Math.floor((parent.width / wallhavenGrid.cellWidth)) * wallhavenGrid.cellWidth
                                 height: Math.min(
                                     parent.height,
-                                    Math.ceil(Services.WallhavenAPIService.wallhavenList.count / Math.max(1, Math.floor(parent.width / 120))) * (120 * 9 / 16 + 8)
+                                    Math.ceil(Services.WallhavenAPIService.wallhavenList.count / Math.max(1, Math.floor(parent.width / wallhavenGrid.cellWidth))) * wallhavenGrid.cellHeight
                                 )
-                                cellWidth: 120
-                                cellHeight: 120 * 9 / 16 + 8
+                                cellWidth: 180
+                                cellHeight: 180 * 9 / 16 + 8
                                 model: Services.WallhavenAPIService.wallhavenList
                                 clip: true
                                 
                                 delegate: Rectangle {
                                     id: whItem
                                     width: wallhavenGrid.cellWidth - 8
-                                    height: 120 * 9 / 16
+                                    height: wallhavenGrid.cellHeight - 8
                                     radius: Commons.Theme.radius
                                     color: whArea.containsMouse ? cHover : "transparent"
                                     border.width: whArea.containsMouse ? 2 : 1
@@ -445,7 +525,7 @@ Widgets.PopupWindow {
                                         Image {
                                             anchors.fill: parent
                                             source: whItem.thumbUrl
-                                            sourceSize: Qt.size(240, 240)
+                                            sourceSize: Qt.size(wallhavenGrid.cellWidth * 2, wallhavenGrid.cellHeight * 2)
                                             fillMode: Image.PreserveAspectCrop
                                             asynchronous: true
                                             smooth: true
@@ -676,6 +756,26 @@ Widgets.PopupWindow {
                 }
             }
         }
+
+        Process {
+            id: copyProcess
+            running: false
+        }
+
+        Process {
+            id: openProcess
+            running: false
+        }
+
+        Process {
+            id: deleteProcess
+            running: false
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    Services.WallpaperService.refresh()
+                }
+            }
+        }
         
         Connections {
             target: Services.ConfigService
@@ -710,6 +810,28 @@ Widgets.PopupWindow {
 
     function openDirectoryDialog() {
         directoryDialogProcess.running = true
+    }
+
+    function copyToClipboard(text) {
+        var escapedText = text.replace(/'/g, "'\"'\"'")
+        copyProcess.command = ["sh", "-c", "printf '%s' '" + escapedText + "' | wl-copy"]
+        copyProcess.running = false
+        copyProcess.running = true
+    }
+
+    function openFile(path) {
+        var escaped = path.replace(/'/g, "'\"'\"'")
+        openProcess.command = ["sh", "-c", "xdg-open '" + escaped + "' 2>/dev/null &"]
+        openProcess.running = false
+        openProcess.running = true
+    }
+
+    function deleteFile(path, name) {
+        var ePath = path.replace(/'/g, "'\"'\"'")
+        var eName = name.replace(/'/g, "'\"'\"'")
+        deleteProcess.command = ["sh", "-c", "(zenity --question --text='Delete " + eName + "?' 2>/dev/null || yad --question --text='Delete " + eName + "?' 2>/dev/null) && rm -f '" + ePath + "' && echo deleted || echo canceled"]
+        deleteProcess.running = false
+        deleteProcess.running = true
     }
 
     function refreshWallhaven() {
