@@ -75,6 +75,10 @@ Widgets.PopupWindow {
             
             Widgets.NavButton {
                 icon: "󰁍"
+                baseColor: "transparent"
+                hoverColor: Commons.Theme.secondaryMuted
+                iconColor: Commons.Theme.secondary
+                hoverIconColor: Commons.Theme.secondary
                 onClicked: {
                     var newDate = new Date(currentDate)
                     newDate.setMonth(newDate.getMonth() - 1)
@@ -84,6 +88,10 @@ Widgets.PopupWindow {
             
             Widgets.NavButton {
                 icon: "󰁔"
+                baseColor: "transparent"
+                hoverColor: Commons.Theme.secondaryMuted
+                iconColor: Commons.Theme.secondary
+                hoverIconColor: Commons.Theme.secondary
                 onClicked: {
                     var newDate = new Date(currentDate)
                     newDate.setMonth(newDate.getMonth() + 1)
