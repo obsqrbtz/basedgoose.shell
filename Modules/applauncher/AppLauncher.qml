@@ -24,18 +24,8 @@ Widgets.PopupWindow {
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
     readonly property color cPrimary: Commons.Theme.secondary
     
-    anchors {
-        top: true
-        left: true
-    }
-    
     readonly property int launcherWidth: 420
     readonly property int launcherHeight: 500
-    
-    margins {
-        top: Quickshell.screens[0] ? (Quickshell.screens[0].height - launcherHeight) / 2 : 0
-        left: Quickshell.screens[0] ? (Quickshell.screens[0].width - launcherWidth) / 2 : 0
-    }
     
     implicitWidth: launcherWidth
     implicitHeight: launcherHeight

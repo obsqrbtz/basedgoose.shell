@@ -20,16 +20,6 @@ Widgets.PopupWindow {
     readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
     readonly property color cBorder: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.08)
 
-    anchors {
-        top: true
-        left: true
-    }
-
-    margins {
-        top: Quickshell.screens[0] ? (Quickshell.screens[0].height - implicitHeight) / 2 : 100
-        left: Quickshell.screens[0] ? (Quickshell.screens[0].width - implicitWidth) / 2 : 100
-    }
-
     implicitWidth: 600
     implicitHeight: 720
 

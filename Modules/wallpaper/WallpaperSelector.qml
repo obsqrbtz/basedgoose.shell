@@ -1,5 +1,6 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
+import QtQuick.Controls 6.10
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
@@ -13,13 +14,13 @@ Widgets.PopupWindow {
     ipcTarget: "wallpaper"
     Component.onCompleted: {
         if (Services.ConfigService.initialized)
-            Services.WallpaperService.refresh()
+            Services.WallpaperService.refresh();
     }
     initialScale: 0.94
     transformOriginX: 0.5
     transformOriginY: 0.5
-    closeOnClickOutside: !directoryDialogProcess.running
-    
+    closeOnClickOutside: false
+
     readonly property color cSurface: Commons.Theme.background
     readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
     readonly property color cPrimary: Commons.Theme.secondary
@@ -27,25 +28,15 @@ Widgets.PopupWindow {
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
-    
+
     property int currentTab: 0  // 0 = Local, 1 = Wallhaven, 2 = Settings
     property string wallhavenSorting: "date_added"
     property string wallhavenTopRange: "1M"
     property int wallhavenPage: 1
-    
-    anchors {
-        top: true
-        left: true
-    }
-    
-    margins {
-        top: 100
-        left: Quickshell.screens[0] ? (Quickshell.screens[0].width - implicitWidth) / 2 : 0
-    }
-    
+
     implicitWidth: 600
     implicitHeight: 540
-    
+
     Rectangle {
         id: backgroundRect
         anchors.fill: parent
@@ -53,7 +44,7 @@ Widgets.PopupWindow {
         radius: Commons.Theme.radius * 2
         border.color: cBorder
         border.width: 1
-        
+
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
@@ -61,23 +52,23 @@ Widgets.PopupWindow {
             shadowBlur: 1.0
             shadowVerticalOffset: 6
         }
-        
+
         ColumnLayout {
             id: contentColumn
             anchors.fill: parent
             anchors.margins: 16
             spacing: 12
-            
+
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 12
-                
+
                 Rectangle {
                     width: 36
                     height: 36
                     radius: 12
                     color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                    
+
                     Text {
                         anchors.centerIn: parent
                         text: "\uf03e"
@@ -86,11 +77,11 @@ Widgets.PopupWindow {
                         color: cPrimary
                     }
                 }
-                
+
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 2
-                    
+
                     Text {
                         text: "Wallpaper Selector"
                         font.family: Commons.Theme.fontUI
@@ -98,20 +89,16 @@ Widgets.PopupWindow {
                         font.weight: Font.Bold
                         color: cText
                     }
-                    
+
                     Text {
-                        text: currentTab === 0
-                            ? (Services.WallpaperService.wallpaperList.count > 0 ? Services.WallpaperService.wallpaperList.count + " wallpapers found" : "Loading...")
-                            : (currentTab === 1
-                                ? (Services.WallhavenAPIService.running ? "Loading..." : "Page " + wallhavenPage + " of " + Services.WallhavenAPIService.lastPage)
-                                : "Directory and resize mode")
+                        text: currentTab === 0 ? (Services.WallpaperService.wallpaperList.count > 0 ? Services.WallpaperService.wallpaperList.count + " wallpapers found" : "Loading...") : (currentTab === 1 ? (Services.WallhavenAPIService.running ? "Loading..." : "Page " + wallhavenPage + " of " + Services.WallhavenAPIService.lastPage) : "Directory and resize mode")
                         font.family: Commons.Theme.fontUI
                         font.pixelSize: 11
                         color: cSubText
                     }
                 }
             }
-            
+
             Row {
                 Layout.fillWidth: true
                 spacing: 4
@@ -146,8 +133,9 @@ Widgets.PopupWindow {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            currentTab = 1
-                            if (Services.WallhavenAPIService.wallhavenList.count === 0 && !Services.WallhavenAPIService.running) refreshWallhaven()
+                            currentTab = 1;
+                            if (Services.WallhavenAPIService.wallhavenList.count === 0 && !Services.WallhavenAPIService.running)
+                                refreshWallhaven();
                         }
                     }
                     Text {
@@ -179,21 +167,23 @@ Widgets.PopupWindow {
                     }
                 }
             }
-            
+
             StackLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 currentIndex: currentTab
-                
+
                 // Local tab
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 12
-                    
+
                     RowLayout {
                         Layout.fillWidth: true
-                        Item { Layout.fillWidth: true }
+                        Item {
+                            Layout.fillWidth: true
+                        }
                         Widgets.IconButton {
                             width: 28
                             height: 28
@@ -206,26 +196,23 @@ Widgets.PopupWindow {
                             onClicked: Services.WallpaperService.refresh()
                         }
                     }
-                    
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         radius: 12
                         color: cSurfaceContainer
                         clip: true
-                        
+
                         Item {
                             anchors.fill: parent
                             anchors.margins: 8
-                            
+
                             GridView {
                                 id: wallpaperGrid
                                 anchors.centerIn: parent
                                 width: Math.floor((parent.width / wallpaperGrid.cellWidth)) * wallpaperGrid.cellWidth
-                                height: Math.min(
-                                    parent.height,
-                                    Math.ceil(Services.WallpaperService.wallpaperList.count / Math.max(1, Math.floor(parent.width / wallpaperGrid.cellWidth))) * wallpaperGrid.cellHeight
-                                )
+                                height: Math.min(parent.height, Math.ceil(Services.WallpaperService.wallpaperList.count / Math.max(1, Math.floor(parent.width / wallpaperGrid.cellWidth))) * wallpaperGrid.cellHeight)
                                 cellWidth: 180
                                 cellHeight: 180 * 9 / 16 + 8
                                 model: Services.WallpaperService.wallpaperList
@@ -235,24 +222,53 @@ Widgets.PopupWindow {
                                     id: wallpaperItem
                                     width: wallpaperGrid.cellWidth - 8
                                     height: wallpaperGrid.cellHeight - 8
-                            radius: Commons.Theme.radius
-                            color: itemArea.containsMouse ? cHover : "transparent"
-                            border.width: itemArea.containsMouse ? 2 : 1
-                            border.color: itemArea.containsMouse ? cPrimary : cBorder
-                            
-                            required property string filePath
-                            required property string fileName
-                            
-                            Behavior on color { ColorAnimation { duration: 100 } }
-                            Behavior on border.color { ColorAnimation { duration: 100 } }
-                            
-                            Rectangle {
-                                anchors.fill: parent
-                                anchors.margins: 4
-                                radius: 6
-                                color: cSurface
-                                clip: true
-                                
+                                    radius: Commons.Theme.radius
+                                    color: itemArea.containsMouse ? cHover : "transparent"
+                                    border.width: itemArea.containsMouse ? 2 : 1
+                                    border.color: itemArea.containsMouse ? cPrimary : cBorder
+
+                                    ContextMenu.menu: Menu {
+                                        MenuItem {
+                                            text: qsTr("Copy path")
+                                            onTriggered: {
+                                                copyToClipboard(wallpaperItem.filePath);
+                                            }
+                                        }
+                                        MenuItem {
+                                            text: qsTr("Open in file manager")
+                                            onTriggered: {
+                                                openFile(wallpaperItem.filePath);
+                                            }
+                                        }
+                                        MenuItem {
+                                            text: qsTr("Delete")
+                                            onTriggered: {
+                                                deleteFile(wallpaperItem.filePath, wallpaperItem.fileName);
+                                            }
+                                        }
+                                    }
+
+                                    required property string filePath
+                                    required property string fileName
+
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 100
+                                        }
+                                    }
+                                    Behavior on border.color {
+                                        ColorAnimation {
+                                            duration: 100
+                                        }
+                                    }
+
+                                    Rectangle {
+                                        anchors.fill: parent
+                                        anchors.margins: 4
+                                        radius: 6
+                                        color: cSurface
+                                        clip: true
+
                                         Image {
                                             id: wallpaperImage
                                             anchors.fill: parent
@@ -261,93 +277,105 @@ Widgets.PopupWindow {
                                             fillMode: Image.PreserveAspectCrop
                                             asynchronous: true
                                             smooth: true
-                                    
-                                    onStatusChanged: {
-                                        if (status === Image.Error) {
-                                            errorIcon.visible = true
+
+                                            onStatusChanged: {
+                                                if (status === Image.Error) {
+                                                    errorIcon.visible = true;
+                                                }
+                                            }
+                                        }
+
+                                        Text {
+                                            id: errorIcon
+                                            anchors.centerIn: parent
+                                            text: "󰈙"
+                                            font.family: Commons.Theme.fontIcon
+                                            font.pixelSize: 24
+                                            color: cSubText
+                                            visible: false
+                                        }
+
+                                        Rectangle {
+                                            id: tooltipRect
+                                            anchors.left: parent.left
+                                            anchors.top: parent.top
+                                            anchors.margins: 6
+                                            radius: 6
+                                            color: Qt.rgba(0, 0, 0, 0.6)
+                                            visible: itemArea.containsMouse
+                                            z: 2
+                                            implicitHeight: 22
+                                            implicitWidth: Math.min(parent.width - 12, 220)
+
+                                            Text {
+                                                anchors.fill: parent
+                                                anchors.leftMargin: 8
+                                                anchors.rightMargin: 8
+                                                text: wallpaperItem.fileName
+                                                font.family: Commons.Theme.fontUI
+                                                font.pixelSize: 11
+                                                color: "white"
+                                                elide: Text.ElideRight
+                                                verticalAlignment: Text.AlignVCenter
+                                            }
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        id: itemArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        acceptedButtons: Qt.LeftButton
+
+                                        onClicked: {
+                                            Services.WallpaperService.setWallpaper(wallpaperItem.filePath);
                                         }
                                     }
                                 }
-                                
-                                Text {
-                                    id: errorIcon
-                                    anchors.centerIn: parent
-                                    text: "󰈙"
-                                    font.family: Commons.Theme.fontIcon
-                                    font.pixelSize: 24
-                                    color: cSubText
-                                    visible: false
-                                }
-
-                                Rectangle {
-                                    id: tooltipRect
-                                    anchors.left: parent.left
-                                    anchors.top: parent.top
-                                    anchors.margins: 6
-                                    radius: 6
-                                    color: Qt.rgba(0, 0, 0, 0.6)
-                                    visible: itemArea.containsMouse
-                                    z: 2
-                                    implicitHeight: 22
-                                    implicitWidth: Math.min(parent.width - 12, 220)
-
-                                    Text {
-                                        anchors.fill: parent
-                                        anchors.leftMargin: 8
-                                        anchors.rightMargin: 8
-                                        text: wallpaperItem.fileName
-                                        font.family: Commons.Theme.fontUI
-                                        font.pixelSize: 11
-                                        color: "white"
-                                        elide: Text.ElideRight
-                                        verticalAlignment: Text.AlignVCenter
-                                    }
-                                }
                             }
-                            
-                                MouseArea {
-                                id: itemArea
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                        }
 
-                                onClicked: {
-                                    Services.WallpaperService.setWallpaper(wallpaperItem.filePath)
-                                }
-                            }
+                        Widgets.EmptyState {
+                            anchors.centerIn: parent
+                            visible: Services.WallpaperService.wallpaperList.count === 0 && !Services.WallpaperService.loading
+                            icon: "󰈙"
+                            iconSize: 32
+                            iconOpacity: 0.2
+                            title: "No wallpapers found"
+                            subtitle: "Check the directory: " + Commons.Config.wallpaperDirectory
+                            textOpacity: 1.0
                         }
                     }
                 }
-                    
-                Widgets.EmptyState {
-                    anchors.centerIn: parent
-                    visible: Services.WallpaperService.wallpaperList.count === 0 && !Services.WallpaperService.loading
-                    icon: "󰈙"
-                    iconSize: 32
-                    iconOpacity: 0.2
-                    title: "No wallpapers found"
-                    subtitle: "Check the directory: " + Commons.Config.wallpaperDirectory
-                    textOpacity: 1.0
-                }
-            }
-                }
-                
+
                 // Wallhaven tab
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 8
-                    
+
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 6
                         Repeater {
                             model: [
-                                { key: "date_added", label: "Latest" },
-                                { key: "hot", label: "Hot" },
-                                { key: "toplist", label: "Top" },
-                                { key: "random", label: "Random" }
+                                {
+                                    key: "date_added",
+                                    label: "Latest"
+                                },
+                                {
+                                    key: "hot",
+                                    label: "Hot"
+                                },
+                                {
+                                    key: "toplist",
+                                    label: "Top"
+                                },
+                                {
+                                    key: "random",
+                                    label: "Random"
+                                }
                             ]
                             Rectangle {
                                 Layout.preferredWidth: 72
@@ -360,9 +388,9 @@ Widgets.PopupWindow {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        wallhavenSorting = modelData.key
-                                        wallhavenPage = 1
-                                        refreshWallhaven()
+                                        wallhavenSorting = modelData.key;
+                                        wallhavenPage = 1;
+                                        refreshWallhaven();
                                     }
                                 }
                                 Text {
@@ -374,7 +402,9 @@ Widgets.PopupWindow {
                                 }
                             }
                         }
-                        Item { Layout.fillWidth: true }
+                        Item {
+                            Layout.fillWidth: true
+                        }
                         Widgets.IconButton {
                             width: 28
                             height: 28
@@ -387,7 +417,7 @@ Widgets.PopupWindow {
                             onClicked: refreshWallhaven()
                         }
                     }
-                    
+
                     Row {
                         Layout.fillWidth: true
                         visible: wallhavenSorting === "toplist"
@@ -405,9 +435,9 @@ Widgets.PopupWindow {
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        wallhavenTopRange = modelData
-                                        wallhavenPage = 1
-                                        refreshWallhaven()
+                                        wallhavenTopRange = modelData;
+                                        wallhavenPage = 1;
+                                        refreshWallhaven();
                                     }
                                 }
                                 Text {
@@ -420,31 +450,28 @@ Widgets.PopupWindow {
                             }
                         }
                     }
-                    
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         radius: 12
                         color: cSurfaceContainer
                         clip: true
-                        
+
                         Item {
                             anchors.fill: parent
                             anchors.margins: 8
-                            
+
                             GridView {
                                 id: wallhavenGrid
                                 anchors.centerIn: parent
                                 width: Math.floor((parent.width / wallhavenGrid.cellWidth)) * wallhavenGrid.cellWidth
-                                height: Math.min(
-                                    parent.height,
-                                    Math.ceil(Services.WallhavenAPIService.wallhavenList.count / Math.max(1, Math.floor(parent.width / wallhavenGrid.cellWidth))) * wallhavenGrid.cellHeight
-                                )
+                                height: Math.min(parent.height, Math.ceil(Services.WallhavenAPIService.wallhavenList.count / Math.max(1, Math.floor(parent.width / wallhavenGrid.cellWidth))) * wallhavenGrid.cellHeight)
                                 cellWidth: 180
                                 cellHeight: 180 * 9 / 16 + 8
                                 model: Services.WallhavenAPIService.wallhavenList
                                 clip: true
-                                
+
                                 delegate: Rectangle {
                                     id: whItem
                                     width: wallhavenGrid.cellWidth - 8
@@ -453,22 +480,30 @@ Widgets.PopupWindow {
                                     color: whArea.containsMouse ? cHover : "transparent"
                                     border.width: whArea.containsMouse ? 2 : 1
                                     border.color: whArea.containsMouse ? cPrimary : cBorder
-                                    
+
                                     required property string id
                                     required property string thumbUrl
                                     required property string fullUrl
                                     required property string resolution
-                                    
-                                    Behavior on color { ColorAnimation { duration: 100 } }
-                                    Behavior on border.color { ColorAnimation { duration: 100 } }
-                                    
+
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 100
+                                        }
+                                    }
+                                    Behavior on border.color {
+                                        ColorAnimation {
+                                            duration: 100
+                                        }
+                                    }
+
                                     Rectangle {
                                         anchors.fill: parent
                                         anchors.margins: 4
                                         radius: 6
                                         color: cSurface
                                         clip: true
-                                        
+
                                         Image {
                                             anchors.fill: parent
                                             source: whItem.thumbUrl
@@ -476,12 +511,13 @@ Widgets.PopupWindow {
                                             fillMode: Image.PreserveAspectCrop
                                             asynchronous: true
                                             smooth: true
-                                            
+
                                             onStatusChanged: {
-                                                if (status === Image.Error) whError.visible = true
+                                                if (status === Image.Error)
+                                                    whError.visible = true;
                                             }
                                         }
-                                        
+
                                         Text {
                                             id: whError
                                             anchors.centerIn: parent
@@ -491,7 +527,7 @@ Widgets.PopupWindow {
                                             color: cSubText
                                             visible: false
                                         }
-                                        
+
                                         Text {
                                             anchors.left: parent.left
                                             anchors.bottom: parent.bottom
@@ -501,10 +537,10 @@ Widgets.PopupWindow {
                                             font.pixelSize: 9
                                             color: cText
                                             style: Text.Outline
-                                            styleColor: Qt.rgba(0,0,0,0.8)
+                                            styleColor: Qt.rgba(0, 0, 0, 0.8)
                                         }
                                     }
-                                    
+
                                     MouseArea {
                                         id: whArea
                                         anchors.fill: parent
@@ -514,7 +550,7 @@ Widgets.PopupWindow {
                                     }
                                 }
                             }
-                            
+
                             Widgets.EmptyState {
                                 anchors.centerIn: parent
                                 visible: Services.WallhavenAPIService.wallhavenList.count === 0 && !Services.WallhavenAPIService.running
@@ -527,7 +563,7 @@ Widgets.PopupWindow {
                             }
                         }
                     }
-                    
+
                     Row {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 32
@@ -541,7 +577,12 @@ Widgets.PopupWindow {
                             hoverIconColor: cPrimary
                             baseColor: "transparent"
                             hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                            onClicked: { if (wallhavenPage > 1) { wallhavenPage--; refreshWallhaven() } }
+                            onClicked: {
+                                if (wallhavenPage > 1) {
+                                    wallhavenPage--;
+                                    refreshWallhaven();
+                                }
+                            }
                         }
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
@@ -559,17 +600,22 @@ Widgets.PopupWindow {
                             hoverIconColor: cPrimary
                             baseColor: "transparent"
                             hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                            onClicked: { if (wallhavenPage < Services.WallhavenAPIService.lastPage) { wallhavenPage++; refreshWallhaven() } }
+                            onClicked: {
+                                if (wallhavenPage < Services.WallhavenAPIService.lastPage) {
+                                    wallhavenPage++;
+                                    refreshWallhaven();
+                                }
+                            }
                         }
                     }
                 }
-                
+
                 // Settings tab
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 12
-                    
+
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 40
@@ -607,8 +653,8 @@ Widgets.PopupWindow {
                                 }
                                 Keys.onReturnPressed: saveDirectory()
                                 Keys.onEscapePressed: {
-                                    text = Services.ConfigService.wallpaperDirectory
-                                    focus = false
+                                    text = Services.ConfigService.wallpaperDirectory;
+                                    focus = false;
                                 }
                             }
                             Widgets.IconButton {
@@ -651,10 +697,22 @@ Widgets.PopupWindow {
                         }
                         Repeater {
                             model: [
-                                { key: "no", label: "No" },
-                                { key: "crop", label: "Crop" },
-                                { key: "fit", label: "Fit" },
-                                { key: "stretch", label: "Stretch" }
+                                {
+                                    key: "no",
+                                    label: "No"
+                                },
+                                {
+                                    key: "crop",
+                                    label: "Crop"
+                                },
+                                {
+                                    key: "fit",
+                                    label: "Fit"
+                                },
+                                {
+                                    key: "stretch",
+                                    label: "Stretch"
+                                }
                             ]
                             Rectangle {
                                 Layout.preferredWidth: 64
@@ -681,24 +739,19 @@ Widgets.PopupWindow {
                 }
             }
         }
-        
+
         Process {
             id: directoryDialogProcess
             running: false
             command: ["sh", "-c", "zenity --file-selection --directory --title='Select Wallpaper Directory' 2>/dev/null || yad --file --directory --title='Select Wallpaper Directory' 2>/dev/null || echo ''"]
-            
-            onRunningChanged: {
-                if (running) {
-                    popupWindow.shouldShow = true
-                }
-            }
-            
+
             stdout: StdioCollector {
                 onStreamFinished: {
-                    var selectedDir = text.trim()
+                    popupWindow.shouldShow = true;
+                    var selectedDir = text.trim();
                     if (selectedDir.length > 0) {
-                        directoryInput.text = selectedDir
-                        saveDirectory()
+                        directoryInput.text = selectedDir;
+                        saveDirectory();
                     }
                 }
             }
@@ -719,69 +772,72 @@ Widgets.PopupWindow {
             running: false
             stdout: StdioCollector {
                 onStreamFinished: {
-                    Services.WallpaperService.refresh()
+                    popupWindow.shouldShow = true;
+                    Services.WallpaperService.refresh();
                 }
             }
         }
-        
+
         Connections {
             target: Services.ConfigService
             function onWallpaperDirectoryChanged() {
-                directoryInput.text = Services.ConfigService.wallpaperDirectory
-                Services.WallpaperService.refresh()
+                directoryInput.text = Services.ConfigService.wallpaperDirectory;
+                Services.WallpaperService.refresh();
             }
             function onInitializedChanged() {
                 if (Services.ConfigService.initialized) {
-                    directoryInput.text = Services.ConfigService.wallpaperDirectory
-                    Services.WallpaperService.refresh()
+                    directoryInput.text = Services.ConfigService.wallpaperDirectory;
+                    Services.WallpaperService.refresh();
                 }
             }
         }
 
         Connections {
             target: Services.WallpaperService
-            function onWallpaperApplied() {
-                popupWindow.shouldShow = false
-            }
+            // function onWallpaperApplied() {
+            //     popupWindow.shouldShow = false;
+            // }
         }
     }
 
     function saveDirectory() {
-        var newDir = directoryInput.text.trim()
+        var newDir = directoryInput.text.trim();
         if (newDir.length > 0) {
-            Services.ConfigService.setWallpaperDirectory(newDir)
-            directoryInput.focus = false
-            Services.WallpaperService.refresh()
+            Services.ConfigService.setWallpaperDirectory(newDir);
+            directoryInput.focus = false;
+            Services.WallpaperService.refresh();
         }
     }
 
     function openDirectoryDialog() {
-        directoryDialogProcess.running = true
+        popupWindow.shouldShow = false;
+        directoryDialogProcess.running = true;
     }
 
     function copyToClipboard(text) {
-        var escapedText = text.replace(/'/g, "'\"'\"'")
-        copyProcess.command = ["sh", "-c", "printf '%s' '" + escapedText + "' | wl-copy"]
-        copyProcess.running = false
-        copyProcess.running = true
+        var escapedText = text.replace(/'/g, "'\"'\"'");
+        copyProcess.command = ["sh", "-c", "printf '%s' '" + escapedText + "' | wl-copy"];
+        copyProcess.running = false;
+        copyProcess.running = true;
     }
 
     function openFile(path) {
-        var escaped = path.replace(/'/g, "'\"'\"'")
-        openProcess.command = ["sh", "-c", "xdg-open '" + escaped + "' 2>/dev/null &"]
-        openProcess.running = false
-        openProcess.running = true
+        var escaped = path.replace(/'/g, "'\"'\"'");
+        openProcess.command = ["sh", "-c", "xdg-open '" + escaped + "' 2>/dev/null &"];
+        openProcess.running = false;
+        openProcess.running = true;
     }
 
     function deleteFile(path, name) {
-        var ePath = path.replace(/'/g, "'\"'\"'")
-        var eName = name.replace(/'/g, "'\"'\"'")
-        deleteProcess.command = ["sh", "-c", "(zenity --question --text='Delete " + eName + "?' 2>/dev/null || yad --question --text='Delete " + eName + "?' 2>/dev/null) && rm -f '" + ePath + "' && echo deleted || echo canceled"]
-        deleteProcess.running = false
-        deleteProcess.running = true
+        var ePath = path.replace(/'/g, "'\"'\"'");
+        var eName = name.replace(/'/g, "'\"'\"'");
+        popupWindow.shouldShow = false;
+        deleteProcess.command = ["sh", "-c", "(zenity --question --text='Delete " + eName + "?' 2>/dev/null || yad --question --text='Delete " + eName + "?' 2>/dev/null) && rm -f '" + ePath + "' && echo deleted || echo canceled"];
+        deleteProcess.running = false;
+        deleteProcess.running = true;
     }
 
     function refreshWallhaven() {
-        Services.WallhavenAPIService.refresh(wallhavenSorting, wallhavenPage, wallhavenTopRange, Services.WallhavenAPIService.seed)
+        Services.WallhavenAPIService.refresh(wallhavenSorting, wallhavenPage, wallhavenTopRange, Services.WallhavenAPIService.seed);
     }
 }
