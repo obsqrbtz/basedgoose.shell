@@ -19,7 +19,7 @@ Singleton {
         var all = Mpris.players && Mpris.players.values ? Mpris.players.values : []
         if (!all || all.length === 0) return null
         for (var i = 0; i < all.length; i++) {
-            if (all[i] && (all[i].isPlaying || all[i].playbackState === Quickshell.Mpris.MprisPlaybackState.Playing)) {
+            if (all[i] && all[i].isPlaying) {
                 return all[i]
             }
         }
