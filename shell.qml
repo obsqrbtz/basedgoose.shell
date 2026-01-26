@@ -17,20 +17,11 @@ import "./Modules/display" as DisplayModule
 import "./Services" as Services
 
 Scope {
-    readonly property var notificationServer: Services.NotificationServer
-    
     Component.onCompleted: {
-        if (notificationServer && notificationServer.server) {
+        if (Services.Notifications && Services.Notifications.server) {
             console.log("[Shell] Notification server initialized")
         } else {
             console.error("[Shell] Failed to initialize notification server")
-        }
-    }
-    
-    Connections {
-        target: Services.NotificationServer
-        function onNotificationReceived(notification) {
-            Services.Notifs.addNotification(notification)
         }
     }
     

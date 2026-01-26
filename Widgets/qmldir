@@ -22,3 +22,4 @@ MenuButton 1.0 MenuButton.qml
 NavButton 1.0 NavButton.qml
 MediaControlButton 1.0 MediaControlButton.qml
 TextButton 1.0 TextButton.qml
+NotificationCard 1.0 NotificationCard.qml

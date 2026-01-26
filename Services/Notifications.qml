@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick 6.10
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Notifications
 
 Singleton {
@@ -11,8 +12,54 @@ Singleton {
     property var activeNotifications: []
     
     readonly property int maxNotifications: 100
+    readonly property int maxCachedNotifications: 50
+    
+    readonly property string notificationsCachePath: {
+        var home = Quickshell.env("HOME")
+        return home + "/.cache/basedgoose.shell/notifications.json"
+    }
+    
+    FileView {
+        id: persistenceFile
+        path: root.notificationsCachePath
+        
+        onFileChanged: reload()
+        onAdapterUpdated: writeAdapter()
+        
+        JsonAdapter {
+            id: persist
+            
+            property var savedNotifications: []
+            property bool dndState: false
+        }
+        
+        Component.onCompleted: {
+            reload()
+        }
+    }
+    
+    Connections {
+        target: persistenceFile
+        
+        function onLoaded() {
+            if (persist.savedNotifications && persist.savedNotifications.length > 0) {
+                root.restoreNotifications()
+            }
+        }
+    }
+    
+    property NotificationServer server: NotificationServer {
+        Component.onCompleted: {
+            console.log("[Notifs] Notification server ready")
+        }
+        
+        onNotification: notif => {
+            root.addNotification(notif)
+        }
+    }
     
     readonly property var recentNotifications: notifications.filter(n => {
+        if (n.closed) return false;
         const hoursSinceNotif = (new Date().getTime() - n.timestamp.getTime()) / (1000 * 60 * 60);
         return hoursSinceNotif < 24;
     }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
@@ -40,7 +87,7 @@ Singleton {
         return counts
     }
     
-    property bool dnd: false
+    property bool dnd: persist.dndState
     
     Timer {
         interval: 3600000
@@ -55,20 +102,14 @@ Singleton {
                 n.timestamp.getTime() > oneDayAgo
             )
             root.refreshActiveNotifications()
-            const cleaned = oldCount - root.notifications.length
-            if (cleaned > 0) {
-                console.log("[Notifs] Cleaned up", cleaned, "old notifications")
-            }
         }
     }
     
     function addNotification(notif) {
         if (dnd && notif.urgency < 2) {
-            console.log("[Notifs Service] DND active - suppressing notification:", notif.summary);
             return;
         }
         
-        console.log("[Notifs Service] Adding notification:", notif.summary);
         
         const notifWrapper = notifComponent.createObject(root, {
             notification: notif
@@ -76,26 +117,76 @@ Singleton {
         
         root.notifications = [notifWrapper, ...root.notifications].slice(0, root.maxNotifications);
         root.refreshActiveNotifications();
-        console.log("Total notifications:", root.notifications.length);
+        root.saveNotifications();
     }
     
     function toggleDnd() {
-        dnd = !dnd;
-        console.log("[Notifs Service] DND mode:", dnd ? "enabled" : "disabled");
+        persist.dndState = !persist.dndState;
+        dnd = persist.dndState;
     }
     
     function clearAll() {
-        notifications.forEach(n => n.close());
-        console.log("[Notifs Service] All notifications cleared");
+        notifications.forEach(n => {
+            n.closed = true;
+            if (n.notification && typeof n.notification.dismiss === 'function') {
+                n.notification.dismiss();
+            }
+        });
+        root.refreshActiveNotifications();
+        root.notifications = [...root.notifications];
+        root.saveNotifications();
     }
     
     function clearApp(appName) {
         notifications.filter(n => n.appName === appName).forEach(n => n.close());
-        console.log("[Notifs Service] Cleared notifications from:", appName);
     }
 
     function refreshActiveNotifications() {
         root.activeNotifications = root.notifications.filter(n => !n.closed);
+    }
+    
+    function saveNotifications() {
+        const notificationsToSave = root.notifications.slice(0, root.maxCachedNotifications);
+        
+        const saved = notificationsToSave.map(n => ({
+            id: n.id,
+            summary: n.summary,
+            body: n.body,
+            appName: n.appName,
+            appIcon: n.appIcon,
+            appImage: n.appImage,
+            urgency: n.urgency,
+            timestamp: n.timestamp.getTime(),
+            closed: n.closed,
+            dismissed: n.dismissed
+        }));
+        
+        persist.savedNotifications = saved;
+    }
+    
+    function restoreNotifications() {        
+        const restored = [];
+        for (let i = 0; i < persist.savedNotifications.length; i++) {
+            const data = persist.savedNotifications[i];
+            const notifObj = notifComponent.createObject(root, {
+                notification: null,
+                id: data.id,
+                summary: data.summary,
+                body: data.body,
+                appName: data.appName,
+                appIcon: data.appIcon,
+                appImage: data.appImage,
+                urgency: data.urgency,
+                timestamp: new Date(data.timestamp),
+                closed: data.closed,
+                dismissed: true  // Mark as dismissed so they don't show as popups
+            });
+            restored.push(notifObj);
+        }
+        
+        root.notifications = restored;
+        root.refreshActiveNotifications();
+        dnd = persist.dndState;
     }
 
     component Notif: QtObject {
@@ -104,6 +195,7 @@ Singleton {
         property var notification
         property date timestamp: new Date()
         property bool closed: false
+        property bool dismissed: false
         property bool hasAnimated: false 
         
         property string id: ""
@@ -111,9 +203,18 @@ Singleton {
         property string body: ""
         property string appName: ""
         property string appIcon: ""
-        property string image: ""
+        property string appImage: ""
         property int urgency: 0
         property list<var> actions: []
+        
+        property Timer autoCloseTimer: Timer {
+            interval: 5000
+            repeat: false
+            running: !notifWrapper.closed && !notifWrapper.dismissed
+            onTriggered: {
+                notifWrapper.dismissPopup();
+            }
+        }
         
         readonly property string timeString: {
             const diff = new Date().getTime() - timestamp.getTime();
@@ -151,7 +252,7 @@ Singleton {
             }
             
             function onImageChanged() {
-                notifWrapper.image = notifWrapper.notification.image;
+                notifWrapper.appImage = notifWrapper.notification.image;
             }
             
             function onUrgencyChanged() {
@@ -167,16 +268,21 @@ Singleton {
             }
         }
         
+        function dismissPopup() {
+            if (dismissed) return;
+            dismissed = true;
+            root.refreshActiveNotifications();
+        }
+        
         function close() {
             if (closed) return;
             
             closed = true;
             
-            if (notification) {
+            if (notification && typeof notification.dismiss === 'function') {
                 notification.dismiss();
             }
             
-            console.log("[Notifs] Notification closed but kept in history:", summary);
             root.refreshActiveNotifications();
         }
         
@@ -196,12 +302,16 @@ Singleton {
             body = notification.body;
             appName = notification.appName;
             appIcon = notification.appIcon;
-            image = notification.image;
+            appImage = notification.image;
             urgency = notification.urgency;
             actions = notification.actions.map(a => ({
                 identifier: a.identifier,
                 text: a.text,
-                invoke: () => a.invoke()
+                invoke: () => {
+                    if (typeof a.invoke === 'function') {
+                        a.invoke()
+                    }
+                }
             }));
         }
     }
@@ -215,12 +325,12 @@ Singleton {
     function deleteNotification(notif) {
         if (root.notifications.includes(notif)) {
             root.notifications = root.notifications.filter(n => n !== notif);
-            if (notif.notification) {
+            if (notif.notification && typeof notif.notification.dismiss === 'function') {
                 notif.notification.dismiss();
             }
             notif.destroy();
             root.refreshActiveNotifications();
-            console.log("[Notifs] Notification permanently deleted");
+            root.saveNotifications();
         }
     }
 }

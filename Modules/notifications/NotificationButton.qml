@@ -9,7 +9,7 @@ Rectangle {
     
     property var notificationCenter
     
-    readonly property var notifs: Services.Notifs
+    readonly property var notifs: Services.Notifications
     readonly property int unreadCount: notifs.activeNotifications.length
     readonly property bool hasDnd: notifs.dnd
     
