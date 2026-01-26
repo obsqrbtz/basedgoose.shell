@@ -140,6 +140,48 @@ ColumnLayout {
         }
     }
     
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Layout.topMargin: 8
+        radius: 10
+        color: Wallpaper.WallpaperColors.surfaceContainer
+        
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            spacing: 12
+            
+            Text {
+                text: "Image Cache:"
+                font.family: Commons.Theme.fontUI
+                font.pixelSize: 12
+                color: Wallpaper.WallpaperColors.text
+                Layout.alignment: Qt.AlignVCenter
+            }
+            
+            Item {
+                Layout.fillWidth: true
+            }
+            
+            Widgets.TextButton {
+                Layout.preferredHeight: 28
+                text: clearingCache ? "Clearing..." : "Clear Cache"
+                textColor: Commons.Theme.foreground
+                enabled: !clearingCache
+                onClicked: {
+                    clearingCache = true
+                    Services.ImageCacheService.clearCache(function(success) {
+                        clearingCache = false
+                    })
+                }
+            }
+        }
+    }
+    
+    property bool clearingCache: false
+    
     Item {
         Layout.fillHeight: true
     }

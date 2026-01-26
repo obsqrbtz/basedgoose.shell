@@ -11,3 +11,4 @@ singleton Bluetooth 1.0 Bluetooth.qml
 singleton ConfigService 1.0 ConfigService.qml
 singleton WallpaperService 1.0 WallpaperService.qml
 singleton WallhavenAPIService 1.0 WallhavenAPIService.qml
+singleton ImageCacheService 1.0 ImageCacheService.qml

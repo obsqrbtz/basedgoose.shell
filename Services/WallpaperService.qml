@@ -25,7 +25,7 @@ Singleton {
                ? Services.ConfigService.wallpaperDirectory.replace("~", "$HOME")
                : Services.ConfigService.wallpaperDirectory)
             : ""
-        command: ["sh", "-c", "find " + wallpaperDir + " -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.webp' -o -iname '*.bmp' -o -iname '*.tiff' -o -iname '*.svg' -o -iname '*.avif' -o -iname '*.jxl' \\) 2>/dev/null"]
+        command: ["fd", "-e", "jpg", "-e", "jpeg", "-e", "png", "-e", "gif", "-e", "webp", "-e", "bmp", "-e", "avif", "-e", "jxl", "-t", "f", "--max-depth", "3", ".", wallpaperDir]
 
         stdout: StdioCollector {
             onStreamFinished: {
@@ -45,6 +45,8 @@ Singleton {
                 }
             }
         }
+        
+        stderr: StdioCollector { }
     }
 
     Process {

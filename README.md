@@ -28,6 +28,8 @@ Quickshell setup for Hyprland
    - `zenity` or `yad`
    - `wlr-randr`
    - `curl`
+   - `imagemagick`
+   - `fd`
 
 2. Clone this repository to your Quickshell config directory:
    ```bash
@@ -60,3 +62,8 @@ Available targets and actions:
 - `display` - Display manager
 
 Each target supports `toggle`, `open`, and `close` actions.
+
+## Acknowledgments
+
+- [noctalia-shell](https://github.com/noctalia-dev/noctalia-shell)
+- [tripathiji1312/quickshell](https://github.com/tripathiji1312/quickshell)

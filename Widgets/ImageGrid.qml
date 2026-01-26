@@ -1,4 +1,5 @@
 import QtQuick 6.10
+import QtQuick.Controls 6.10
 import "../Commons" as Commons
 
 Item {
@@ -30,6 +31,11 @@ Item {
                 cellWidth: root.cellWidth
                 cellHeight: root.cellHeight
                 clip: true
+                
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                    active: true
+                }
             }
             
             Item {

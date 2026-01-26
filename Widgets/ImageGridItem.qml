@@ -1,6 +1,7 @@
 import QtQuick 6.10
 import QtQuick.Controls 6.10
 import "../Commons" as Commons
+import "../Services" as Services
 
 Rectangle {
     id: root
@@ -15,9 +16,49 @@ Rectangle {
     property color surfaceColor: Commons.Theme.background
     property color textColor: Commons.Theme.foreground
     property color subTextColor: Qt.rgba(textColor.r, textColor.g, textColor.b, 0.6)
+    property string cachedImagePath: ""
     
     signal clicked()
     signal rightClicked()
+    
+    Component.onCompleted: {
+        if (!imageSource || imageSource === "") {
+            return
+        }
+        
+        var cleanPath = imageSource.replace("file://", "")
+        
+        if (Services.ImageCacheService.initialized && Services.ImageCacheService.imageMagickAvailable) {
+            Services.ImageCacheService.getThumbnail(cleanPath, function(path, success) {
+                if (root && path && path !== "") {
+                    root.cachedImagePath = path
+                }
+            })
+        } else if (Services.ImageCacheService.initialized) {
+            cachedImagePath = cleanPath
+        }
+    }
+    
+    Connections {
+        target: Services.ImageCacheService
+        function onInitializedChanged() {
+            if (Services.ImageCacheService.initialized && 
+                imageSource && 
+                !cachedImagePath) {
+                var cleanPath = imageSource.replace("file://", "")
+                
+                if (Services.ImageCacheService.imageMagickAvailable) {
+                    Services.ImageCacheService.getThumbnail(cleanPath, function(path, success) {
+                        if (root && path && path !== "") {
+                            root.cachedImagePath = path
+                        }
+                    })
+                } else {
+                    root.cachedImagePath = cleanPath
+                }
+            }
+        }
+    }
     
     radius: Commons.Theme.radius
     color: mouseArea.containsMouse ? hoverColor : "transparent"
@@ -42,15 +83,52 @@ Rectangle {
         Image {
             id: image
             anchors.fill: parent
-            source: root.imageSource
-            sourceSize: Qt.size(parent.width * 2, parent.height * 2)
+            source: {
+                if (!root.cachedImagePath || root.cachedImagePath === "") {
+                    return ""
+                }
+                return root.cachedImagePath.startsWith("/") ? "file://" + root.cachedImagePath : root.cachedImagePath
+            }
+            sourceSize: Qt.size(Math.min(parent.width * 2, 400), Math.min(parent.height * 2, 300))
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
             smooth: true
+            cache: true
             
             onStatusChanged: {
                 if (status === Image.Error) {
                     errorIcon.visible = true
+                    busyIndicator.visible = false
+                } else if (status === Image.Ready) {
+                    busyIndicator.visible = false
+                } else if (status === Image.Loading) {
+                    busyIndicator.visible = true
+                }
+            }
+        }
+        
+        Rectangle {
+            anchors.centerIn: parent
+            width: 40
+            height: 40
+            radius: 20
+            color: Qt.rgba(0, 0, 0, 0.3)
+            visible: busyIndicator.visible || !root.cachedImagePath
+            
+            Text {
+                id: busyIndicator
+                anchors.centerIn: parent
+                text: "..."
+                font.family: Commons.Theme.fontUI
+                font.pixelSize: 16
+                color: Commons.Theme.foreground
+                visible: !root.cachedImagePath || image.status === Image.Loading
+                
+                SequentialAnimation on opacity {
+                    running: busyIndicator.visible
+                    loops: Animation.Infinite
+                    NumberAnimation { from: 0.3; to: 1.0; duration: 600 }
+                    NumberAnimation { from: 1.0; to: 0.3; duration: 600 }
                 }
             }
         }
