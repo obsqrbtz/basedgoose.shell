@@ -74,7 +74,7 @@ Widgets.PopupWindow {
         Process {
             id: appListProc
             running: true
-            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g')|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)\"; done"]
+            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do exec_line=$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g'); exec_name=$(echo \"$exec_line\" | awk '{print $1}' | xargs basename); echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_line|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_name\"; done"]
             
             stdout: StdioCollector {
                 onStreamFinished: {
@@ -88,11 +88,13 @@ Widgets.PopupWindow {
                             var name = parts[0].trim();
                             var execStr = parts[1].trim();
                             var iconStr = parts.length >= 3 ? parts[2].trim() : "";
+                            var execName = parts.length >= 4 ? parts[3].trim() : "";
                             if (execStr.length > 0) {
                                 appModel.append({
                                     name: name,
                                     exec: execStr,
-                                    icon: iconStr
+                                    icon: iconStr,
+                                    execName: execName
                                 });
                             }
                         }
@@ -222,6 +224,7 @@ Widgets.PopupWindow {
                     required property string name
                     required property string exec
                     required property string icon
+                    required property string execName
                     required property int index
                     
                     width: appList.width
@@ -247,12 +250,26 @@ Widgets.PopupWindow {
                             fallbackIcon: "󰀻"
                         }
                         
-                        Text {
-                            text: name
-                            color: cText
-                            font { family: Commons.Theme.fontUI; pixelSize: 13; weight: Font.Medium }
+                        ColumnLayout {
                             Layout.fillWidth: true
-                            elide: Text.ElideRight
+                            spacing: 2
+                            
+                            Text {
+                                text: name
+                                color: cText
+                                font { family: Commons.Theme.fontUI; pixelSize: 13; weight: Font.Medium }
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                            }
+                            
+                            Text {
+                                text: execName
+                                color: cSubText
+                                font { family: Commons.Theme.fontUI; pixelSize: 11 }
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                                visible: execName !== ""
+                            }
                         }
                     }
                     
@@ -273,21 +290,61 @@ Widgets.PopupWindow {
     }
     
     function filterApps() {
-        filteredModel.clear();
         var searchText = searchInput.text.toLowerCase();
-        if (searchText === "") {
-            for (var i = 0; i < appModel.count; i++) {
-                var item = appModel.get(i);
-                filteredModel.append({ name: item.name, exec: item.exec, icon: item.icon });
-            }
-        } else {
-            for (var i = 0; i < appModel.count; i++) {
-                var item = appModel.get(i);
-                if (item.name.toLowerCase().includes(searchText)) {
-                    filteredModel.append({ name: item.name, exec: item.exec, icon: item.icon });
+        var matches = [];
+        
+        // Collect all matches with priority scoring
+        for (var i = 0; i < appModel.count; i++) {
+            var item = appModel.get(i);
+            var nameLower = item.name.toLowerCase();
+            var execNameLower = item.execName.toLowerCase();
+            var priority = -1;
+            
+            if (searchText === "") {
+                priority = 100;
+            } else {
+                if (execNameLower === searchText) {
+                    priority = 1;
+                }
+                else if (execNameLower.indexOf(searchText) === 0) {
+                    priority = 2;
+                }
+                else if (execNameLower.includes(searchText)) {
+                    priority = 3;
+                }
+                else if (nameLower.indexOf(searchText) === 0) {
+                    priority = 4;
+                }
+                else if (nameLower.includes(searchText)) {
+                    priority = 5;
                 }
             }
+            
+            if (priority > 0) {
+                matches.push({
+                    priority: priority,
+                    name: item.name,
+                    exec: item.exec,
+                    icon: item.icon,
+                    execName: item.execName
+                });
+            }
         }
+        
+        matches.sort(function(a, b) {
+            if (a.priority !== b.priority) {
+                return a.priority - b.priority;
+            }
+            var aSort = a.execName || a.name;
+            var bSort = b.execName || b.name;
+            return aSort.toLowerCase().localeCompare(bSort.toLowerCase());
+        });
+        
+        filteredModel.clear();
+        for (var i = 0; i < matches.length; i++) {
+            filteredModel.append(matches[i]);
+        }
+        
         if (filteredModel.count > 0) {
             appList.currentIndex = 0;
         } else {
@@ -299,4 +356,3 @@ Widgets.PopupWindow {
         filterApps();
     }
 }
-
