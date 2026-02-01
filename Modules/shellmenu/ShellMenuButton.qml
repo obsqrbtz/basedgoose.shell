@@ -5,6 +5,9 @@ import "../../Widgets" as Widgets
 Widgets.HoverButton {
     id: shellMenuButton
     
+    property var barWindow
+    property bool isVertical: false
+    
     icon: "\uf219"
     iconSize: Commons.Theme.fontSize + 2
     iconColor: Commons.Theme.primary

@@ -12,6 +12,7 @@ Widgets.PopupWindow {
     id: popupWindow
     
     property bool isHovered: false
+    barPosition: Commons.Config.barPosition
     
     readonly property var player: Services.Players.active
     readonly property real playerPosition: Services.Players.currentPosition
@@ -19,18 +20,6 @@ Widgets.PopupWindow {
     readonly property bool playerIsPlaying: Services.Players.isPlaying
     
     initialScale: 0.96
-    transformOriginX: 0.0
-    transformOriginY: 0.0
-    
-    anchors {
-        top: true
-        left: true
-    }
-    
-    margins {
-        top: Commons.Config.popupMargin
-        left: Commons.Config.popupMargin
-    }
     
     implicitWidth: 340
     implicitHeight: popupWindow.player ? contentColumn.implicitHeight + 40 : 0

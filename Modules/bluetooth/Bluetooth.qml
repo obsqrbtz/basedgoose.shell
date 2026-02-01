@@ -4,10 +4,12 @@ import Quickshell
 import "../../Services" as Services
 import "../../Commons" as Commons
 
-Rectangle {
+Item {
     id: root
+    
     property var barWindow
     property var bluetoothPopup
+    property bool isVertical: false
     
     readonly property bool isEnabled: Services.Bluetooth.powered
     readonly property bool hasConnection: Services.Bluetooth.connected
@@ -15,27 +17,17 @@ Rectangle {
     readonly property int deviceCount: Services.Bluetooth.deviceCount
     readonly property bool isHovered: mouseArea.containsMouse
     
-    height: Commons.Config.componentHeight
-    color: "transparent"
-    radius: 14
-    width: Math.min(140, Math.max(44, bluetoothContent.implicitWidth + Commons.Config.componentPadding))
-    clip: true
+    implicitWidth: isVertical ? 28 : bluetoothRow.implicitWidth
+    implicitHeight: isVertical ? bluetoothCol.implicitHeight : 20
     
-    Item {
-        id: bluetoothContent
-        anchors.centerIn: parent
-        implicitWidth: bluetoothRow.implicitWidth
-        implicitHeight: 20
-    
+    // Horizontal layout
     RowLayout {
         id: bluetoothRow
         anchors.centerIn: parent
-        spacing: 5
-        Layout.leftMargin: Commons.Config.componentPadding / 2
-        Layout.alignment: Qt.AlignVCenter
+        spacing: 3
+        visible: !isVertical
         
         Text {
-            Layout.alignment: Qt.AlignVCenter
             text: {
                 if (!isEnabled) return "󰂲"
                 if (hasConnection) return "󰂱"
@@ -55,48 +47,75 @@ Rectangle {
         }
         
         Text {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.maximumWidth: 120
             text: {
                 if (!isEnabled) return "Off"
-                if (!hasConnection) return "No device"
+                if (!hasConnection) return ""
                 if (deviceCount > 1) return deviceName + " +" + (deviceCount - 1)
                 return deviceName
             }
             font.family: Commons.Theme.fontUI
             font.pixelSize: 10
             font.weight: hasConnection ? Font.Medium : Font.Normal
-            elide: Text.ElideRight
             color: {
                 if (!isEnabled || !hasConnection) return Commons.Theme.foreground
                 if (isHovered) return Commons.Theme.primary
                 return Commons.Theme.foreground
             }
+            visible: text !== ""
             Behavior on color { ColorAnimation { duration: 150 } }
+        }
+    }
+    
+    // Vertical layout
+    Column {
+        id: bluetoothCol
+        anchors.centerIn: parent
+        spacing: 2
+        visible: isVertical
+        
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: {
+                if (!isEnabled) return "󰂲"
+                if (hasConnection) return "󰂱"
+                return "󰂯"
+            }
+            font.family: Commons.Theme.fontIcon
+            font.pixelSize: 14
+            color: {
+                if (!isEnabled) return Commons.Theme.foreground
+                if (isHovered) return Commons.Theme.secondary
+                if (hasConnection) return Commons.Theme.success
+                return Commons.Theme.foreground
+            }
+            Behavior on color { ColorAnimation { duration: 150 } }
+            scale: isHovered ? 1.05 : 1.0
+            Behavior on scale { NumberAnimation { duration: 100 } }
+        }
+        
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: 4
+            height: 4
+            radius: 2
+            color: hasConnection ? Commons.Theme.success : (isEnabled ? Commons.Theme.foregroundMuted : "transparent")
+            visible: isEnabled
         }
     }
     
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        anchors.margins: 0
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
         
         onClicked: {
-            if (!bluetoothPopup) return
-            
-            bluetoothPopup.shouldShow = !bluetoothPopup.shouldShow
-            if (!bluetoothPopup.shouldShow) return
-            if (!barWindow || !barWindow.screen) return
-            
-            const pos = root.mapToItem(barWindow.contentItem, 0, 0)
-            const rightEdge = pos.x + root.width
-            const screenWidth = barWindow.screen.width
-            const barHeight = barWindow.implicitHeight || 36
-            
-            bluetoothPopup.margins.right = Commons.Config.popupMargin
+            if (bluetoothPopup && barWindow) {
+                if (!bluetoothPopup.shouldShow) {
+                    bluetoothPopup.positionNear(root, barWindow)
+                }
+                bluetoothPopup.shouldShow = !bluetoothPopup.shouldShow
+            }
         }
-    }
     }
 }

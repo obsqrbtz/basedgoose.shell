@@ -11,10 +11,14 @@ PanelWindow {
 
     visible: showing
     color: "transparent"
+    
+    WlrLayershell.layer: WlrLayer.Overlay
+    exclusionMode: ExclusionMode.Ignore
 
     property bool showing: false
     property bool initialized: false
     property var volumePopup
+    property string barPosition: Commons.Config.barPosition
 
     readonly property var volumeMonitor: Services.VolumeMonitor
     readonly property int currentVolume: volumeMonitor.percentage
@@ -22,15 +26,21 @@ PanelWindow {
 
     property int lastVolume: 0
     property bool lastMuted: false
+    
+    readonly property int barOffset: (barPosition === "top" || barPosition === "bottom") 
+        ? (Commons.Config.barHeight + Commons.Config.barMargin * 2 + 12)
+        : (Commons.Config.barWidth + Commons.Config.barMargin * 2 + 12)
 
     anchors {
-        top: true
+        top: barPosition !== "bottom"
+        bottom: barPosition === "bottom"
         right: true
     }
 
     margins {
-        top: 20
-        right: 12
+        top: barPosition === "top" ? barOffset : 20
+        bottom: barPosition === "bottom" ? barOffset : 0
+        right: barPosition === "right" ? barOffset : 12
     }
 
     implicitWidth: 250

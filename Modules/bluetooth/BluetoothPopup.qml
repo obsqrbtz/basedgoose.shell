@@ -13,8 +13,7 @@ Widgets.PopupWindow {
     
     ipcTarget: "bluetooth"
     initialScale: 0.94
-    transformOriginX: 1.0
-    transformOriginY: 0.0
+    barPosition: Commons.Config.barPosition
     
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property var devices: [...Bluetooth.devices.values].sort((a, b) => {
@@ -30,16 +29,6 @@ Widgets.PopupWindow {
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
     readonly property color cBorder: Commons.Theme.border
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
-    
-    anchors {
-        top: true
-        right: true
-    }
-    
-    margins {
-        right: Commons.Config.popupMargin
-        top: Commons.Config.popupMargin
-    }
     
     implicitWidth: 320
     implicitHeight: contentColumn.implicitHeight + 32
@@ -108,6 +97,7 @@ Widgets.PopupWindow {
                 }
                 
                 Widgets.HoverButton {
+                    id: scanButton
                     Layout.fillWidth: true
                     Layout.preferredHeight: 36
                     radius: 10
@@ -115,8 +105,8 @@ Widgets.PopupWindow {
                     text: adapter?.discovering ? "Scanning..." : "Scan for devices"
                     iconSize: 16
                     textSize: 12
-                    iconColor: adapter?.discovering ? cPrimary : cText
-                    hoverIconColor: adapter?.discovering ? cPrimary : cPrimary
+                    iconColor: adapter?.discovering ? "transparent" : cText
+                    hoverIconColor: adapter?.discovering ? "transparent" : cPrimary
                     textColor: cText
                     hoverTextColor: cText
                     baseColor: cSurfaceContainer
@@ -124,17 +114,28 @@ Widgets.PopupWindow {
                     onClicked: if (adapter) adapter.discovering = !adapter.discovering
                     
                     Text {
-                        anchors.centerIn: parent
-                        anchors.horizontalCenterOffset: -40
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: (parent.width - (16 + 6 + scanTextMetrics.width)) / 2
                         text: "󰑐"
                         font.family: Commons.Theme.fontIcon
                         font.pixelSize: 16
                         color: cPrimary
                         visible: adapter?.discovering ?? false
                         
+                        TextMetrics {
+                            id: scanTextMetrics
+                            font.family: Commons.Theme.fontUI
+                            font.pixelSize: 12
+                            font.weight: Font.Medium
+                            text: "Scanning..."
+                        }
+                        
                         RotationAnimation on rotation {
                             running: adapter?.discovering ?? false
-                            from: 0; to: 360; duration: 1000; loops: Animation.Infinite
+                            from: 0
+                            to: 360
+                            duration: 1000
+                            loops: Animation.Infinite
                         }
                     }
                 }
@@ -236,4 +237,3 @@ Widgets.PopupWindow {
             }
         }
     }
-

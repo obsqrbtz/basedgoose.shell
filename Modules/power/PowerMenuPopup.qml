@@ -12,22 +12,11 @@ Widgets.PopupWindow {
     
     ipcTarget: "power"
     initialScale: 0.85
-    transformOriginX: 1.0
-    transformOriginY: 0.0
     closeOnClickOutside: true
+    barPosition: Commons.Config.barPosition
     
     implicitWidth: 280
     implicitHeight: contentColumn.implicitHeight + 32
-    
-    anchors {
-        top: true
-        right: true
-    }
-    
-    margins {
-        top: Commons.Config.popupMargin
-        right: Commons.Config.popupMargin
-    }
     
     Rectangle {
         anchors.fill: backgroundRect

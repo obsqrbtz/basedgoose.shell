@@ -14,6 +14,14 @@ Singleton {
     property string hyprlandMonitorsConfigPath: "~/.config/hypr/hyprland/monitors.conf"
     property bool initialized: false
     
+    // Bar configuration
+    property string barPosition: "top"  // top, bottom, left, right
+    property var barModules: ({
+        "left": ["shellmenu", "workspaces", "mediaplayer"],
+        "center": ["systemstats"],
+        "right": ["clock", "systemtray", "volume", "bluetooth", "notifications", "power"]
+    })
+    
     Component.onCompleted: {
         loadConfig()
     }
@@ -57,8 +65,15 @@ Singleton {
                     if (config.wallpaperResizeMode) {
                         root.wallpaperResizeMode = config.wallpaperResizeMode
                     }
+                    if (config.barPosition) {
+                        root.barPosition = config.barPosition
+                    }
+                    if (config.barModules) {
+                        root.barModules = config.barModules
+                    }
                     // Save config if any defaults are missing
-                    if (!config.wallpaperDirectory || !config.wallpaperResizeMode || !config.hyprlandMonitorsConfigPath) {
+                    if (!config.wallpaperDirectory || !config.wallpaperResizeMode || 
+                        !config.hyprlandMonitorsConfigPath || !config.barPosition || !config.barModules) {
                         root.saveConfig()
                     }
                 } catch (e) {
@@ -67,6 +82,9 @@ Singleton {
                 }
                 
                 root.initialized = true
+                console.log("[ConfigService] Initialized")
+                console.log("[ConfigService] barPosition:", root.barPosition)
+                console.log("[ConfigService] barModules:", JSON.stringify(root.barModules))
             }
         }
     }
@@ -75,7 +93,9 @@ Singleton {
         var config = {
             wallpaperDirectory: root.wallpaperDirectory,
             wallpaperResizeMode: root.wallpaperResizeMode,
-            hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath
+            hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath,
+            barPosition: root.barPosition,
+            barModules: root.barModules
         }
         
         var configJson = JSON.stringify(config, null, 2)
@@ -106,6 +126,16 @@ Singleton {
     
     function setHyprlandMonitorsConfigPath(path) {
         root.hyprlandMonitorsConfigPath = path
+        root.saveConfig()
+    }
+    
+    function setBarPosition(position) {
+        root.barPosition = position
+        root.saveConfig()
+    }
+    
+    function setBarModules(modules) {
+        root.barModules = modules
         root.saveConfig()
     }
 }

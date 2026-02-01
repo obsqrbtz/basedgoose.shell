@@ -9,19 +9,21 @@ Rectangle {
     property int cpuUsage: 0
     property real memUsed: 0
     property real memTotal: 0
+    property var barWindow
+    property bool isVertical: false
     
-    Layout.preferredWidth: statsRow.implicitWidth + 20
-    Layout.preferredHeight: Commons.Config.componentHeight
-    implicitWidth: statsRow.implicitWidth + 20
-    implicitHeight: Commons.Config.componentHeight
+    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : (statsRowH.implicitWidth + 20)
+    implicitHeight: isVertical ? (statsColV.implicitHeight + 16) : Commons.Config.componentHeight
     color: Commons.Theme.surfaceBase
     radius: Commons.Theme.radius
     clip: true
     
+    // Horizontal layout
     RowLayout {
-        id: statsRow
+        id: statsRowH
         anchors.centerIn: parent
         spacing: Commons.Config.statsSpacing
+        visible: !isVertical
         
         RowLayout {
             spacing: Commons.Config.statsLabelSpacing
@@ -54,9 +56,61 @@ Rectangle {
                 font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
             }
             Text {
-                text: systemStats.memUsed.toFixed(2) + "GB / " + systemStats.memTotal.toFixed(2) + "GB"
+                text: systemStats.memUsed.toFixed(1) + " / " + systemStats.memTotal.toFixed(0) + "G"
                 color: Commons.Theme.foreground
                 font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
+            }
+        }
+    }
+    
+    // Vertical layout
+    ColumnLayout {
+        id: statsColV
+        anchors.centerIn: parent
+        spacing: 8
+        visible: isVertical
+        
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 2
+            
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                text: "\uf4bc"
+                color: Commons.Theme.primary
+                font { family: Commons.Theme.fontMono; pixelSize: 14; weight: Font.DemiBold }
+            }
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                text: systemStats.cpuUsage + "%"
+                color: Commons.Theme.foreground
+                font { family: Commons.Theme.fontMono; pixelSize: 9; weight: Font.Medium }
+            }
+        }
+        
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter
+            width: 16
+            height: 1
+            color: Commons.Theme.foregroundMuted
+            opacity: Commons.Config.statsSeparatorOpacity
+        }
+        
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 2
+            
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                text: "\uefc5"
+                color: Commons.Theme.primary
+                font { family: Commons.Theme.fontMono; pixelSize: 14; weight: Font.DemiBold }
+            }
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                text: systemStats.memUsed.toFixed(1) + "G"
+                color: Commons.Theme.foreground
+                font { family: Commons.Theme.fontMono; pixelSize: 9; weight: Font.Medium }
             }
         }
     }

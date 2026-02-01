@@ -1,36 +1,47 @@
 import QtQuick
 import "../../Commons" as Commons
-import "../../Widgets" as Widgets
 
-Widgets.HoverButton {
-    id: powerButton
+Item {
+    id: root
+    
+    signal clicked()
     
     property var barWindow
     property var powerMenuPopup
+    property bool isVertical: false
     
-    icon: "\udb81\udc25"
-    iconSize: Commons.Theme.fontSize + 2
-    iconColor: Commons.Theme.secondary
-    hoverIconColor: Commons.Theme.secondary
-    baseColor: "transparent"
-    hoverColor: Commons.Theme.background
+    readonly property bool isHovered: mouseArea.containsMouse
     
-    width: Commons.Config.powerButtonSize
-    height: Commons.Config.powerButtonSize
-    radius: Commons.Config.powerButtonRadius
+    implicitWidth: isVertical ? 28 : 20
+    implicitHeight: isVertical ? 28 : 20
     
-    onClicked: {
-        if (!powerButton.powerMenuPopup) return
+    Text {
+        id: powerIcon
+        anchors.centerIn: parent
+        text: "\udb81\udc25"
+        font.family: Commons.Theme.fontIcon
+        font.pixelSize: 14
+        color: root.isHovered ? Commons.Theme.secondary : Commons.Theme.foreground
         
-        powerButton.powerMenuPopup.shouldShow = !powerButton.powerMenuPopup.shouldShow
-        if (!powerButton.powerMenuPopup.shouldShow) return
-        if (!powerButton.barWindow || !powerButton.barWindow.screen) return
+        Behavior on color { ColorAnimation { duration: 150 } }
+        scale: root.isHovered ? 1.05 : 1.0
+        Behavior on scale { NumberAnimation { duration: 100 } }
+    }
+    
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         
-        const pos = powerButton.mapToItem(powerButton.barWindow.contentItem, 0, 0)
-        const rightEdge = pos.x + powerButton.width
-        const screenWidth = powerButton.barWindow.screen.width
-        const barHeight = powerButton.barWindow.implicitHeight || 36
-        
-        powerButton.powerMenuPopup.margins.right = Commons.Config.popupMargin
+        onClicked: {
+            if (root.powerMenuPopup && root.barWindow) {
+                if (!root.powerMenuPopup.shouldShow) {
+                    root.powerMenuPopup.positionNear(root, root.barWindow)
+                }
+                root.powerMenuPopup.shouldShow = !root.powerMenuPopup.shouldShow
+            }
+            root.clicked()
+        }
     }
 }

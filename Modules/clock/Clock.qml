@@ -7,34 +7,62 @@ Item {
     
     property var barWindow
     property var calendarPopup
+    property bool isVertical: false
     
     readonly property bool isHovered: mouseArea.containsMouse
     
-    implicitWidth: clockText.implicitWidth
-    implicitHeight: 20
+    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : clockText.implicitWidth
+    implicitHeight: isVertical ? clockColV.implicitHeight : 20
     
+    // Horizontal layout 
     Text {
         id: clockText
         anchors.centerIn: parent
+        visible: !isVertical
         
         color: Commons.Theme.foreground
         font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
         text: Qt.formatDateTime(new Date(), Commons.Config.clockFormat)
         
         scale: isHovered ? 1.05 : 1.0
-        Behavior on scale {
-            NumberAnimation { duration: 100 }
+        Behavior on scale { NumberAnimation { duration: 100 } }
+        Behavior on color { ColorAnimation { duration: 150 } }
+    }
+    
+    // Vertical layout
+    Column {
+        id: clockColV
+        anchors.centerIn: parent
+        spacing: 2
+        visible: isVertical
+        
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Commons.Theme.foreground
+            font { family: Commons.Theme.fontMono; pixelSize: 11; weight: Font.DemiBold }
+            text: Qt.formatDateTime(new Date(), "HH:mm")
+            
+            scale: isHovered ? 1.05 : 1.0
+            Behavior on scale { NumberAnimation { duration: 100 } }
         }
         
-        Behavior on color {
-            ColorAnimation { duration: 150 }
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Commons.Theme.foregroundMuted
+            font { family: Commons.Theme.fontMono; pixelSize: 8; weight: Font.Medium }
+            text: Qt.formatDateTime(new Date(), "ddd")
+            
+            scale: isHovered ? 1.05 : 1.0
+            Behavior on scale { NumberAnimation { duration: 100 } }
         }
-        
-        Timer {
-            interval: Commons.Config.clockUpdateInterval
-            running: true
-            repeat: true
-            onTriggered: clockText.text = Qt.formatDateTime(new Date(), Commons.Config.clockFormat)
+    }
+    
+    Timer {
+        interval: Commons.Config.clockUpdateInterval
+        running: true
+        repeat: true
+        onTriggered: {
+            clockText.text = Qt.formatDateTime(new Date(), Commons.Config.clockFormat)
         }
     }
     
@@ -46,19 +74,12 @@ Item {
         cursorShape: Qt.PointingHandCursor
         
         onClicked: {
-            if (!calendarPopup) return
-            
-            calendarPopup.shouldShow = !calendarPopup.shouldShow
-            if (!calendarPopup.shouldShow) return
-            if (!barWindow || !barWindow.screen) return
-            
-            const pos = root.mapToItem(barWindow.contentItem, 0, 0)
-            const clockCenterX = pos.x + root.width / 2
-            const screenWidth = barWindow.screen.width
-            const popupWidth = calendarPopup.implicitWidth || 320
-            
-            calendarPopup.margins.left = Math.max(Commons.Config.popupMargin, Math.round(clockCenterX - popupWidth / 2))
-            calendarPopup.margins.top = Commons.Config.popupMargin
+            if (calendarPopup && barWindow) {
+                if (!calendarPopup.shouldShow) {
+                    calendarPopup.positionNear(root, barWindow)
+                }
+                calendarPopup.shouldShow = !calendarPopup.shouldShow
+            }
         }
     }
 }

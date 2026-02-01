@@ -12,9 +12,8 @@ Widgets.PopupWindow {
     
     ipcTarget: "notifications"
     initialScale: 0.95
-    transformOriginX: 1.0
-    transformOriginY: 0.0
     closeOnClickOutside: true
+    barPosition: Commons.Config.barPosition
     
     property alias notifs: root.notifService
     
@@ -22,16 +21,6 @@ Widgets.PopupWindow {
     readonly property var recentNotifs: notifService.recentNotifications
     readonly property var groupedNotifs: notifService.groupedNotifications
     readonly property bool hasDnd: notifService.dnd
-    
-    anchors {
-        top: true
-        right: true
-    }
-    
-    margins {
-        top: Commons.Config.popupMargin
-        right: Commons.Config.popupMargin
-    }
     
     implicitWidth: Commons.Config.notifications.centerWidth
     implicitHeight: Commons.Config.notifications.centerHeight

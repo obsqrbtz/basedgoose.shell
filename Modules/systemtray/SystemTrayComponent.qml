@@ -6,67 +6,137 @@ import QtQuick.Layouts
 import "../../Services" as Services
 import "../../Commons" as Commons
 
-RowLayout {
+Item {
     id: systemTrayComponent
     
     property var barWindow: null
+    property bool isVertical: false
     
-    spacing: Commons.Config.traySpacing
+    implicitWidth: isVertical ? Commons.Config.trayIconSize : trayRowH.implicitWidth
+    implicitHeight: isVertical ? trayColV.implicitHeight : Commons.Config.trayIconSize
+    
     visible: SystemTray.items.values.length > 0
     
-    Repeater {
-        model: SystemTray.items
+    // Horizontal layout
+    RowLayout {
+        id: trayRowH
+        anchors.centerIn: parent
+        spacing: Commons.Config.traySpacing
+        visible: !isVertical
         
-        Rectangle {
-            width: Commons.Config.trayIconSize
-            height: Commons.Config.trayIconSize
-            color: trayMa.containsMouse ? Commons.Theme.background : "transparent"
-            radius: Commons.Config.trayIconRadius
+        Repeater {
+            model: SystemTray.items
             
-            Image {
-                anchors.centerIn: parent
-                width: Commons.Config.trayIconImageSize
-                height: Commons.Config.trayIconImageSize
-                source: modelData.icon
-                smooth: true
-            }
-            
-            MouseArea {
-                id: trayMa
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+            Rectangle {
+                width: Commons.Config.trayIconSize
+                height: Commons.Config.trayIconSize
+                color: trayMaH.containsMouse ? Commons.Theme.background : "transparent"
+                radius: Commons.Config.trayIconRadius
                 
-                onClicked: (mouse) => {
-                    if (mouse.button === Qt.LeftButton) {
-                        modelData.activate();
-                    } else if (mouse.button === Qt.RightButton) {
-                        if (modelData.hasMenu) {
-                            var window = systemTrayComponent.barWindow;
-                            
-                            if (window) {
-                                var pos = mapToItem(null, mouse.x, mouse.y);
-                                modelData.display(window, pos.x, pos.y);
-                            } else {
-                                console.error("Could not find parent window for tray menu");
+                Image {
+                    anchors.centerIn: parent
+                    width: Commons.Config.trayIconImageSize
+                    height: Commons.Config.trayIconImageSize
+                    source: modelData.icon
+                    smooth: true
+                }
+                
+                MouseArea {
+                    id: trayMaH
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                    
+                    onClicked: (mouse) => {
+                        if (mouse.button === Qt.LeftButton) {
+                            modelData.activate();
+                        } else if (mouse.button === Qt.RightButton) {
+                            if (modelData.hasMenu) {
+                                var window = systemTrayComponent.barWindow;
+                                if (window) {
+                                    var pos = mapToItem(null, mouse.x, mouse.y);
+                                    modelData.display(window, pos.x, pos.y);
+                                }
                             }
+                        } else if (mouse.button === Qt.MiddleButton) {
+                            modelData.secondaryActivate();
                         }
-                    } else if (mouse.button === Qt.MiddleButton) {
-                        modelData.secondaryActivate();
+                    }
+                    
+                    onWheel: (wheel) => {
+                        modelData.scroll(wheel.angleDelta.y / 120, false);
                     }
                 }
                 
-                onWheel: (wheel) => {
-                    modelData.scroll(wheel.angleDelta.y / 120, false);
+                ToolTip {
+                    visible: trayMaH.containsMouse
+                    text: modelData.tooltipTitle || modelData.title
+                    delay: 500
+                    contentWidth: 200
                 }
             }
+        }
+    }
+    
+    // Vertical layout
+    ColumnLayout {
+        id: trayColV
+        anchors.centerIn: parent
+        spacing: Commons.Config.traySpacing
+        visible: isVertical
+        
+        Repeater {
+            model: SystemTray.items
             
-            ToolTip {
-                visible: trayMa.containsMouse
-                text: modelData.tooltipTitle || modelData.title
-                delay: 500
-                contentWidth: 200
+            Rectangle {
+                width: Commons.Config.trayIconSize
+                height: Commons.Config.trayIconSize
+                color: trayMaV.containsMouse ? Commons.Theme.background : "transparent"
+                radius: Commons.Config.trayIconRadius
+                
+                Image {
+                    anchors.centerIn: parent
+                    width: Commons.Config.trayIconImageSize
+                    height: Commons.Config.trayIconImageSize
+                    source: modelData.icon
+                    smooth: true
+                }
+                
+                MouseArea {
+                    id: trayMaV
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                    
+                    onClicked: (mouse) => {
+                        if (mouse.button === Qt.LeftButton) {
+                            modelData.activate();
+                        } else if (mouse.button === Qt.RightButton) {
+                            if (modelData.hasMenu) {
+                                var window = systemTrayComponent.barWindow;
+                                if (window) {
+                                    var pos = mapToItem(null, mouse.x, mouse.y);
+                                    modelData.display(window, pos.x, pos.y);
+                                }
+                            }
+                        } else if (mouse.button === Qt.MiddleButton) {
+                            modelData.secondaryActivate();
+                        }
+                    }
+                    
+                    onWheel: (wheel) => {
+                        modelData.scroll(wheel.angleDelta.y / 120, false);
+                    }
+                }
+                
+                ToolTip {
+                    visible: trayMaV.containsMouse
+                    text: modelData.tooltipTitle || modelData.title
+                    delay: 500
+                    contentWidth: 200
+                }
             }
         }
     }

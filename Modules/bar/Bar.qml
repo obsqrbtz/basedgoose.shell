@@ -1,3 +1,4 @@
+//@ pragma ComponentBehavior: Bound
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import Quickshell
@@ -16,7 +17,6 @@ import "../../Modules/workspaces" as Workspaces
 import "../../Modules/bluetooth" as Bluetooth
 import "../../Modules/mediaplayer" as MediaPlayer
 import "../../Modules/volume" as Volume
-import "../../Modules/shellmenu" as ShellMenu
 
 PanelWindow {
     id: bar
@@ -32,18 +32,27 @@ PanelWindow {
     property var shellMenuPopup
     property var powerMenuPopup
 
+    readonly property string barPosition: Commons.Config.barPosition
+    readonly property bool isHorizontal: barPosition === "top" || barPosition === "bottom"
+    readonly property bool isVertical: barPosition === "left" || barPosition === "right"
+
     Services.CpuMonitor { id: cpuMonitor }
     Services.MemoryMonitor { id: memoryMonitor }
 
-    anchors.top: true
-    anchors.left: true
-    anchors.right: true
+    anchors.top: barPosition === "top" || barPosition === "left" || barPosition === "right"
+    anchors.bottom: barPosition === "bottom" || barPosition === "left" || barPosition === "right"
+    anchors.left: barPosition === "left" || barPosition === "top" || barPosition === "bottom"
+    anchors.right: barPosition === "right" || barPosition === "top" || barPosition === "bottom"
+    
     margins {
-        top: Commons.Config.barMargin
-        left: Commons.Config.barMargin
-        right: Commons.Config.barMargin
+        top: (barPosition === "top" || barPosition === "left" || barPosition === "right") ? Commons.Config.barMargin : 0
+        bottom: (barPosition === "bottom" || barPosition === "left" || barPosition === "right") ? Commons.Config.barMargin : 0
+        left: (barPosition === "left" || barPosition === "top" || barPosition === "bottom") ? Commons.Config.barMargin : 0
+        right: (barPosition === "right" || barPosition === "top" || barPosition === "bottom") ? Commons.Config.barMargin : 0
     }
-    implicitHeight: Commons.Config.barHeight
+    
+    implicitWidth: isVertical ? Commons.Config.barWidth : undefined
+    implicitHeight: isHorizontal ? Commons.Config.barHeight : undefined
     color: "transparent"
 
     Rectangle {
@@ -70,85 +79,251 @@ PanelWindow {
         bar.bluetoothPopup = btPopup
         bar.volumePopup = volPopup
         bar.calendarPopup = calPopup
+        
+        console.log("[Bar] Position:", barPosition, "isVertical:", isVertical)
     }
 
-    // Left section
-    RowLayout {
-        id: leftSection
-        anchors.left: parent.left
-        anchors.leftMargin: Commons.Config.barPadding
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: Commons.Config.barSpacing
-
+    Component {
+        id: shellMenuComponent
         ShellMenu.ShellMenuButton {
+            id: shellMenuBtn
+            barWindow: bar
+            isVertical: bar.isVertical
             onClicked: {
                 if (bar.shellMenuPopup) {
+                    if (!bar.shellMenuPopup.shouldShow) {
+                        bar.shellMenuPopup.positionNear(shellMenuBtn, bar)
+                    }
                     bar.shellMenuPopup.toggle()
                 }
             }
         }
+    }
 
-        Workspaces.Workspaces {}
-
-        MediaPlayer.MediaPlayer {
-            barWindow: bar.barWindow
-            mediaPopup: bar.mediaPopup
+    Component {
+        id: workspacesComponent
+        Workspaces.Workspaces {
+            barWindow: bar
+            isVertical: bar.isVertical
         }
     }
 
-    // Center section - anchored to true center
-    SystemStats.SystemStats {
-        id: centerStats
-        anchors.centerIn: parent
-        width: implicitWidth
-        height: implicitHeight
-        cpuUsage: cpuMonitor.cpuUsage
-        memUsed: memoryMonitor.memUsed
-        memTotal: memoryMonitor.memTotal
+    Component {
+        id: mediaPlayerComponent
+        MediaPlayer.MediaPlayer {
+            barWindow: bar
+            mediaPopup: bar.mediaPopup
+            isVertical: bar.isVertical
+        }
     }
 
-    // Right section
-    Rectangle {
-        anchors.right: parent.right
-        anchors.rightMargin: Commons.Config.barPadding
-        anchors.verticalCenter: parent.verticalCenter
-        width: rightRow.width + 20
-        height: Commons.Config.componentHeight
-        color: Commons.Theme.surfaceBase
-        radius: Commons.Theme.radius
+    Component {
+        id: systemStatsComponent
+        SystemStats.SystemStats {
+            cpuUsage: cpuMonitor.cpuUsage
+            memUsed: memoryMonitor.memUsed
+            memTotal: memoryMonitor.memTotal
+            barWindow: bar
+            isVertical: bar.isVertical
+        }
+    }
 
+    Component {
+        id: clockComponent
+        Clock.Clock {
+            barWindow: bar
+            calendarPopup: bar.calendarPopup
+            isVertical: bar.isVertical
+        }
+    }
+
+    Component {
+        id: systemTrayComponent
+        SystemTray.SystemTrayComponent {
+            barWindow: bar
+            isVertical: bar.isVertical
+        }
+    }
+
+    Component {
+        id: volumeComponent
+        Volume.Volume {
+            barWindow: bar
+            volumePopup: bar.volumePopup
+            isVertical: bar.isVertical
+        }
+    }
+
+    Component {
+        id: bluetoothComponent
+        Bluetooth.Bluetooth {
+            barWindow: bar
+            bluetoothPopup: bar.bluetoothPopup
+            isVertical: bar.isVertical
+        }
+    }
+
+    Component {
+        id: notificationsComponent
+        Notifications.NotificationButton {
+            notificationCenter: bar.notificationCenter
+            barWindow: bar
+            isVertical: bar.isVertical
+        }
+    }
+
+    Component {
+        id: powerComponent
+        Power.PowerButton {
+            barWindow: bar
+            powerMenuPopup: bar.powerMenuPopup
+            isVertical: bar.isVertical
+            onClicked: bar.showPowerMenu()
+        }
+    }
+
+    function getModuleComponent(moduleName) {
+        switch (moduleName) {
+            case "shellmenu": return shellMenuComponent
+            case "workspaces": return workspacesComponent
+            case "mediaplayer": return mediaPlayerComponent
+            case "systemstats": return systemStatsComponent
+            case "clock": return clockComponent
+            case "systemtray": return systemTrayComponent
+            case "volume": return volumeComponent
+            case "bluetooth": return bluetoothComponent
+            case "notifications": return notificationsComponent
+            case "power": return powerComponent
+            default: return null
+        }
+    }
+
+    RowLayout {
+        anchors.fill: parent
+        anchors.margins: Commons.Config.barPadding
+        spacing: 0
+        visible: isHorizontal
+
+        // Start section
         RowLayout {
-            id: rightRow
-            anchors.centerIn: parent
-            spacing: 10
+            Layout.alignment: Qt.AlignVCenter
+            spacing: Commons.Config.barSpacing
 
-            Clock.Clock {
-                barWindow: bar
-                calendarPopup: bar.calendarPopup
+            Repeater {
+                model: Commons.Config.barModules.left || []
+                delegate: Loader {
+                    required property string modelData
+                    sourceComponent: bar.getModuleComponent(modelData)
+                    Layout.alignment: Qt.AlignVCenter
+                }
             }
+        }
 
-            SystemTray.SystemTrayComponent {
-                barWindow: bar
+        Item { Layout.fillWidth: true }
+
+        // Center section
+        RowLayout {
+            Layout.alignment: Qt.AlignVCenter
+            spacing: Commons.Config.barSpacing
+
+            Repeater {
+                model: Commons.Config.barModules.center || []
+                delegate: Loader {
+                    required property string modelData
+                    sourceComponent: bar.getModuleComponent(modelData)
+                    Layout.alignment: Qt.AlignVCenter
+                }
             }
+        }
 
-            Volume.Volume {
-                barWindow: bar
-                volumePopup: bar.volumePopup
+        Item { Layout.fillWidth: true }
+
+        // End section
+        Rectangle {
+            Layout.alignment: Qt.AlignVCenter
+            implicitWidth: rightRowH.implicitWidth + 20
+            implicitHeight: Commons.Config.componentHeight
+            color: Commons.Theme.surfaceBase
+            radius: Commons.Theme.radius
+
+            RowLayout {
+                id: rightRowH
+                anchors.centerIn: parent
+                spacing: 10
+
+                Repeater {
+                    model: Commons.Config.barModules.right || []
+                    delegate: Loader {
+                        required property string modelData
+                        sourceComponent: bar.getModuleComponent(modelData)
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                }
             }
+        }
+    }
 
-            Bluetooth.Bluetooth {
-                barWindow: bar
-                bluetoothPopup: bar.bluetoothPopup
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: Commons.Config.barPadding
+        spacing: 0
+        visible: isVertical
+
+        // Start section
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: Commons.Config.barSpacing
+
+            Repeater {
+                model: Commons.Config.barModules.left || []
+                delegate: Loader {
+                    required property string modelData
+                    sourceComponent: bar.getModuleComponent(modelData)
+                    Layout.alignment: Qt.AlignHCenter
+                }
             }
+        }
 
-            Notifications.NotificationButton {
-                notificationCenter: bar.notificationCenter
+        Item { Layout.fillHeight: true }
+
+        // Center section
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: Commons.Config.barSpacing
+
+            Repeater {
+                model: Commons.Config.barModules.center || []
+                delegate: Loader {
+                    required property string modelData
+                    sourceComponent: bar.getModuleComponent(modelData)
+                    Layout.alignment: Qt.AlignHCenter
+                }
             }
+        }
 
-            Power.PowerButton {
-                barWindow: bar
-                powerMenuPopup: bar.powerMenuPopup
-                onClicked: bar.showPowerMenu()
+        Item { Layout.fillHeight: true }
+
+        // End section
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter
+            implicitWidth: Commons.Config.barWidth - Commons.Config.barPadding * 2
+            implicitHeight: rightColV.implicitHeight + 16
+            color: Commons.Theme.surfaceBase
+            radius: Commons.Theme.radius
+
+            ColumnLayout {
+                id: rightColV
+                anchors.centerIn: parent
+                spacing: 8
+
+                Repeater {
+                    model: Commons.Config.barModules.right || []
+                    delegate: Loader {
+                        required property string modelData
+                        sourceComponent: bar.getModuleComponent(modelData)
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                }
             }
         }
     }

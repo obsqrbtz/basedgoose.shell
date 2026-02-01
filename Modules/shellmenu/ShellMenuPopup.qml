@@ -10,13 +10,13 @@ Widgets.PopupWindow {
     
     ipcTarget: "shellmenu"
     initialScale: 0.94
-    transformOriginX: 0.5
-    transformOriginY: 0.0
     closeOnClickOutside: true
+    barPosition: Commons.Config.barPosition
     
     property var cheatsheetPopup: null
     property var wallpaperSelector: null
     property var displayManager: null
+    property var settingsWindow: null
     
     readonly property color cSurface: Commons.Theme.background
     readonly property color cSurfaceContainer: Qt.lighter(Commons.Theme.background, 1.15)
@@ -25,16 +25,6 @@ Widgets.PopupWindow {
     readonly property color cSubText: Qt.rgba(cText.r, cText.g, cText.b, 0.6)
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
-    
-    anchors {
-        top: true
-        left: true
-    }
-    
-    margins {
-        left: Commons.Config.popupMargin
-        top: Commons.Config.popupMargin
-    }
     
     implicitWidth: 240
     implicitHeight: contentColumn.implicitHeight + 32
@@ -124,6 +114,22 @@ Widgets.PopupWindow {
                     popupWindow.shouldShow = false
                     if (displayManager) {
                         displayManager.shouldShow = true
+                    }
+                }
+            }
+
+            Widgets.MenuItem {
+                Layout.fillWidth: true
+                icon: "\uf013"
+                text: "Settings"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    popupWindow.shouldShow = false
+                    if (settingsWindow) {
+                        settingsWindow.shouldShow = true
                     }
                 }
             }

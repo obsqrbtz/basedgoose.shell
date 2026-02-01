@@ -12,21 +12,10 @@ Widgets.PopupWindow {
     
     ipcTarget: "volume"
     initialScale: 0.85
-    transformOriginX: 1.0
-    transformOriginY: 0.0
+    barPosition: Commons.Config.barPosition
     
     property bool isHovered: false
     readonly property var audio: Services.Audio
-        
-    anchors {
-        top: true
-        right: true
-    }
-    
-    margins {
-        right: Commons.Config.popupMargin
-        top: Commons.Config.popupMargin
-    }
     
     implicitWidth: 320
     implicitHeight: contentColumn.implicitHeight + 32

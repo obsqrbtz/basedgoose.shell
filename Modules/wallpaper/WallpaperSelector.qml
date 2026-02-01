@@ -22,6 +22,16 @@ Widgets.PopupWindow {
     transformOriginY: 0.5
     closeOnClickOutside: false
 
+    anchors {
+        top: true
+        left: true
+    }
+
+    margins {
+        top: Quickshell.screens[0] ? (Quickshell.screens[0].height - implicitHeight) / 2 : 100
+        left: Quickshell.screens[0] ? (Quickshell.screens[0].width - implicitWidth) / 2 : 100
+    }
+
     property int currentTab: 0  // 0 = Local, 1 = Wallhaven, 2 = Settings
     property string wallhavenSorting: "date_added"
     property string wallhavenTopRange: "1M"

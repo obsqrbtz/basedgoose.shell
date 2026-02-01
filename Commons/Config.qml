@@ -5,7 +5,26 @@ import "../Services" as Services
 QtObject {
     id: config
 
+    readonly property string barPosition: Services.ConfigService.initialized ? Services.ConfigService.barPosition : "top"
+    
+    readonly property var defaultBarModules: ({
+        "left": ["shellmenu", "workspaces", "mediaplayer"],
+        "center": ["systemstats"],
+        "right": ["clock", "systemtray", "volume", "bluetooth", "notifications", "power"]
+    })
+    
+    readonly property var barModules: Services.ConfigService.initialized ? Services.ConfigService.barModules : defaultBarModules
+    
+    Component.onCompleted: {
+        console.log("[Config] ConfigService initialized:", Services.ConfigService.initialized)
+        console.log("[Config] barPosition:", barPosition)
+        console.log("[Config] barModules type:", typeof barModules)
+        console.log("[Config] barModules:", JSON.stringify(barModules))
+        console.log("[Config] barModules.left:", barModules.left)
+    }
+
     readonly property int barHeight: 42
+    readonly property int barWidth: 48
     readonly property int barMargin: 6
     readonly property int barPadding: 6
     readonly property int barSpacing: 4

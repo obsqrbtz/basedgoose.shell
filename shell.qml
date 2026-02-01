@@ -14,6 +14,7 @@ import "./Modules/wallpaper" as Wallpaper
 import "./Modules/cheatsheet" as Cheatsheet
 import "./Modules/shellmenu" as ShellMenu
 import "./Modules/display" as DisplayModule
+import "./Modules/settings" as SettingsModule
 import "./Services" as Services
 
 Scope {
@@ -31,6 +32,7 @@ Scope {
     
     Power.PowerMenuPopup {
         id: powerMenu
+        barPosition: bar.barPosition
     }
     
     AppLauncher.AppLauncher {
@@ -41,12 +43,9 @@ Scope {
         id: osdWrapper
     }
 
-    Bluetooth.BluetoothPopup {
-        id: bluetoothPopup
-    }
-
     MediaPlayer.MediaPlayerPopup {
         id: mediaPopup
+        barPosition: bar.barPosition
     }
 
     Notifications.NotificationPopups {
@@ -70,10 +69,15 @@ Scope {
         cheatsheetPopup: ipcCheatsheet
         wallpaperSelector: wallpaperSelector
         displayManager: displayManagement
+        settingsWindow: settingsWin
     }
     
     DisplayModule.DisplayManagerWindow {
         id: displayManagement
+    }
+    
+    SettingsModule.SettingsWindow {
+        id: settingsWin
     }
     
     Process {
@@ -113,7 +117,6 @@ Scope {
     QtObject {
         id: wiring
         Component.onCompleted: {
-            if (bluetoothPopup) bar.bluetoothPopup = bluetoothPopup
             if (mediaPopup) bar.mediaPopup = mediaPopup
             if (notificationPopups) bar.notificationPopups = notificationPopups
             if (notificationCenter) bar.notificationCenter = notificationCenter

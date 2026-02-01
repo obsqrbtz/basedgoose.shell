@@ -9,6 +9,7 @@ Item {
     
     property var barWindow
     property var volumePopup
+    property bool isVertical: false
     
     readonly property var audio: Services.Audio
     readonly property var volumeMonitor: Services.VolumeMonitor
@@ -16,76 +17,77 @@ Item {
     readonly property bool isMuted: volumeMonitor.muted
     readonly property int percentage: volumeMonitor.percentage
     
-    implicitWidth: volumeRow.implicitWidth
-    implicitHeight: 20
+    implicitWidth: isVertical ? 28 : volumeRow.implicitWidth
+    implicitHeight: isVertical ? volumeCol.implicitHeight : 20
     
+    // Horizontal layout
     RowLayout {
         id: volumeRow
         anchors.centerIn: parent
         spacing: 3
+        visible: !isVertical
         
         Text {
             id: volumeIcon
-            
             text: {
                 if (isMuted) return "󰖁"
                 if (percentage >= 70) return "󰕾"
                 if (percentage >= 30) return "󰖀"
                 return "󰕿"
             }
-            
             font.family: Commons.Theme.fontIcon
             font.pixelSize: 14
+            color: isMuted ? Commons.Theme.foreground : (isHovered ? Commons.Theme.secondary : Commons.Theme.foreground)
             
-            color: {
-                if (isMuted) return Commons.Theme.foreground
-                if (isHovered) return Commons.Theme.secondary
-                return Commons.Theme.foreground
-            }
-            
-            Behavior on color {
-                ColorAnimation { duration: 150 }
-            }
-            
+            Behavior on color { ColorAnimation { duration: 150 } }
             scale: isHovered ? 1.05 : 1.0
-            Behavior on scale {
-                NumberAnimation { duration: 100 }
-            }
+            Behavior on scale { NumberAnimation { duration: 100 } }
         }
         
         Text {
             id: volumeText
-            
             text: percentage
             font.family: Commons.Theme.fontMono
             font.pixelSize: 10
             font.weight: Font.Medium
+            color: isMuted ? Commons.Theme.foregroundMuted : Commons.Theme.foreground
             
-            color: {
-                if (isMuted) return Commons.Theme.foregroundMuted
-                return Commons.Theme.foreground
+            Behavior on color { ColorAnimation { duration: 150 } }
+        }
+    }
+    
+    // Vertical layout
+    Column {
+        id: volumeCol
+        anchors.centerIn: parent
+        spacing: 2
+        visible: isVertical
+        
+        Text {
+            id: volumeIconV
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: {
+                if (isMuted) return "󰖁"
+                if (percentage >= 70) return "󰕾"
+                if (percentage >= 30) return "󰖀"
+                return "󰕿"
             }
+            font.family: Commons.Theme.fontIcon
+            font.pixelSize: 14
+            color: isMuted ? Commons.Theme.foreground : (isHovered ? Commons.Theme.secondary : Commons.Theme.foreground)
             
-            Behavior on color {
-                ColorAnimation { duration: 150 }
-            }
-            
-            Behavior on text {
-                SequentialAnimation {
-                    NumberAnimation {
-                        target: volumeText
-                        property: "scale"
-                        to: 1.15
-                        duration: 80
-                    }
-                    NumberAnimation {
-                        target: volumeText
-                        property: "scale"
-                        to: 1.0
-                        duration: 100
-                    }
-                }
-            }
+            Behavior on color { ColorAnimation { duration: 150 } }
+            scale: isHovered ? 1.05 : 1.0
+            Behavior on scale { NumberAnimation { duration: 100 } }
+        }
+        
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: percentage
+            font.family: Commons.Theme.fontMono
+            font.pixelSize: 9
+            font.weight: Font.Medium
+            color: isMuted ? Commons.Theme.foregroundMuted : Commons.Theme.foreground
         }
     }
     
@@ -105,19 +107,12 @@ Item {
         }
         
         onClicked: {
-            if (!volumePopup) return
-            
-            volumePopup.shouldShow = !volumePopup.shouldShow
-            if (!volumePopup.shouldShow) return
-            if (!barWindow || !barWindow.screen) return
-            
-            const pos = root.mapToItem(barWindow.contentItem, 0, 0)
-            const rightEdge = pos.x + root.width
-            const screenWidth = barWindow.screen.width
-            const barHeight = barWindow.implicitHeight || 36
-            
-            volumePopup.margins.right = Commons.Config.popupMargin
-            volumePopup.margins.top = Commons.Config.popupMargin
+            if (volumePopup && barWindow) {
+                if (!volumePopup.shouldShow) {
+                    volumePopup.positionNear(root, barWindow)
+                }
+                volumePopup.shouldShow = !volumePopup.shouldShow
+            }
         }
     }
     
@@ -132,17 +127,16 @@ Item {
         id: pulseAnim
         
         NumberAnimation {
-            target: volumeIcon
+            target: isVertical ? volumeIconV : volumeIcon
             property: "scale"
             to: 1.2
             duration: 80
         }
         NumberAnimation {
-            target: volumeIcon
+            target: isVertical ? volumeIconV : volumeIcon
             property: "scale"
             to: isHovered ? 1.05 : 1.0
             duration: 120
         }
     }
 }
-

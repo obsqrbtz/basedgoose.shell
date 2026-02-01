@@ -2,66 +2,51 @@ import QtQuick 6.10
 import QtQuick.Layouts 6.10
 import "../../Services" as Services
 import "../../Commons" as Commons
-import "../../Widgets" as Widgets
 
-Rectangle {
+Item {
     id: root
     
     property var notificationCenter
+    property var barWindow
+    property bool isVertical: false
     
     readonly property var notifs: Services.Notifications
     readonly property int unreadCount: notifs.activeNotifications.length
     readonly property bool hasDnd: notifs.dnd
+    readonly property bool isHovered: mouseArea.containsMouse
     
-    implicitWidth: 32
-    implicitHeight: 28
-    radius: 14
+    implicitWidth: isVertical ? 28 : 20
+    implicitHeight: isVertical ? 28 : 20
     
-    color: mouseArea.containsMouse ? 
-           Commons.Theme.background :
-           "transparent"
-    
-    Behavior on color {
-        ColorAnimation { duration: 150 }
-    }
-    
-    Widgets.Badge {
-        visible: root.unreadCount > 0 && !root.hasDnd
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 2
-        anchors.topMargin: 2
-        count: root.unreadCount
-        badgeColor: Commons.Theme.secondary
-        textColor: Commons.Theme.background
-        borderColor: Commons.Theme.surfaceBase
-    }
-    
-    Widgets.Badge {
-        visible: root.hasDnd
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 2
-        anchors.topMargin: 2
-        count: 1
-        icon: "󰂛"
-        badgeColor: Commons.Theme.error
-        textColor: Commons.Theme.background
-        borderColor: Commons.Theme.surfaceBase
-        minWidth: 12
-        badgeHeight: 12
-    }
-    
+    // Notification icon
     Text {
+        id: notifIcon
         anchors.centerIn: parent
         text: root.hasDnd ? "󰂛" : (root.unreadCount > 0 ? "󰵅" : "󰂚")
         font.family: Commons.Theme.fontIcon
-        font.pixelSize: 16
-        color: mouseArea.containsMouse ? Commons.Theme.secondary : Commons.Theme.foreground
-        
-        Behavior on color {
-            ColorAnimation { duration: 150 }
+        font.pixelSize: 14
+        color: {
+            if (root.hasDnd) return Commons.Theme.error
+            if (root.isHovered) return Commons.Theme.secondary
+            return Commons.Theme.foreground
         }
+        
+        Behavior on color { ColorAnimation { duration: 150 } }
+        scale: root.isHovered ? 1.05 : 1.0
+        Behavior on scale { NumberAnimation { duration: 100 } }
+    }
+    
+    // dot indicator
+    Rectangle {
+        visible: root.unreadCount > 0 && !root.hasDnd
+        width: 6
+        height: 6
+        radius: 3
+        color: Commons.Theme.secondary
+        anchors.right: notifIcon.right
+        anchors.top: notifIcon.top
+        anchors.rightMargin: -2
+        anchors.topMargin: -2
     }
     
     MouseArea {
@@ -71,29 +56,35 @@ Rectangle {
         cursorShape: Qt.PointingHandCursor
         
         onClicked: {
-            if (root.notificationCenter) {
+            if (root.notificationCenter && root.barWindow) {
+                if (!root.notificationCenter.shouldShow) {
+                    root.notificationCenter.positionNear(root, root.barWindow)
+                }
                 root.notificationCenter.shouldShow = !root.notificationCenter.shouldShow
             }
         }
     }
     
-    SequentialAnimation on scale {
+    SequentialAnimation {
+        id: pulseAnim
         running: root.unreadCount > 0 && !root.hasDnd
         loops: 1
         
         NumberAnimation {
+            target: notifIcon
+            property: "scale"
             from: 1.0
             to: 1.15
             duration: 150
             easing.type: Easing.OutQuad
         }
         NumberAnimation {
+            target: notifIcon
+            property: "scale"
             from: 1.15
-            to: 1.0
+            to: root.isHovered ? 1.05 : 1.0
             duration: 150
             easing.type: Easing.InQuad
         }
     }
 }
-
-

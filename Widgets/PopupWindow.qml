@@ -4,6 +4,7 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
+import "../Commons" as Commons
 
 PanelWindow {
     id: root
@@ -20,13 +21,187 @@ PanelWindow {
     property int closeDuration: 120
     property real scaleOvershoot: 1.3
     
+    property string barPosition: "top"  // Can be "top", "bottom", "left", "right"
+    
+    property real relativeX: -1
+    property real relativeY: -1
+    
+    readonly property bool isBarHorizontal: barPosition === "top" || barPosition === "bottom"
+    readonly property int barOffset: isBarHorizontal 
+        ? (Commons.Config.barHeight + Commons.Config.barMargin * 2 + Commons.Config.popupMargin)
+        : (Commons.Config.barWidth + Commons.Config.barMargin * 2 + Commons.Config.popupMargin)
+    
+    property bool autoTransformOrigin: true
+    
+    Component.onCompleted: {
+        if (autoTransformOrigin) {
+            updateTransformOrigin()
+        }
+    }
+    
+    onBarPositionChanged: {
+        if (autoTransformOrigin) {
+            updateTransformOrigin()
+        }
+    }
+    
+    function updateTransformOrigin() {
+        switch (barPosition) {
+            case "top":
+                transformOriginY = 0.0
+                break
+            case "bottom":
+                transformOriginY = 1.0
+                break
+            case "left":
+                transformOriginX = 0.0
+                break
+            case "right":
+                transformOriginX = 1.0
+                break
+        }
+    }
+    
+    function positionNear(moduleItem, barWindow) {
+        if (!moduleItem || !barWindow) {
+            console.log("[PopupWindow] positionNear called with invalid parameters")
+            return
+        }
+        
+        const screen = root.screen || Quickshell.screens[0]
+        if (!screen) {
+            console.log("[PopupWindow] No screen available")
+            return
+        }
+        
+        const screenWidth = screen.width
+        const screenHeight = screen.height
+        const popupWidth = root.implicitWidth || 320
+        const popupHeight = root.implicitHeight || 400
+        
+        const moduleWidth = moduleItem.width || 30
+        const moduleHeight = moduleItem.height || 30
+        
+        if (typeof moduleItem.mapToGlobal !== 'function') {
+            console.error("[PopupWindow] mapToGlobal not available")
+            return
+        }
+        
+        const globalPos = moduleItem.mapToGlobal(0, 0)
+        const moduleScreenX = globalPos.x
+        const moduleScreenY = globalPos.y
+        
+        console.log("[PopupWindow] barPosition:", barPosition, "moduleScreenPos:", moduleScreenX, moduleScreenY, "screenSize:", screenWidth, screenHeight)
+        
+        var targetX = 0
+        var targetY = 0
+        
+        if (barPosition === "top" || barPosition === "bottom") {
+            targetX = moduleScreenX + moduleWidth / 2 - popupWidth / 2
+            targetX = Math.max(Commons.Config.popupMargin, Math.min(screenWidth - popupWidth - Commons.Config.popupMargin, targetX))
+            
+            if (barPosition === "top") {
+                targetY = barOffset
+            } else {
+                targetY = screenHeight - popupHeight - barOffset
+            }
+            console.log("[PopupWindow] Horizontal bar - targetX:", targetX, "targetY:", targetY)
+        } else {
+            targetY = moduleScreenY + moduleHeight / 2 - popupHeight / 2
+            console.log("[PopupWindow] Vertical bar - before clamp targetY:", targetY)
+            targetY = Math.max(Commons.Config.popupMargin, Math.min(screenHeight - popupHeight - Commons.Config.popupMargin, targetY))
+            console.log("[PopupWindow] Vertical bar - after clamp targetY:", targetY)
+            
+            if (barPosition === "left") {
+                targetX = barOffset
+            } else {
+                targetX = screenWidth - popupWidth - barOffset
+            }
+            console.log("[PopupWindow] Vertical bar - targetX:", targetX, "targetY:", targetY)
+        }
+        
+        relativeX = targetX
+        relativeY = targetY
+        console.log("[PopupWindow] Final relativeX:", relativeX, "relativeY:", relativeY)
+    }
+    
     default property alias content: contentContainer.children
     
     screen: Quickshell.screens[0]
     visible: shouldShow || container.opacity > 0
     color: "transparent"
     
+    WlrLayershell.layer: WlrLayer.Overlay
+    exclusionMode: ExclusionMode.Ignore
     WlrLayershell.keyboardFocus: shouldShow ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    
+    anchors {
+        top: barPosition === "top" || barPosition === "left" || barPosition === "right"
+        bottom: barPosition === "bottom"
+        left: barPosition === "left" || barPosition === "top" || barPosition === "bottom"
+        right: barPosition === "right"
+    }
+    
+    margins {
+        top: {
+            var result = 0
+            if (barPosition === "top") {
+                result = barOffset
+            } else if (relativeY >= 0) {
+                result = relativeY
+            } else if (barPosition === "left" || barPosition === "right") {
+                result = Commons.Config.popupMargin
+            } else {
+                result = Commons.Config.popupMargin
+            }
+            console.log("[PopupWindow] margins.top:", result, "barPosition:", barPosition, "relativeY:", relativeY)
+            return result
+        }
+        bottom: {
+            var result = 0
+            if (barPosition === "bottom") {
+                result = barOffset
+            } else if (barPosition === "left" || barPosition === "right") {
+                result = 0
+            } else if (relativeY >= 0) {
+                var screenHeight = root.screen ? root.screen.height : 1080
+                result = screenHeight - relativeY - (root.implicitHeight || 400)
+            } else {
+                result = Commons.Config.popupMargin
+            }
+            console.log("[PopupWindow] margins.bottom:", result)
+            return result
+        }
+        left: {
+            var result = 0
+            if (relativeX >= 0) {
+                result = relativeX
+            } else if (barPosition === "left") {
+                result = barOffset
+            } else if (barPosition === "right") {
+                result = 0
+            } else {
+                result = Commons.Config.popupMargin
+            }
+            console.log("[PopupWindow] margins.left:", result, "relativeX:", relativeX)
+            return result
+        }
+        right: {
+            var result = 0
+            if (barPosition === "right") {
+                result = barOffset
+            } else if (barPosition === "left") {
+                result = 0
+            } else if (relativeX >= 0 && (barPosition === "top" || barPosition === "bottom")) {
+                var screenWidth = root.screen ? root.screen.width : 1920
+                result = screenWidth - relativeX - (root.implicitWidth || 320)
+            } else {
+                result = 0
+            }
+            console.log("[PopupWindow] margins.right:", result)
+            return result
+        }
+    }
     
     IpcHandler {
         id: ipcHandler
@@ -45,7 +220,6 @@ PanelWindow {
         }
     }
     
-    // TODO: check at home and fix is not working
     MouseArea {
         anchors.fill: parent
         z: 0
@@ -190,4 +364,3 @@ PanelWindow {
         shouldShow = false
     }
 }
-

@@ -10,18 +10,7 @@ Widgets.PopupWindow {
     
     ipcTarget: "calendar"
     initialScale: 0.85
-    transformOriginX: 0.5
-    transformOriginY: 0.0
-    
-    anchors {
-        top: true
-        left: true
-    }
-    
-    margins {
-        left: Commons.Config.popupMargin
-        top: Commons.Config.popupMargin
-    }
+    barPosition: Commons.Config.barPosition
     
     implicitWidth: 320
     implicitHeight: contentColumn.implicitHeight + 32

@@ -15,6 +15,16 @@ Widgets.PopupWindow {
     transformOriginX: 0.5
     transformOriginY: 0.5
     closeOnClickOutside: true
+
+    anchors {
+        top: true
+        left: true
+    }
+
+    margins {
+        top: Quickshell.screens[0] ? (Quickshell.screens[0].height - implicitHeight) / 2 : 100
+        left: Quickshell.screens[0] ? (Quickshell.screens[0].width - implicitWidth) / 2 : 100
+    }
     
     readonly property color cSurface: Commons.Theme.surfaceBase
     readonly property color cSurfaceContainer: Commons.Theme.surfaceContainer

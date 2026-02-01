@@ -10,6 +10,8 @@ import "../../Widgets" as Widgets
 PanelWindow {
     id: root
     
+    readonly property string barPosition: Commons.Config.barPosition
+    
     readonly property var notifs: Services.Notifications
     readonly property var activePopups: (
         notifs.notifications
@@ -19,16 +21,25 @@ PanelWindow {
     
     screen: Quickshell.screens[0]
     
+    WlrLayershell.layer: WlrLayer.Overlay
+    exclusionMode: ExclusionMode.Ignore
+    
     anchors {
-        top: true
-        right: true
+        top: barPosition === "top"
+        bottom: barPosition === "bottom"
+        left: barPosition === "left"
+        right: barPosition === "right" || barPosition === "top" || barPosition === "bottom"
     }
     
+    readonly property int barOffset: (barPosition === "top" || barPosition === "bottom") 
+        ? (Commons.Config.barHeight + Commons.Config.barMargin * 2 + Commons.Config.popupMargin)
+        : (Commons.Config.barWidth + Commons.Config.barMargin * 2 + Commons.Config.popupMargin)
+    
     margins {
-        top: Commons.Config.popupMargin
-             + Commons.Config.barHeight
-             + Commons.Config.barMargin * 2
-        right: Commons.Config.popupMargin
+        top: barPosition === "top" ? barOffset : Commons.Config.popupMargin
+        bottom: barPosition === "bottom" ? barOffset : 0
+        right: (barPosition === "right") ? barOffset : Commons.Config.popupMargin
+        left: barPosition === "left" ? barOffset : 0
     }
     
     visible: activePopups.length > 0
