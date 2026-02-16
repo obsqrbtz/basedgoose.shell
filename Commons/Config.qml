@@ -62,6 +62,7 @@ QtObject {
     readonly property int memoryUpdateInterval: 3000
 
     readonly property string wallpaperDirectory: Services.ConfigService.initialized ? Services.ConfigService.wallpaperDirectory : "~/Pictures/walls"
+    readonly property string wallpaperDownloadDirectory: Services.ConfigService.initialized ? Services.ConfigService.wallpaperDownloadDirectory : "~/Pictures/walls/downloaded"
 
     readonly property var notifications: ({
             popupWidth: 320,

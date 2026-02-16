@@ -7,18 +7,41 @@ import "." as Wallpaper
 
 ColumnLayout {
     id: root
-    
+
+    property int currentSubTab: 0  // 0 = Saved, 1 = Downloaded
+
     signal wallpaperSelected(string filePath)
     signal copyRequested(string filePath)
     signal openRequested(string filePath)
     signal deleteRequested(string filePath, string fileName)
-    
+    signal previewRequested(string imageSource, string tooltipText, string filePath, string fileName, bool isFromDownloaded)
+    signal saveToSavedRequested(string filePath)
+
     Layout.fillWidth: true
     Layout.fillHeight: true
     spacing: 12
-    
+
+    readonly property var currentModel: currentSubTab === 0 ? Services.WallpaperService.savedList : Services.WallpaperService.downloadedList
+    readonly property bool currentLoading: currentSubTab === 0 ? Services.WallpaperService.savedLoading : Services.WallpaperService.downloadedLoading
+    readonly property string currentDirHint: currentSubTab === 0 ? Services.ConfigService.wallpaperDirectory : Services.ConfigService.wallpaperDownloadDirectory
+
     RowLayout {
         Layout.fillWidth: true
+        spacing: 4
+
+        Widgets.TabButton {
+            text: "Saved"
+            active: root.currentSubTab === 0
+            onClicked: root.currentSubTab = 0
+        }
+        Widgets.TabButton {
+            text: "Downloaded"
+            active: root.currentSubTab === 1
+            onClicked: {
+                root.currentSubTab = 1
+                Services.WallpaperService.refreshDownloaded()
+            }
+        }
         Item {
             Layout.fillWidth: true
         }
@@ -31,25 +54,25 @@ ColumnLayout {
             hoverIconColor: Wallpaper.WallpaperColors.primary
             baseColor: "transparent"
             hoverColor: Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.15)
-            onClicked: Services.WallpaperService.refresh()
+            onClicked: currentSubTab === 0 ? Services.WallpaperService.refreshSaved() : Services.WallpaperService.refreshDownloaded()
         }
     }
-    
+
     Widgets.ImageGrid {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        model: Services.WallpaperService.wallpaperList
+        model: root.currentModel
         backgroundColor: Wallpaper.WallpaperColors.surfaceContainer
-        
+
         delegate: Widgets.ImageGridItem {
             required property string filePath
             required property string fileName
-            
+
             width: 180 - 8
             height: 180 * 9 / 16 + 8 - 8
             imageSource: "file://" + filePath
             tooltipText: fileName
-            
+
             onClicked: root.wallpaperSelected(filePath)
             onRightClicked: {
                 contextMenu.filePath = filePath
@@ -57,24 +80,28 @@ ColumnLayout {
                 contextMenu.popup()
             }
         }
-        
+
         Widgets.EmptyState {
             anchors.centerIn: parent
-            visible: Services.WallpaperService.wallpaperList.count === 0 && !Services.WallpaperService.loading
+            visible: root.currentModel.count === 0 && !root.currentLoading
             icon: "󰈙"
             iconSize: 32
             iconOpacity: 0.2
             title: "No wallpapers found"
-            subtitle: "Check the directory: " + (Services.ConfigService.wallpaperDirectory || "")
+            subtitle: "Check the directory: " + (root.currentDirHint || "")
             textOpacity: 1.0
         }
     }
-    
+
     Menu {
         id: contextMenu
         property string filePath: ""
         property string fileName: ""
-        
+
+        MenuItem {
+            text: qsTr("Preview")
+            onTriggered: root.previewRequested("file://" + contextMenu.filePath, contextMenu.fileName, contextMenu.filePath, contextMenu.fileName, root.currentSubTab === 1)
+        }
         MenuItem {
             text: qsTr("Copy path")
             onTriggered: root.copyRequested(contextMenu.filePath)
@@ -82,6 +109,11 @@ ColumnLayout {
         MenuItem {
             text: qsTr("Open in file manager")
             onTriggered: root.openRequested(contextMenu.filePath)
+        }
+        MenuItem {
+            text: qsTr("Save to saved folder")
+            visible: root.currentSubTab === 1
+            onTriggered: root.saveToSavedRequested(contextMenu.filePath)
         }
         MenuItem {
             text: qsTr("Delete")

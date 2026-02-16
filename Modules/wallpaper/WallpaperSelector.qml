@@ -32,6 +32,8 @@ Widgets.PopupWindow {
         left: Quickshell.screens[0] ? (Quickshell.screens[0].width - implicitWidth) / 2 : 100
     }
 
+    property var previewOverlay: null
+
     property int currentTab: 0  // 0 = Local, 1 = Wallhaven, 2 = Settings
     property string wallhavenSorting: "date_added"
     property string wallhavenTopRange: "1M"
@@ -122,6 +124,12 @@ Widgets.PopupWindow {
                     onDeleteRequested: function(filePath, fileName) {
                         deleteFile(filePath, fileName)
                     }
+                    onPreviewRequested: function(imageSource, tooltipText, filePath, fileName, isFromDownloaded) {
+                        showPreview(imageSource, tooltipText, filePath, fileName, isFromDownloaded, "", "")
+                    }
+                    onSaveToSavedRequested: function(filePath) {
+                        Services.WallpaperService.copyToSaved(filePath)
+                    }
                 }
 
                 // Wallhaven tab
@@ -154,6 +162,12 @@ Widgets.PopupWindow {
                         wallhavenPage = 1
                         refreshWallhaven()
                     }
+                    onPreviewRequested: function(imageSource, tooltipText, wallhavenId, wallhavenFullUrl) {
+                        showPreview(imageSource, tooltipText, "", "", false, wallhavenId, wallhavenFullUrl)
+                    }
+                    onSaveToSavedRequested: function(id, fullUrl) {
+                        Services.WallhavenAPIService.downloadToSaved(id, fullUrl)
+                    }
                 }
 
                 // Settings tab
@@ -161,9 +175,15 @@ Widgets.PopupWindow {
                     onDirectoryChanged: function(newDirectory) {
                         saveDirectory(newDirectory)
                     }
+                    onDownloadDirectoryChanged: function(newDirectory) {
+                        saveDownloadDirectory(newDirectory)
+                    }
                     onDirectoryDialogRequested: {
                         console.log("[WallpaperSelector] Directory dialog requested")
                         openDirectoryDialog()
+                    }
+                    onDownloadDirectoryDialogRequested: {
+                        openDownloadDirectoryDialog()
                     }
                     onResizeModeChanged: function(mode) {
                         Services.ConfigService.setWallpaperResizeMode(mode)
@@ -172,13 +192,44 @@ Widgets.PopupWindow {
             }
         }
 
-        // Process handlers now in WallpaperService
+        Connections {
+            target: previewOverlay
+            enabled: !!previewOverlay
+            function onSetRequested() {
+                if (!previewOverlay) return
+                var o = previewOverlay
+                if (o.filePath.length > 0) {
+                    Services.WallpaperService.setWallpaper(o.filePath)
+                } else if (o.wallhavenId.length > 0 && o.wallhavenFullUrl.length > 0) {
+                    Services.WallhavenAPIService.downloadAndSet(o.wallhavenId, o.wallhavenFullUrl)
+                }
+            }
+            function onSaveRequested() {
+                if (!previewOverlay) return
+                var o = previewOverlay
+                if (o.filePath.length > 0) {
+                    Services.WallpaperService.copyToSaved(o.filePath)
+                } else if (o.wallhavenId.length > 0 && o.wallhavenFullUrl.length > 0) {
+                    Services.WallhavenAPIService.downloadToSaved(o.wallhavenId, o.wallhavenFullUrl)
+                }
+            }
+            function onDeleteRequested() {
+                if (!previewOverlay) return
+                var o = previewOverlay
+                if (o.filePath.length > 0) {
+                    deleteFile(o.filePath, o.fileName)
+                }
+            }
+        }
 
         // Service connections
         Connections {
             target: Services.ConfigService
             function onWallpaperDirectoryChanged() {
-                Services.WallpaperService.refresh()
+                Services.WallpaperService.refreshSaved()
+            }
+            function onWallpaperDownloadDirectoryChanged() {
+                Services.WallpaperService.refreshDownloaded()
             }
             function onInitializedChanged() {
                 if (Services.ConfigService.initialized) {
@@ -191,9 +242,11 @@ Widgets.PopupWindow {
     // Helper functions
     function getSubtitleText() {
         if (currentTab === 0) {
-            return Services.WallpaperService.wallpaperList.count > 0 
-                ? Services.WallpaperService.wallpaperList.count + " wallpapers found" 
-                : "Loading..."
+            var savedCount = Services.WallpaperService.savedList.count
+            var downloadedCount = Services.WallpaperService.downloadedList.count
+            if (Services.WallpaperService.savedLoading || Services.WallpaperService.downloadedLoading)
+                return "Loading..."
+            return savedCount + " saved, " + downloadedCount + " downloaded"
         } else if (currentTab === 1) {
             return Services.WallhavenAPIService.running 
                 ? "Loading..." 
@@ -207,15 +260,29 @@ Widgets.PopupWindow {
         var trimmedDir = newDir.trim()
         if (trimmedDir.length > 0) {
             Services.ConfigService.setWallpaperDirectory(trimmedDir)
-            Services.WallpaperService.refresh()
+            Services.WallpaperService.refreshSaved()
         }
     }
 
-function openDirectoryDialog() {
+    function saveDownloadDirectory(newDir) {
+        var trimmedDir = newDir.trim()
+        if (trimmedDir.length > 0) {
+            Services.ConfigService.setWallpaperDownloadDirectory(trimmedDir)
+            Services.WallpaperService.refreshDownloaded()
+        }
+    }
+
+        function openDirectoryDialog() {
         console.log("[WallpaperSelector] openDirectoryDialog called")
         popupWindow.shouldShow = false
         Services.WallpaperService.popupWindow = popupWindow
-        Services.WallpaperService.openDirectoryDialog()
+        Services.WallpaperService.openDirectoryDialog(0)
+    }
+
+    function openDownloadDirectoryDialog() {
+        popupWindow.shouldShow = false
+        Services.WallpaperService.popupWindow = popupWindow
+        Services.WallpaperService.openDirectoryDialog(1)
     }
 
     function copyToClipboard(text) {
@@ -234,5 +301,18 @@ function openDirectoryDialog() {
 
     function refreshWallhaven() {
         Services.WallhavenAPIService.refresh(wallhavenSorting, wallhavenPage, wallhavenTopRange, Services.WallhavenAPIService.seed, wallhavenQuery)
+    }
+
+    function showPreview(imageSource, tooltipText, filePath, fileName, isFromDownloaded, wallhavenId, wallhavenFullUrl) {
+        if (previewOverlay) {
+            previewOverlay.imageSource = imageSource || ""
+            previewOverlay.tooltipText = tooltipText || ""
+            previewOverlay.filePath = filePath || ""
+            previewOverlay.fileName = fileName || ""
+            previewOverlay.isFromDownloaded = isFromDownloaded || false
+            previewOverlay.wallhavenId = wallhavenId || ""
+            previewOverlay.wallhavenFullUrl = wallhavenFullUrl || ""
+            previewOverlay.shouldShow = true
+        }
     }
 }

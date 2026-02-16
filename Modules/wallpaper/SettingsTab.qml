@@ -12,6 +12,8 @@ ColumnLayout {
     
     signal directoryChanged(string newDirectory)
     signal directoryDialogRequested()
+    signal downloadDirectoryChanged(string newDirectory)
+    signal downloadDirectoryDialogRequested()
     signal resizeModeChanged(string mode)
     
     Layout.fillWidth: true
@@ -34,7 +36,7 @@ ColumnLayout {
             spacing: 8
             
             Text {
-                text: "Directory:"
+                text: "Saved:"
                 font.family: Commons.Theme.fontUI
                 font.pixelSize: 12
                 color: Wallpaper.WallpaperColors.text
@@ -100,6 +102,89 @@ ColumnLayout {
                 baseColor: "transparent"
                 hoverColor: Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.15)
                 onClicked: root.directoryChanged(directoryInput.text)
+            }
+        }
+    }
+
+    // Download directory setting
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        radius: 10
+        color: Wallpaper.WallpaperColors.surfaceContainer
+
+        RowLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 8
+            anchors.rightMargin: 8
+            spacing: 8
+
+            Text {
+                text: "Download:"
+                font.family: Commons.Theme.fontUI
+                font.pixelSize: 12
+                color: Wallpaper.WallpaperColors.text
+            }
+
+            TextInput {
+                id: downloadDirInput
+                Layout.fillWidth: true
+                text: Services.ConfigService.wallpaperDownloadDirectory
+                font.family: Commons.Theme.fontUI
+                font.pixelSize: 11
+                color: Wallpaper.WallpaperColors.text
+                selectByMouse: true
+
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: -4
+                    radius: 6
+                    color: downloadDirInput.activeFocus ? Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.1) : "transparent"
+                    border.width: downloadDirInput.activeFocus ? 1 : 0
+                    border.color: Wallpaper.WallpaperColors.primary
+                    z: -1
+                }
+
+                Keys.onReturnPressed: root.downloadDirectoryChanged(text)
+                Keys.onEscapePressed: {
+                    text = Services.ConfigService.wallpaperDownloadDirectory
+                    focus = false
+                }
+
+                Connections {
+                    target: Services.ConfigService
+                    function onWallpaperDownloadDirectoryChanged() {
+                        downloadDirInput.text = Services.ConfigService.wallpaperDownloadDirectory
+                    }
+                }
+            }
+
+            Widgets.IconButton {
+                width: 32
+                height: 32
+                Layout.alignment: Qt.AlignVCenter
+                icon: "\uf4d3"
+                iconSize: 14
+                iconColor: Wallpaper.WallpaperColors.subText
+                hoverIconColor: Wallpaper.WallpaperColors.primary
+                baseColor: "transparent"
+                hoverColor: Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.15)
+                onClicked: root.downloadDirectoryDialogRequested()
+            }
+
+            Widgets.IconButton {
+                width: 32
+                height: 32
+                visible: downloadDirInput.text !== Services.ConfigService.wallpaperDownloadDirectory
+                icon: "󰄬"
+                iconSize: 14
+                iconColor: Wallpaper.WallpaperColors.primary
+                hoverIconColor: Wallpaper.WallpaperColors.primary
+                baseColor: "transparent"
+                hoverColor: Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.15)
+                onClicked: root.downloadDirectoryChanged(downloadDirInput.text)
             }
         }
     }

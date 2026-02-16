@@ -56,8 +56,13 @@ Scope {
         id: notificationCenter
     }
     
+    Wallpaper.WallpaperPreviewOverlay {
+        id: wallpaperPreviewOverlay
+    }
+
     Wallpaper.WallpaperSelector {
         id: wallpaperSelector
+        previewOverlay: wallpaperPreviewOverlay
     }
     
     Cheatsheet.IPCCheatsheet {

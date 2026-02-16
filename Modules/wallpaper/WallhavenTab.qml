@@ -1,5 +1,6 @@
 import QtQuick 6.10
 import QtQuick.Layouts 6.10
+import QtQuick.Controls 6.10
 import "../../Widgets" as Widgets
 import "../../Services" as Services
 import "../../Commons" as Commons
@@ -19,10 +20,28 @@ ColumnLayout {
     signal refreshRequested()
     signal wallpaperSelected(string id, string fullUrl)
     signal searchRequested(string query)
+    signal previewRequested(string imageSource, string tooltipText, string wallhavenId, string wallhavenFullUrl)
+    signal saveToSavedRequested(string id, string fullUrl)
     
     Layout.fillWidth: true
     Layout.fillHeight: true
     spacing: 8
+
+    Menu {
+        id: wallhavenContextMenu
+        property string whId: ""
+        property string fullUrl: ""
+        property string resolution: ""
+
+        MenuItem {
+            text: qsTr("Preview")
+            onTriggered: root.previewRequested(wallhavenContextMenu.fullUrl, wallhavenContextMenu.resolution, wallhavenContextMenu.whId, wallhavenContextMenu.fullUrl)
+        }
+        MenuItem {
+            text: qsTr("Save to saved folder")
+            onTriggered: root.saveToSavedRequested(wallhavenContextMenu.whId, wallhavenContextMenu.fullUrl)
+        }
+    }
     
     // Search input
     Rectangle {
@@ -168,14 +187,20 @@ ColumnLayout {
             required property string thumbUrl
             required property string fullUrl
             required property string resolution
-            
+
             width: 180 - 8
             height: 180 * 9 / 16 + 8 - 8
             imageSource: thumbUrl
             overlayText: resolution
             showOverlay: true
-            
+
             onClicked: root.wallpaperSelected(id, fullUrl)
+            onRightClicked: {
+                wallhavenContextMenu.whId = id
+                wallhavenContextMenu.fullUrl = fullUrl
+                wallhavenContextMenu.resolution = resolution
+                wallhavenContextMenu.popup()
+            }
         }
         
         Widgets.EmptyState {

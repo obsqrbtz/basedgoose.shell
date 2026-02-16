@@ -10,6 +10,7 @@ Singleton {
     readonly property string configPath: "$HOME/.config/basedgoose.shell/config.json"
     
     property string wallpaperDirectory: "~/Pictures/walls"
+    property string wallpaperDownloadDirectory: "~/Pictures/walls/downloaded"
     property string wallpaperResizeMode: "fit"  // no, crop, fit, stretch
     property string hyprlandMonitorsConfigPath: "~/.config/hypr/hyprland/monitors.conf"
     property bool initialized: false
@@ -59,6 +60,9 @@ Singleton {
                     if (config.wallpaperDirectory) {
                         root.wallpaperDirectory = config.wallpaperDirectory
                     }
+                    if (config.wallpaperDownloadDirectory) {
+                        root.wallpaperDownloadDirectory = config.wallpaperDownloadDirectory
+                    }
                     if (config.hyprlandMonitorsConfigPath) {
                         root.hyprlandMonitorsConfigPath = config.hyprlandMonitorsConfigPath
                     }
@@ -72,7 +76,7 @@ Singleton {
                         root.barModules = config.barModules
                     }
                     // Save config if any defaults are missing
-                    if (!config.wallpaperDirectory || !config.wallpaperResizeMode || 
+                    if (!config.wallpaperDirectory || !config.wallpaperDownloadDirectory || !config.wallpaperResizeMode || 
                         !config.hyprlandMonitorsConfigPath || !config.barPosition || !config.barModules) {
                         root.saveConfig()
                     }
@@ -92,6 +96,7 @@ Singleton {
     function saveConfig() {
         var config = {
             wallpaperDirectory: root.wallpaperDirectory,
+            wallpaperDownloadDirectory: root.wallpaperDownloadDirectory,
             wallpaperResizeMode: root.wallpaperResizeMode,
             hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath,
             barPosition: root.barPosition,
@@ -116,6 +121,11 @@ Singleton {
     
     function setWallpaperDirectory(path) {
         root.wallpaperDirectory = path
+        root.saveConfig()
+    }
+
+    function setWallpaperDownloadDirectory(path) {
+        root.wallpaperDownloadDirectory = path
         root.saveConfig()
     }
 

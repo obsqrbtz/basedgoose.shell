@@ -63,7 +63,11 @@ Singleton {
             onStreamFinished: {
                 var out = text.trim()
                 if (out.length > 0) {
-                    Services.WallpaperService.setWallpaper(out)
+                    if (out.indexOf("SAVED:") === 0) {
+                        Services.WallpaperService.refreshSaved()
+                    } else {
+                        Services.WallpaperService.setWallpaper(out)
+                    }
                 }
             }
         }
@@ -93,12 +97,24 @@ Singleton {
             return
         if (!fullUrl || fullUrl.length === 0)
             return
+        var dir = Services.ConfigService.wallpaperDownloadDirectory
+        runDownload(whId, fullUrl, dir, true)
+    }
 
+    function downloadToSaved(whId, fullUrl) {
+        if (downloadProcess.running)
+            return
+        if (!fullUrl || fullUrl.length === 0)
+            return
+        var dir = Services.ConfigService.wallpaperDirectory
+        runDownload(whId, fullUrl, dir, false)
+    }
+
+    function runDownload(whId, fullUrl, targetDir, thenSet) {
         var url = fullUrl
         if (url.indexOf("/full/") === -1 && url.indexOf("w.wallhaven.cc/") !== -1) {
             url = url.replace(/w\.wallhaven\.cc\/(?!full)/, "w.wallhaven.cc/full/")
         }
-
         var ext = "jpg"
         var parts = fullUrl.split('.')
         if (parts.length > 1) {
@@ -106,10 +122,9 @@ Singleton {
             if (last)
                 ext = last.toLowerCase()
         }
-
-        var dir = Services.ConfigService.wallpaperDirectory
-        var dirForSh = dir.replace(/^~\//, "$HOME/").replace(/^~$/, "$HOME")
-        var script = "D=$(eval echo \"" + dirForSh.replace(/"/g, '\\"') + "\"); mkdir -p \"$D\" && curl -sfL -o \"$D/wallhaven-$1.$2\" \"$3\" && echo \"$D/wallhaven-$1.$2\""
+        var dirForSh = targetDir.replace(/"/g, '\\"')
+        var echoPrefix = thenSet ? "" : "SAVED:"
+        var script = "D=$(eval echo \"" + dirForSh + "\"); mkdir -p \"$D\" && curl -sfL -o \"$D/wallhaven-$1.$2\" \"$3\" && echo \"" + echoPrefix + "$D/wallhaven-$1.$2\""
         downloadProcess.command = ["sh", "-c", script, "_", whId, ext, url]
         downloadProcess.running = true
     }
