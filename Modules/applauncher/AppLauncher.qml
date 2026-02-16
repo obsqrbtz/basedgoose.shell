@@ -64,15 +64,6 @@ Widgets.PopupWindow {
         border.color: Commons.Theme.border
         border.width: 1
         
-        Component {
-            id: processComponent
-            Process {
-                property var cmd: []
-                running: true
-                command: cmd
-            }
-        }
-        
         ListModel {
             id: appModel
         }
@@ -84,14 +75,12 @@ Widgets.PopupWindow {
         Process {
             id: appListProc
             running: true
-            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do exec_line=$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g'); exec_name=$(echo \"$exec_line\" | awk '{print $1}' | xargs basename); echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_line|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_name\"; done"]
-            
+            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do exec_line=$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g'); exec_name=$(echo \"$exec_line\" | awk '{print $1}' | xargs basename); desktop_id=$(basename \"$f\"); echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_line|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_name|||$desktop_id\"; done"]
             stdout: StdioCollector {
                 onStreamFinished: {
                     var output = text.trim();
                     var lines = output.split('\n');
                     appModel.clear();
-                    
                     for (var i = 0; i < lines.length; i++) {
                         var parts = lines[i].split('|||');
                         if (parts.length >= 2 && parts[0] && parts[1]) {
@@ -99,18 +88,43 @@ Widgets.PopupWindow {
                             var execStr = parts[1].trim();
                             var iconStr = parts.length >= 3 ? parts[2].trim() : "";
                             var execName = parts.length >= 4 ? parts[3].trim() : "";
+                            var desktopId = parts.length >= 5 ? parts[4].trim() : "";
                             if (execStr.length > 0) {
                                 appModel.append({
                                     name: name,
                                     exec: execStr,
                                     icon: iconStr,
-                                    execName: execName
+                                    execName: execName,
+                                    id: desktopId
                                 });
                             }
                         }
                     }
                     filterApps();
                 }
+            }
+        }
+        
+        function launchApp(item) {
+            if (!item)
+                return;
+            var entry = typeof DesktopEntries !== "undefined" ? DesktopEntries.byId(item.id) : null;
+            if (entry && typeof entry.execute === "function") {
+                entry.execute();
+                return;
+            }
+            var command = (item.exec || "").trim().split(/\s+/).filter(function(c) { return c.length > 0; });
+            if (command.length === 0)
+                return;
+            var proc = processComponent.createObject(appLauncher, { cmd: ["sh", "-c", "nohup " + command.join(" ") + " </dev/null >/dev/null 2>&1 &"] });
+        }
+        
+        Component {
+            id: processComponent
+            Process {
+                property var cmd: []
+                running: true
+                command: cmd
             }
         }
         
@@ -167,8 +181,7 @@ Widgets.PopupWindow {
                                 var item = filteredModel.get(appList.currentIndex);
                                 if (item) {
                                     appLauncher.shouldShow = false;
-                                    var command = item.exec.trim().split(/\s+/).filter(function(cmd) { return cmd.length > 0; });
-                                    var proc = processComponent.createObject(appLauncher, {  cmd: ["sh", "-c", command.join(" ") + " &"]  });
+                                    backgroundRect.launchApp(item);
                                 }
                             }
                         }
@@ -235,6 +248,7 @@ Widgets.PopupWindow {
                     required property string exec
                     required property string icon
                     required property string execName
+                    required property string id
                     required property int index
                     
                     width: appList.width
@@ -290,8 +304,9 @@ Widgets.PopupWindow {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             appLauncher.shouldShow = false;
-                            var command = exec.trim().split(/\s+/).filter(function(cmd) { return cmd.length > 0; });
-                            var proc = processComponent.createObject(appLauncher, {  cmd: ["sh", "-c", command.join(" ") + " &"]  });
+                            var item = filteredModel.get(index);
+                            if (item)
+                                backgroundRect.launchApp(item);
                         }
                     }
                 }
@@ -336,7 +351,8 @@ Widgets.PopupWindow {
                     name: item.name,
                     exec: item.exec,
                     icon: item.icon,
-                    execName: item.execName
+                    execName: item.execName,
+                    id: item.id
                 });
             }
         }
@@ -362,7 +378,4 @@ Widgets.PopupWindow {
         }
     }
     
-    Component.onCompleted: {
-        filterApps();
-    }
 }
