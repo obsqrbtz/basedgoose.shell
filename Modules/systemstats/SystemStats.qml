@@ -56,7 +56,7 @@ Rectangle {
                 font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize + 2; weight: Font.DemiBold }
             }
             Text {
-                text: systemStats.memUsed.toFixed(1) + " / " + systemStats.memTotal.toFixed(0) + "G"
+                text: systemStats.memUsed.toFixed(1) + "G" + " / " + systemStats.memTotal.toFixed(0) + "G"
                 color: Commons.Theme.foreground
                 font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
             }
