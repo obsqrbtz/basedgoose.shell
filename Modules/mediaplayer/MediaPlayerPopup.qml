@@ -112,7 +112,7 @@ Widgets.PopupWindow {
                     anchors.centerIn: parent
                     width: parent.width - 20
                     height: parent.height - 20
-                    radius: 16
+                    radius: Commons.Theme.radiusLg
                     color: Commons.Theme.secondary
                     opacity: (popupWindow.player?.trackArtUrl ?? false) ? 0.08 : 0
                     
@@ -126,7 +126,7 @@ Widgets.PopupWindow {
                     anchors.centerIn: parent
                     width: parent.width - 32
                     height: parent.height - 32
-                    radius: 12
+                    radius: Commons.Theme.radius
                     color: Commons.Theme.surfaceContainer
                     clip: true
                     border.width: 1
@@ -151,7 +151,7 @@ Widgets.PopupWindow {
                                 sourceItem: Rectangle {
                                     width: albumArt.width
                                     height: albumArt.height
-                                    radius: 12
+                                    radius: Commons.Theme.radius
                                 }
                             }
                         }
@@ -295,7 +295,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.preferredWidth: 44
                     Layout.preferredHeight: 44
-                    radius: 22
+                    radius: Commons.Theme.radiusLg
                     color: prevMouse.containsMouse ? Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08) : "transparent"
                     
                     Behavior on color { ColorAnimation { duration: 150 } }
@@ -323,7 +323,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.preferredWidth: 56
                     Layout.preferredHeight: 56
-                    radius: 28
+                    radius: Commons.Theme.radiusLg
                     color: playMouse.pressed ? Qt.darker(Commons.Theme.secondary, 1.1) : 
                            (playMouse.containsMouse ? Qt.lighter(Commons.Theme.secondary, 1.1) : Commons.Theme.secondary)
                     
@@ -359,7 +359,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.preferredWidth: 44
                     Layout.preferredHeight: 44
-                    radius: 22
+                    radius: Commons.Theme.radiusLg
                     color: nextMouse.containsMouse ? Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08) : "transparent"
                     
                     Behavior on color { ColorAnimation { duration: 150 } }

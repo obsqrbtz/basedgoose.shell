@@ -97,7 +97,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 4
             height: 4
-            radius: 2
+            radius: Commons.Theme.radiusSm
             color: hasConnection ? Commons.Theme.success : (isEnabled ? Commons.Theme.foregroundMuted : "transparent")
             visible: isEnabled
         }

@@ -146,7 +146,7 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
                 color: searchInput.activeFocus ? cSurfaceContainer : cSurfaceContainer
-                radius: 12
+                radius: Commons.Theme.radius
                 border.color: searchInput.activeFocus ? Commons.Theme.borderFocused : cBorder
                 border.width: 1
                 
@@ -253,7 +253,7 @@ Widgets.PopupWindow {
                     
                     width: appList.width
                     height: 48
-                    radius: 12
+                    radius: Commons.Theme.radius
                     color: (appMa.containsMouse || appList.currentIndex === index) ? 
                            (appList.currentIndex === index ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12) : cHover) : 
                            "transparent"

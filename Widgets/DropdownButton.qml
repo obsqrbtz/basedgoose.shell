@@ -21,7 +21,7 @@ Rectangle {
     
     implicitWidth: 200
     implicitHeight: 40
-    radius: 8
+    radius: Commons.Theme.radius
     color: dropdownArea.containsMouse ? hoverColor : baseColor
     border.color: dropdownArea.containsMouse ? hoverBorderColor : borderColor
     border.width: 1

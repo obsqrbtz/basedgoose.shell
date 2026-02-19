@@ -100,7 +100,7 @@ Widgets.PopupWindow {
                     id: scanButton
                     Layout.fillWidth: true
                     Layout.preferredHeight: 36
-                    radius: 10
+                    radius: Commons.Theme.radius
                     icon: adapter?.discovering ? "󰑐" : "󰑓"
                     text: adapter?.discovering ? "Scanning..." : "Scan for devices"
                     iconSize: 16
@@ -143,7 +143,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: devices.length === 0 ? 120 : Math.min(deviceList.contentHeight + 8, 260)
-                    radius: 12
+                    radius: Commons.Theme.radius
                     color: cSurfaceContainer
                     clip: true
                     

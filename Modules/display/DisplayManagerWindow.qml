@@ -84,7 +84,7 @@ Widgets.PopupWindow {
                 id: monitorsContainer
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                radius: 12
+                radius: Commons.Theme.radius
                 color: cSurfaceContainer
                 clip: true
 

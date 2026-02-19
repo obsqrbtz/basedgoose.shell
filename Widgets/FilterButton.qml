@@ -16,7 +16,7 @@ Rectangle {
     
     readonly property bool active: currentValue === value
     
-    radius: 6
+    radius: Commons.Theme.radiusSm
     color: active ? Qt.rgba(activeColor.r, activeColor.g, activeColor.b, 0.25) : inactiveColor
     border.width: 1
     border.color: active ? activeColor : borderColor

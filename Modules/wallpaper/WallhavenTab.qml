@@ -48,7 +48,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 32
         color: Wallpaper.WallpaperColors.surfaceContainer
-        radius: 6
+        radius: Commons.Theme.radiusSm
         border.width: searchQueryInput.activeFocus ? 1 : 0
         border.color: Wallpaper.WallpaperColors.primary
         

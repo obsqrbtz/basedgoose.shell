@@ -125,7 +125,7 @@ PanelWindow {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 6
                 Layout.alignment: Qt.AlignVCenter
-                radius: 3
+                radius: Commons.Theme.radiusSm
                 color: Qt.rgba(
                     Commons.Theme.foreground.r,
                     Commons.Theme.foreground.g,
@@ -136,7 +136,7 @@ PanelWindow {
                 Rectangle {
                     width: parent.width * (root.currentVolume / 100)
                     height: parent.height
-                    radius: 3
+                    radius: Commons.Theme.radiusSm
                     color: root.currentMuted
                            ? Commons.Theme.foreground
                            : Commons.Theme.secondary

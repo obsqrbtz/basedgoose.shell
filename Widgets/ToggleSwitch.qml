@@ -16,7 +16,7 @@ Rectangle {
     
     implicitWidth: 48
     implicitHeight: 32
-    radius: height / 2
+    radius: Commons.Theme.radiusLg
     color: root.checked ? checkedColor : uncheckedColor
     border.width: 1
     border.color: Commons.Theme.surfaceBorder
@@ -28,7 +28,7 @@ Rectangle {
     Rectangle {
         width: 24
         height: 24
-        radius: 12
+        radius: Commons.Theme.radiusLg
         anchors.verticalCenter: parent.verticalCenter
         x: root.checked ? parent.width - width - 4 : 4
         color: root.thumbColor

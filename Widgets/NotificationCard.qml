@@ -26,7 +26,7 @@ Rectangle {
     readonly property color error: Commons.Theme.error
     readonly property color surfaceBorder: Commons.Theme.surfaceBorder
     
-    radius: isPopup ? 20 : 14
+    radius: isPopup ? Commons.Theme.radiusLg : Commons.Theme.radius
     color: isPopup ? surfaceBase : (isHovered ? Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.04) : surfaceContainer)
     
     border.width: 1
@@ -196,7 +196,7 @@ Rectangle {
             
             Rectangle {
                 anchors.fill: parent
-                radius: 14
+                radius: Commons.Theme.radius
                 color: surfaceContainer
                 border.width: 1
                 border.color: surfaceBorder

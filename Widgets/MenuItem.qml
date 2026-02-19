@@ -16,7 +16,7 @@ Rectangle {
     property color hoverColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.06)
     property color borderColor: Commons.Theme.border
     property int iconBoxSize: 28
-    property int iconBoxRadius: 6
+    property int iconBoxRadius: Commons.Theme.radiusSm
     property int animationDuration: 150
     property bool showBorder: true
     

@@ -55,7 +55,7 @@ Widgets.PopupWindow {
             Rectangle {
                 id: chip
                 anchors.fill: parent
-                radius: Commons.Theme.radius - 2
+                radius: Commons.Theme.radiusSm
                 color: chipContainer.chipColor
                 border.color: chipContainer.chipBorderColor
                 border.width: 1
@@ -173,8 +173,8 @@ Widgets.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                radius: 12
-                color: cSurfaceContainer
+radius: Commons.Theme.radius
+        color: cSurfaceContainer
                 clip: true
 
                 Flickable {

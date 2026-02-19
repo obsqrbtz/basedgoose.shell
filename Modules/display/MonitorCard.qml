@@ -56,7 +56,7 @@ Rectangle {
 
     width: parent ? parent.width : 300
     height: enabled ? (mirrorTarget && mirrorTarget !== "" ? 260 : 300) : 60
-    radius: 10
+    radius: Commons.Theme.radius
     color: cSurface
     border.color: cBorder
     border.width: 1
@@ -210,7 +210,7 @@ Rectangle {
                         id: mirrorDropdownButton
                         Layout.fillWidth: true
                         Layout.preferredHeight: 40
-                        radius: 8
+                        radius: Commons.Theme.radius
                         color: mirrorDropdownArea.containsMouse ? cHover : cSurfaceContainer
                         border.color: mirrorDropdownArea.containsMouse ? cPrimary : cBorder
                         border.width: 1
@@ -264,7 +264,7 @@ Rectangle {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 40
-                        radius: 8
+                        radius: Commons.Theme.radius
                         color: mirrorRemoveArea.containsMouse ? cHover : cSurfaceContainer
                         border.color: mirrorRemoveArea.containsMouse ? cPrimary : cBorder
                         border.width: 1

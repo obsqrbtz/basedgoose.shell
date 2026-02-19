@@ -41,7 +41,7 @@ Item {
         visible: root.unreadCount > 0 && !root.hasDnd
         width: 6
         height: 6
-        radius: 3
+        radius: Commons.Theme.radiusSm
         color: Commons.Theme.secondary
         anchors.right: notifIcon.right
         anchors.top: notifIcon.top

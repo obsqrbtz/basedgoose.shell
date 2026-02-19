@@ -25,7 +25,7 @@ Rectangle {
         }
     }
     
-    radius: isVertical ? Commons.Theme.radius : 14
+    radius: Commons.Theme.radius
     color: Commons.Theme.surfaceBase
     border.width: 1
     border.color: Commons.Theme.surfaceBorder
@@ -137,7 +137,7 @@ Rectangle {
             Rectangle {
                 Layout.preferredWidth: 1
                 Layout.preferredHeight: 12
-                radius: 0.5
+                radius: Commons.Theme.radiusSm
                 color: Commons.Theme.surfaceBorder
             }
             
@@ -147,7 +147,7 @@ Rectangle {
                 Rectangle {
                     Layout.preferredWidth: 20
                     Layout.preferredHeight: 20
-                    radius: 10
+                    radius: Commons.Theme.radius
                     color: prevArea.containsMouse ? Commons.Theme.surfaceAccent : "transparent"
                     
                     Behavior on color { ColorAnimation { duration: 100 } }
@@ -178,7 +178,7 @@ Rectangle {
                 Rectangle {
                     Layout.preferredWidth: 24
                     Layout.preferredHeight: 24
-                    radius: 12
+                    radius: Commons.Theme.radius
                     color: playArea.containsMouse ? Qt.lighter(Commons.Theme.secondary, 1.2) : Commons.Theme.secondary
                     
                     Behavior on color { ColorAnimation { duration: 100 } }
@@ -210,7 +210,7 @@ Rectangle {
                 Rectangle {
                     Layout.preferredWidth: 20
                     Layout.preferredHeight: 20
-                    radius: 10
+                    radius: Commons.Theme.radius
                     color: nextArea.containsMouse ? Commons.Theme.surfaceAccent : "transparent"
                     
                     Behavior on color { ColorAnimation { duration: 100 } }
@@ -253,7 +253,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 28
             height: 28
-            radius: 14
+            radius: Commons.Theme.radiusLg
             color: playAreaV.containsMouse ? Qt.lighter(Commons.Theme.secondary, 1.2) : Commons.Theme.secondary
             
             Behavior on color { ColorAnimation { duration: 100 } }
@@ -290,7 +290,7 @@ Rectangle {
             Rectangle {
                 width: 18
                 height: 18
-                radius: 9
+                radius: Commons.Theme.radiusSm
                 color: prevAreaV.containsMouse ? Commons.Theme.surfaceAccent : "transparent"
                 
                 Behavior on color { ColorAnimation { duration: 100 } }
@@ -319,7 +319,7 @@ Rectangle {
             Rectangle {
                 width: 18
                 height: 18
-                radius: 9
+                radius: Commons.Theme.radiusSm
                 color: nextAreaV.containsMouse ? Commons.Theme.surfaceAccent : "transparent"
                 
                 Behavior on color { ColorAnimation { duration: 100 } }

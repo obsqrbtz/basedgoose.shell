@@ -36,11 +36,13 @@ Rectangle {
                 property bool hasWindows: ws !== undefined && ws !== null
                 
                 Layout.preferredWidth: isActive ? Commons.Config.workspaceIndicatorActiveWidth : Commons.Config.workspaceIndicatorWidth
-                Layout.preferredHeight: Commons.Config.workspaceIndicatorHeight
+                Layout.preferredHeight: isActive ? Commons.Config.workspaceIndicatorHeight : Commons.Config.workspaceIndicatorInactiveHeight
+                Layout.alignment: Qt.AlignVCenter
                 radius: Commons.Config.workspaceIndicatorRadius
                 color: isActive ? Commons.Theme.primary : (hasWindows ? Commons.Theme.secondary : Commons.Theme.foregroundMuted)
                 
                 Behavior on Layout.preferredWidth { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                Behavior on Layout.preferredHeight { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 200 } }
                 
                 MouseArea {
@@ -69,11 +71,13 @@ Rectangle {
                 property bool isActive: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id === (index + 1) : false
                 property bool hasWindows: ws !== undefined && ws !== null
                 
-                Layout.preferredWidth: Commons.Config.workspaceIndicatorHeight
+                Layout.preferredWidth: isActive ? Commons.Config.workspaceIndicatorHeight : Commons.Config.workspaceIndicatorInactiveHeight
                 Layout.preferredHeight: isActive ? Commons.Config.workspaceIndicatorActiveWidth : Commons.Config.workspaceIndicatorWidth
+                Layout.alignment: Qt.AlignHCenter
                 radius: Commons.Config.workspaceIndicatorRadius
                 color: isActive ? Commons.Theme.primary : (hasWindows ? Commons.Theme.secondary : Commons.Theme.foregroundMuted)
                 
+                Behavior on Layout.preferredWidth { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Behavior on Layout.preferredHeight { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 200 } }
                 

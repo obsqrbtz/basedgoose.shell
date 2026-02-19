@@ -38,7 +38,7 @@ Rectangle {
 
     width: 400
     height: confirmationContent.implicitHeight + 32
-    radius: 12
+    radius: Commons.Theme.radius
     color: cSurface
     border.color: cBorder
     border.width: 1
@@ -64,7 +64,7 @@ Rectangle {
             Rectangle {
                 width: 40
                 height: 40
-                radius: 10
+                radius: Commons.Theme.radius
                 color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
 
                 Text {

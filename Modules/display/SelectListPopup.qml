@@ -21,7 +21,7 @@ Rectangle {
     visible: false
     width: popupWidth
     height: listHeight
-    radius: 10
+    radius: Commons.Theme.radius
     color: cSurface
     border.color: cBorder
     border.width: 1
@@ -60,7 +60,7 @@ Rectangle {
                 width: listView.width
                 height: root.itemHeight
                 color: itemMa.containsMouse ? root.cHover : "transparent"
-                radius: 6
+                radius: Commons.Theme.radiusSm
 
                 readonly property var rowValue: modelData && (modelData.value !== undefined) ? modelData.value : modelData
                 readonly property string rowText: modelData ? (modelData.text || modelData.label || String(rowValue)) : ""

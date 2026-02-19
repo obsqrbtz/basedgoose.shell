@@ -210,7 +210,7 @@ Rectangle {
     }
 
     color: Qt.darker(cSurface, 1.3)
-    radius: 8
+    radius: Commons.Theme.radius
     border.color: cBorder
     border.width: 1
 
@@ -368,7 +368,7 @@ Rectangle {
                 color: monitorArea.drag.active ? Qt.lighter(root.cSurfaceContainer, 1.2) : (monitorArea.containsMouse ? Qt.lighter(root.cSurfaceContainer, 1.1) : root.cSurfaceContainer)
                 border.color: hasPendingPosition ? root.cPrimary : (root.selectedMonitor === name ? root.cPrimary : root.cBorder)
                 border.width: (root.selectedMonitor === name || hasPendingPosition) ? 2 : 1
-                radius: 4
+                radius: Commons.Theme.radiusSm
 
                 Behavior on color {
                     enabled: !monitorArea.drag.active

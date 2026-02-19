@@ -136,7 +136,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 36
-                    radius: 6
+                    radius: Commons.Theme.radiusSm
                     
                     property int dayNum: index - calendarRepeater.firstDayOfMonth + 1
                     property bool isCurrentMonth: dayNum > 0 && dayNum <= calendarRepeater.daysInMonth

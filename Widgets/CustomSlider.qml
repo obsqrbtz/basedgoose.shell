@@ -10,7 +10,7 @@ Slider {
     property color handleColor: Commons.Theme.foreground
     property color handleBorderColor: Commons.Theme.primaryMuted
     property int trackHeight: 6
-    property int trackRadius: 3
+    property int trackRadius: Commons.Theme.radiusSm
     property int handleSize: 18
     property bool showHandle: true
     property int animationDuration: 100

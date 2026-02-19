@@ -18,7 +18,7 @@ Rectangle {
 
     signal pathChanged(string newPath)
 
-    radius: 12
+    radius: Commons.Theme.radius
     color: cSurfaceContainer
     implicitHeight: configPathColumn.implicitHeight + 16
 
@@ -50,7 +50,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 36
-            radius: 8
+            radius: Commons.Theme.radius
             color: configPathInput.activeFocus ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.08) : cSurface
             border.color: configPathInput.activeFocus ? cPrimary : cBorder
             border.width: 1

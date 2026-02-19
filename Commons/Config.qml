@@ -25,7 +25,7 @@ QtObject {
 
     readonly property int barHeight: 42
     readonly property int barWidth: 48
-    readonly property int barMargin: 6
+    readonly property int barMargin: 0
     readonly property int barPadding: 6
     readonly property int barSpacing: 4
 
@@ -36,7 +36,8 @@ QtObject {
     readonly property int workspaceIndicatorWidth: 10
     readonly property int workspaceIndicatorActiveWidth: 32
     readonly property int workspaceIndicatorHeight: 10
-    readonly property int workspaceIndicatorRadius: 5
+    readonly property int workspaceIndicatorInactiveHeight: 6
+    readonly property int workspaceIndicatorRadius: Theme.radiusLg
     readonly property int workspaceSpacing: 8
 
     readonly property int statsSeparatorWidth: 1
@@ -47,14 +48,14 @@ QtObject {
 
     readonly property int trayIconSize: 28
     readonly property int trayIconImageSize: 18
-    readonly property int trayIconRadius: 6
+    readonly property int trayIconRadius: Theme.radiusLg
     readonly property int traySpacing: 0
 
     readonly property string clockFormat: "HH:mm  ddd MMM dd"
     readonly property int clockUpdateInterval: 1000
 
     readonly property int powerButtonSize: 28
-    readonly property int powerButtonRadius: 6
+    readonly property int powerButtonRadius: Theme.radiusLg
 
     readonly property int popupMargin: 12
 
@@ -75,8 +76,7 @@ QtObject {
             centerMargin: 12,
             itemHeight: 100,
             itemSpacing: 8,
-            centerRadius: 16 // Use Theme.radius * 2 instead
-            ,
+            centerRadius: Theme.radiusLg,
             groupSpacing: 16
         })
 

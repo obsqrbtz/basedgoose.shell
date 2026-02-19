@@ -16,7 +16,7 @@ Rectangle {
     
     implicitWidth: 28
     implicitHeight: 28
-    radius: 6
+    radius: Commons.Theme.radiusSm
     color: mouseArea.containsMouse ? hoverColor : baseColor
     
     Behavior on color {

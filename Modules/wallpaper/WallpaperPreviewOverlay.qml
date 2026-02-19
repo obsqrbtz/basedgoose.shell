@@ -88,7 +88,7 @@ PanelWindow {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 8
+                    radius: Commons.Theme.radius
                     color: Wallpaper.WallpaperColors.surfaceContainer
                     clip: true
 

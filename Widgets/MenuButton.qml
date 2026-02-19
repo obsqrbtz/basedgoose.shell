@@ -11,7 +11,7 @@ Rectangle {
     property int textSize: 13
     property color iconColor: Commons.Theme.primary
     property color textColor: Commons.Theme.foreground
-    property color baseColor: Commons.Theme.primaryMuted
+    property color baseColor: Commons.Theme.surfaceBase
     property color hoverColor: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.18)
     property color pressedColor: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.25)
     property int animationDuration: 150
@@ -20,7 +20,7 @@ Rectangle {
     
     implicitWidth: 200
     implicitHeight: 52
-    radius: 10
+    radius: Commons.Theme.radius
     color: mouseArea.pressed ? pressedColor : (mouseArea.containsMouse ? hoverColor : baseColor)
     
     Behavior on color {

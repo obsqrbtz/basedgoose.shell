@@ -24,7 +24,7 @@ ColumnLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
-        radius: 10
+        radius: Commons.Theme.radius
         color: Wallpaper.WallpaperColors.surfaceContainer
         
         RowLayout {
@@ -54,7 +54,7 @@ ColumnLayout {
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: -4
-                    radius: 6
+                    radius: Commons.Theme.radiusSm
                     color: directoryInput.activeFocus ? Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.1) : "transparent"
                     border.width: directoryInput.activeFocus ? 1 : 0
                     border.color: Wallpaper.WallpaperColors.primary
@@ -110,7 +110,7 @@ ColumnLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
-        radius: 10
+        radius: Commons.Theme.radius
         color: Wallpaper.WallpaperColors.surfaceContainer
 
         RowLayout {
@@ -140,7 +140,7 @@ ColumnLayout {
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: -4
-                    radius: 6
+                    radius: Commons.Theme.radiusSm
                     color: downloadDirInput.activeFocus ? Qt.rgba(Wallpaper.WallpaperColors.primary.r, Wallpaper.WallpaperColors.primary.g, Wallpaper.WallpaperColors.primary.b, 0.1) : "transparent"
                     border.width: downloadDirInput.activeFocus ? 1 : 0
                     border.color: Wallpaper.WallpaperColors.primary
@@ -229,7 +229,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         Layout.topMargin: 8
-        radius: 10
+        radius: Commons.Theme.radius
         color: Wallpaper.WallpaperColors.surfaceContainer
         
         RowLayout {

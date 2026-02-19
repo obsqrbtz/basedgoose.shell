@@ -15,7 +15,7 @@ Item {
     
     Rectangle {
         anchors.fill: parent
-        radius: 12
+        radius: Commons.Theme.radius
         color: root.backgroundColor
         clip: true
         

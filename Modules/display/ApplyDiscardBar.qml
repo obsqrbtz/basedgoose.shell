@@ -18,7 +18,7 @@ RowLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 44
-        radius: 10
+        radius: Commons.Theme.radius
         color: discardArea.containsMouse ? Qt.rgba(cText.r, cText.g, cText.b, 0.1) : cSurfaceContainer
         border.color: cBorder
         border.width: 1
@@ -44,7 +44,7 @@ RowLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 44
-        radius: 10
+        radius: Commons.Theme.radius
         color: applyArea.containsMouse ? Qt.lighter(cPrimary, 1.1) : cPrimary
 
         RowLayout {

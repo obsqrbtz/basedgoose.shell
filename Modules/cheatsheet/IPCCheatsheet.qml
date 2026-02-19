@@ -77,7 +77,7 @@ Widgets.PopupWindow {
                 Rectangle {
                     width: 36
                     height: 36
-                    radius: 12
+                    radius: Commons.Theme.radius
                     color: Commons.Theme.primaryMuted
                     
                     Text {
@@ -113,7 +113,7 @@ Widgets.PopupWindow {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                radius: 12
+                radius: Commons.Theme.radius
                 color: cSurfaceContainer
                 clip: true
                 

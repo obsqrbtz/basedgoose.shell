@@ -15,7 +15,7 @@ Rectangle {
     
     width: 100
     height: 32
-    radius: 8
+    radius: Commons.Theme.radius
     color: active ? Qt.rgba(activeColor.r, activeColor.g, activeColor.b, 0.2) : inactiveColor
     border.width: 1
     border.color: active ? activeColor : borderColor

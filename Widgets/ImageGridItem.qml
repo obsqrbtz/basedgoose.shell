@@ -76,7 +76,7 @@ Rectangle {
     Rectangle {
         anchors.fill: parent
         anchors.margins: 4
-        radius: 6
+        radius: Commons.Theme.radiusSm
         color: root.surfaceColor
         clip: true
         
@@ -111,7 +111,7 @@ Rectangle {
             anchors.centerIn: parent
             width: 40
             height: 40
-            radius: 20
+            radius: Commons.Theme.radiusLg
             color: Qt.rgba(0, 0, 0, 0.3)
             visible: busyIndicator.visible || !root.cachedImagePath
             
@@ -149,7 +149,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.margins: 6
-            radius: 6
+            radius: Commons.Theme.radiusSm
             color: Qt.rgba(0, 0, 0, 0.6)
             visible: mouseArea.containsMouse && root.tooltipText.length > 0
             z: 2
