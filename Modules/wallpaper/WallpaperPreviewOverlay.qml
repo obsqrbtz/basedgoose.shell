@@ -71,7 +71,7 @@ PanelWindow {
         Rectangle {
             anchors.fill: parent
             color: Wallpaper.WallpaperColors.surface
-            radius: Commons.Theme.radius * 2
+            radius: Commons.Theme.radiusPanel
             border.color: Wallpaper.WallpaperColors.border
             border.width: 1
 

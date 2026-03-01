@@ -27,7 +27,7 @@ Widgets.PopupWindow {
         
     Rectangle {
         anchors.fill: parent
-        radius: Commons.Theme.radius * 2
+        radius: Commons.Theme.radiusPanel
         color: Commons.Theme.background
         border.width: 1
         border.color: Commons.Theme.border
@@ -35,17 +35,17 @@ Widgets.PopupWindow {
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.25)
-            shadowBlur: 0.8
-            shadowVerticalOffset: 8
+            shadowColor: Qt.rgba(0, 0, 0, Commons.Theme.popupShadowOpacity)
+            shadowBlur: Commons.Theme.popupShadowBlur
+            shadowVerticalOffset: Commons.Theme.popupShadowOffset
             shadowHorizontalOffset: 0
         }
     }
     
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 20
-        spacing: 16
+        anchors.margins: Commons.Config.popupContentPadding
+        spacing: Commons.Theme.spacingLg
         
         RowLayout {
             Layout.fillWidth: true
@@ -55,7 +55,7 @@ Widgets.PopupWindow {
                 icon: "󰂚"
                 title: "Notifications"
                 iconColor: Commons.Theme.secondary
-                titleSize: 20
+                titleSize: Commons.Theme.fontSizeHeading
             }
             
             Item {

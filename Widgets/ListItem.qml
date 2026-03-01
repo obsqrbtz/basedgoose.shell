@@ -15,17 +15,17 @@ Rectangle {
     property color hoverColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.06)
     property color borderColor: Commons.Theme.border
     property int iconSize: 18
-    property int titleSize: 12
-    property int subtitleSize: 10
-    property int animationDuration: 80
-    property bool showBorder: true
+    property int titleSize: Commons.Theme.fontSize
+    property int subtitleSize: Commons.Theme.fontSizeCaption
+    property int animationDuration: 100
+    property bool showBorder: false
     property alias contentItem: contentArea
     
     signal clicked()
     
     implicitWidth: 300
-    implicitHeight: 52
-    radius: Commons.Theme.radius
+    implicitHeight: 56
+    radius: Commons.Theme.radiusLg
     color: itemArea.containsMouse ? hoverColor : baseColor
     border.width: showBorder ? 1 : 0
     border.color: borderColor
@@ -37,9 +37,9 @@ Rectangle {
     RowLayout {
         id: contentArea
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        spacing: 10
+        anchors.leftMargin: Commons.Theme.spacingLg
+        anchors.rightMargin: Commons.Theme.spacingLg
+        spacing: Commons.Theme.spacingMd
         
         Text {
             text: root.icon

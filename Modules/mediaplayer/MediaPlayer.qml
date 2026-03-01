@@ -16,7 +16,9 @@ Rectangle {
     readonly property bool isPlaying: player?.isPlaying ?? false
     
     implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : (hasPlayer ? Math.max(0, mediaPlayerContent.implicitWidth + 16) : 0)
-    implicitHeight: isVertical ? verticalContent.implicitHeight + 12 : 28
+    implicitHeight: isVertical ? verticalContent.implicitHeight + 12 : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
     visible: hasPlayer
     
     Component.onCompleted: {

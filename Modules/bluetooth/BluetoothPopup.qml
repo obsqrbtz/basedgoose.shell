@@ -37,7 +37,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: cSurface
-        radius: Commons.Theme.radius * 2
+        radius: Commons.Theme.radiusPanel
         border.color: cBorder
         border.width: 1
         
@@ -50,9 +50,9 @@ Widgets.PopupWindow {
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.35)
-            shadowBlur: 1.0
-            shadowVerticalOffset: 6
+            shadowColor: Qt.rgba(0, 0, 0, Commons.Theme.popupShadowOpacity)
+            shadowBlur: Commons.Theme.popupShadowBlur
+            shadowVerticalOffset: Commons.Theme.popupShadowOffset
         }
         
         ColumnLayout {
@@ -60,8 +60,8 @@ Widgets.PopupWindow {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: 16
-            spacing: 12
+            anchors.margins: Commons.Config.popupContentPadding
+            spacing: Commons.Theme.spacingMd
                 
                 RowLayout {
                     Layout.fillWidth: true

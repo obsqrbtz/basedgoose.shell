@@ -7,24 +7,24 @@ Rectangle {
     
     property string icon: ""
     property string text: ""
-    property int iconSize: 14
-    property int textSize: 12
+    property int iconSize: 15
+    property int textSize: Commons.Theme.fontSize
     property color iconColor: Commons.Theme.secondary
     property color textColor: Commons.Theme.foreground
     property color iconBackgroundColor: Qt.rgba(iconColor.r, iconColor.g, iconColor.b, 0.15)
     property color baseColor: "transparent"
     property color hoverColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.06)
     property color borderColor: Commons.Theme.border
-    property int iconBoxSize: 28
-    property int iconBoxRadius: Commons.Theme.radiusSm
+    property int iconBoxSize: 30
+    property int iconBoxRadius: Commons.Theme.radiusLg
     property int animationDuration: 150
-    property bool showBorder: true
+    property bool showBorder: false
     
     signal clicked()
     
     implicitWidth: 200
-    implicitHeight: 48
-    radius: Commons.Theme.radius
+    implicitHeight: 52
+    radius: Commons.Theme.radiusLg
     color: mouseArea.containsMouse ? hoverColor : baseColor
     border.width: showBorder ? 1 : 0
     border.color: borderColor
@@ -35,10 +35,14 @@ Rectangle {
     
     RowLayout {
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 12
+        anchors.leftMargin: Commons.Theme.spacingLg
+        anchors.rightMargin: Commons.Theme.spacingLg
+        spacing: Commons.Theme.spacingMd
         
         Rectangle {
+            Layout.preferredWidth: root.iconBoxSize
+            Layout.preferredHeight: root.iconBoxSize
+            Layout.alignment: Qt.AlignVCenter
             width: root.iconBoxSize
             height: root.iconBoxSize
             radius: root.iconBoxRadius
@@ -60,6 +64,7 @@ Rectangle {
             font.weight: Font.Medium
             color: root.textColor
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
         }
     }
     

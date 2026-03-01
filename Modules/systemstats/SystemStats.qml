@@ -14,8 +14,10 @@ Rectangle {
     
     implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : (statsRowH.implicitWidth + 20)
     implicitHeight: isVertical ? (statsColV.implicitHeight + 16) : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
     color: Commons.Theme.surfaceBase
-    radius: Commons.Theme.radius
+    radius: Commons.Theme.radiusPanel
     clip: true
     
     // Horizontal layout

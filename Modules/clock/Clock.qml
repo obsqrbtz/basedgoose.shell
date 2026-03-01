@@ -11,22 +11,36 @@ Item {
     
     readonly property bool isHovered: mouseArea.containsMouse
     
-    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : clockText.implicitWidth
-    implicitHeight: isVertical ? clockColV.implicitHeight : 20
-    
-    // Horizontal layout 
-    Text {
-        id: clockText
+    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : clockColH.implicitWidth
+    implicitHeight: isVertical ? clockColV.implicitHeight : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
+
+    // Horizontal layout (two-line: time + date)
+    Column {
+        id: clockColH
         anchors.centerIn: parent
+        spacing: 0
         visible: !isVertical
         
-        color: Commons.Theme.foreground
-        font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.Medium }
-        text: Qt.formatDateTime(new Date(), Commons.Config.clockFormat)
-        
-        scale: isHovered ? 1.05 : 1.0
-        Behavior on scale { NumberAnimation { duration: 100 } }
-        Behavior on color { ColorAnimation { duration: 150 } }
+        Text {
+            id: clockText
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Commons.Theme.foreground
+            font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSizeSubheading; weight: Font.DemiBold }
+            text: Qt.formatDateTime(new Date(), "HH:mm")
+            scale: isHovered ? 1.02 : 1.0
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: 150 } }
+        }
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: Commons.Theme.foregroundMuted
+            font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSizeCaption; weight: Font.Medium }
+            text: Qt.formatDateTime(new Date(), "ddd MMM d")
+            scale: isHovered ? 1.02 : 1.0
+            Behavior on scale { NumberAnimation { duration: 100 } }
+        }
     }
     
     // Vertical layout
@@ -62,7 +76,7 @@ Item {
         running: true
         repeat: true
         onTriggered: {
-            clockText.text = Qt.formatDateTime(new Date(), Commons.Config.clockFormat)
+            if (clockText) clockText.text = Qt.formatDateTime(new Date(), "HH:mm")
         }
     }
     

@@ -15,7 +15,7 @@ Widgets.HoverButton {
     baseColor: "transparent"
     hoverColor: Commons.Theme.surfaceBase
     
-    width: Commons.Config.powerButtonSize
-    height: Commons.Config.powerButtonSize
+    width: parent ? parent.width : Commons.Config.powerButtonSize
+    height: parent ? parent.height : Commons.Config.powerButtonSize
     radius: Commons.Config.powerButtonRadius
 }

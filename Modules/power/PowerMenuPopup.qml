@@ -15,9 +15,14 @@ Widgets.PopupWindow {
     closeOnClickOutside: true
     barPosition: Commons.Config.barPosition
     
+    readonly property color cPrimary: Commons.Theme.secondary
+    readonly property color cText: Commons.Theme.foreground
+    readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
+    readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
+
     implicitWidth: 280
-    implicitHeight: contentColumn.implicitHeight + 32
-    
+    implicitHeight: contentColumn.implicitHeight + 40
+
     Rectangle {
         anchors.fill: backgroundRect
         anchors.margins: -6
@@ -27,9 +32,9 @@ Widgets.PopupWindow {
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.35)
-            shadowBlur: 0.8
-            shadowVerticalOffset: 8
+            shadowColor: Qt.rgba(0, 0, 0, Commons.Theme.popupShadowOpacity)
+            shadowBlur: Commons.Theme.popupShadowBlur
+            shadowVerticalOffset: Commons.Theme.popupShadowOffset
         }
     }
       
@@ -37,15 +42,15 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: Commons.Theme.background
-        radius: Commons.Theme.radius * 2
+        radius: Commons.Theme.radiusPanel
         border.color: Commons.Theme.border
         border.width: 1
         
         ColumnLayout {
             id: contentColumn
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 12
+            anchors.margins: Commons.Config.popupContentPadding
+            spacing: Commons.Theme.spacingMd
             
             Widgets.HeaderWithIcon {
                 Layout.fillWidth: true
@@ -57,39 +62,49 @@ Widgets.PopupWindow {
             Widgets.Divider {
                 Layout.fillWidth: true
             }
-            
-            ColumnLayout {
+
+            Widgets.MenuItem {
                 Layout.fillWidth: true
-                spacing: 8
-                
-                Widgets.MenuButton {
-                    Layout.fillWidth: true
-                    icon: "\udb81\udc25"
-                    text: "Shutdown"
-                    onClicked: {
-                        powerMenu.shouldShow = false
-                        processComponent.createObject(powerMenu, { cmd: ["systemctl", "poweroff"] })
-                    }
+                Layout.preferredHeight: 52
+                icon: "\udb81\udc25"
+                text: "Shutdown"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    powerMenu.shouldShow = false
+                    processComponent.createObject(powerMenu, { cmd: ["systemctl", "poweroff"] })
                 }
-                
-                Widgets.MenuButton {
-                    Layout.fillWidth: true
-                    icon: "\udb81\udf09"
-                    text: "Reboot"
-                    onClicked: {
-                        powerMenu.shouldShow = false
-                        processComponent.createObject(powerMenu, { cmd: ["systemctl", "reboot"] })
-                    }
+            }
+
+            Widgets.MenuItem {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 52
+                icon: "\udb81\udf09"
+                text: "Reboot"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    powerMenu.shouldShow = false
+                    processComponent.createObject(powerMenu, { cmd: ["systemctl", "reboot"] })
                 }
-                
-                Widgets.MenuButton {
-                    Layout.fillWidth: true
-                    icon: "\udb81\uddfd"
-                    text: "Logout"
-                    onClicked: {
-                        powerMenu.shouldShow = false
-                        processComponent.createObject(powerMenu, { cmd: ["hyprctl", "dispatch", "exit"] })
-                    }
+            }
+
+            Widgets.MenuItem {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 52
+                icon: "\udb81\uddfd"
+                text: "Logout"
+                iconColor: cPrimary
+                textColor: cText
+                borderColor: cBorder
+                hoverColor: cHover
+                onClicked: {
+                    powerMenu.shouldShow = false
+                    processComponent.createObject(powerMenu, { cmd: ["hyprctl", "dispatch", "exit"] })
                 }
             }
         }

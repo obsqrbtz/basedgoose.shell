@@ -29,9 +29,9 @@ Widgets.PopupWindow {
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.35)
-            shadowBlur: 0.8
-            shadowVerticalOffset: 8
+            shadowColor: Qt.rgba(0, 0, 0, Commons.Theme.popupShadowOpacity)
+            shadowBlur: Commons.Theme.popupShadowBlur
+            shadowVerticalOffset: Commons.Theme.popupShadowOffset
         }
     }
 
@@ -39,7 +39,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: Commons.Theme.background
-        radius: Commons.Theme.radius * 2
+        radius: Commons.Theme.radiusPanel
         
         border.color: Commons.Theme.border
         border.width: 1
@@ -55,8 +55,8 @@ Widgets.PopupWindow {
     ColumnLayout {
         id: contentColumn
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 12
+        anchors.margins: Commons.Config.popupContentPadding
+        spacing: Commons.Theme.spacingMd
         
         Text {
             text: "Volume"

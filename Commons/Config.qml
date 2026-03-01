@@ -23,21 +23,21 @@ QtObject {
         console.log("[Config] barModules.left:", barModules.left)
     }
 
-    readonly property int barHeight: 42
-    readonly property int barWidth: 48
-    readonly property int barMargin: 0
-    readonly property int barPadding: 6
-    readonly property int barSpacing: 4
+    readonly property int barHeight: 48
+    readonly property int barWidth: 52
+    readonly property int barMargin: 8
+    readonly property int barPadding: 8
+    readonly property int barSpacing: 6
 
-    readonly property int componentHeight: 30
-    readonly property int componentPadding: 8
+    readonly property int componentHeight: 32
+    readonly property int componentPadding: 10
 
     readonly property int workspaceCount: 9
     readonly property int workspaceIndicatorWidth: 10
     readonly property int workspaceIndicatorActiveWidth: 32
     readonly property int workspaceIndicatorHeight: 10
     readonly property int workspaceIndicatorInactiveHeight: 6
-    readonly property int workspaceIndicatorRadius: Theme.radiusLg
+    readonly property int workspaceIndicatorRadius: 999
     readonly property int workspaceSpacing: 8
 
     readonly property int statsSeparatorWidth: 1
@@ -57,7 +57,8 @@ QtObject {
     readonly property int powerButtonSize: 28
     readonly property int powerButtonRadius: Theme.radiusLg
 
-    readonly property int popupMargin: 12
+    readonly property int popupMargin: 16
+    readonly property int popupContentPadding: 20
 
     readonly property int cpuUpdateInterval: 3000
     readonly property int memoryUpdateInterval: 3000
@@ -68,16 +69,16 @@ QtObject {
     readonly property var notifications: ({
             popupWidth: 320,
             spacing: 10,
-            margin: 12,
+            margin: 16,
             maxVisible: 5,
             timeout: 8000,
             centerWidth: 420,
             centerHeight: 600,
-            centerMargin: 12,
+            centerMargin: 20,
             itemHeight: 100,
-            itemSpacing: 8,
-            centerRadius: Theme.radiusLg,
-            groupSpacing: 16
+            itemSpacing: 10,
+            centerRadius: Theme.radiusPanel,
+            groupSpacing: 20
         })
 
     readonly property var mediaPlayer: ({

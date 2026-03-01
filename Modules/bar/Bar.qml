@@ -58,7 +58,8 @@ PanelWindow {
     Rectangle {
         anchors.fill: parent
         color: Commons.Theme.background
-        radius: Commons.Theme.radius
+        opacity: 0.92
+        radius: Commons.Theme.radiusPanel
         border.color: Commons.Theme.border
         border.width: 1
     }
@@ -207,6 +208,7 @@ PanelWindow {
         // Start section
         RowLayout {
             Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: Commons.Config.componentHeight
             spacing: Commons.Config.barSpacing
 
             Repeater {
@@ -215,6 +217,7 @@ PanelWindow {
                     required property string modelData
                     sourceComponent: bar.getModuleComponent(modelData)
                     Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredHeight: Commons.Config.componentHeight
                 }
             }
         }
@@ -224,6 +227,7 @@ PanelWindow {
         // Center section
         RowLayout {
             Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: Commons.Config.componentHeight
             spacing: Commons.Config.barSpacing
 
             Repeater {
@@ -232,6 +236,7 @@ PanelWindow {
                     required property string modelData
                     sourceComponent: bar.getModuleComponent(modelData)
                     Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredHeight: Commons.Config.componentHeight
                 }
             }
         }
@@ -241,10 +246,11 @@ PanelWindow {
         // End section
         Rectangle {
             Layout.alignment: Qt.AlignVCenter
-            implicitWidth: rightRowH.implicitWidth + 20
+            Layout.preferredHeight: Commons.Config.componentHeight
+            implicitWidth: rightRowH.implicitWidth + Commons.Theme.spacingXl
             implicitHeight: Commons.Config.componentHeight
             color: Commons.Theme.surfaceBase
-            radius: Commons.Theme.radius
+            radius: Math.round(implicitHeight / 2)
 
             RowLayout {
                 id: rightRowH
@@ -257,6 +263,7 @@ PanelWindow {
                         required property string modelData
                         sourceComponent: bar.getModuleComponent(modelData)
                         Layout.alignment: Qt.AlignVCenter
+                        Layout.preferredHeight: Commons.Config.componentHeight
                     }
                 }
             }
@@ -309,7 +316,7 @@ PanelWindow {
             implicitWidth: Commons.Config.barWidth - Commons.Config.barPadding * 2
             implicitHeight: rightColV.implicitHeight + 16
             color: Commons.Theme.surfaceBase
-            radius: Commons.Theme.radius
+            radius: Commons.Theme.radiusPanel
 
             ColumnLayout {
                 id: rightColV

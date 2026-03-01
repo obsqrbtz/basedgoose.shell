@@ -18,8 +18,10 @@ Item {
     readonly property int percentage: volumeMonitor.percentage
     
     implicitWidth: isVertical ? 28 : volumeRow.implicitWidth
-    implicitHeight: isVertical ? volumeCol.implicitHeight : 20
-    
+    implicitHeight: isVertical ? volumeCol.implicitHeight : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
+
     // Horizontal layout
     RowLayout {
         id: volumeRow

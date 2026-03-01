@@ -15,8 +15,10 @@ Rectangle {
     Layout.preferredHeight: isVertical ? (workspaceColV.implicitHeight + 16) : Commons.Config.componentHeight
     implicitWidth: isVertical ? Commons.Config.componentHeight : (workspaceRowH.implicitWidth + 16)
     implicitHeight: isVertical ? (workspaceColV.implicitHeight + 16) : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
     color: Commons.Theme.surfaceBase
-    radius: Commons.Theme.radius
+    radius: Commons.Theme.radiusPanel
     clip: true
     
     // Horizontal layout

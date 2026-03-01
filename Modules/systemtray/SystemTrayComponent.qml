@@ -13,8 +13,10 @@ Item {
     property bool isVertical: false
     
     implicitWidth: isVertical ? Commons.Config.trayIconSize : trayRowH.implicitWidth
-    implicitHeight: isVertical ? trayColV.implicitHeight : Commons.Config.trayIconSize
-    
+    implicitHeight: isVertical ? trayColV.implicitHeight : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
+
     visible: SystemTray.items.values.length > 0
     
     // Horizontal layout

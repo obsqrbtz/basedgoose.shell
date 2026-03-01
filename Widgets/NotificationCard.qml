@@ -26,7 +26,7 @@ Rectangle {
     readonly property color error: Commons.Theme.error
     readonly property color surfaceBorder: Commons.Theme.surfaceBorder
     
-    radius: isPopup ? Commons.Theme.radiusLg : Commons.Theme.radius
+    radius: isPopup ? Commons.Theme.radiusPanel : Commons.Theme.radiusLg
     color: isPopup ? surfaceBase : (isHovered ? Qt.rgba(surfaceText.r, surfaceText.g, surfaceText.b, 0.04) : surfaceContainer)
     
     border.width: 1
@@ -87,9 +87,9 @@ Rectangle {
     ColumnLayout {
         id: contentLayout
         anchors.fill: parent
-        anchors.margins: isPopup ? 16 : 12
-        anchors.leftMargin: isPopup ? (notification.urgency >= 1 ? 20 : 16) : 12
-        spacing: isPopup ? 8 : 6
+        anchors.margins: isPopup ? Commons.Theme.spacingLg : 12
+        anchors.leftMargin: isPopup ? (notification.urgency >= 1 ? Commons.Theme.spacingXl : Commons.Theme.spacingLg) : 12
+        spacing: isPopup ? Commons.Theme.spacingSm : 6
         
         RowLayout {
             Layout.fillWidth: true
@@ -158,7 +158,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.topMargin: isPopup ? 2 : 0
             text: notification.summary || ""
-            font.pixelSize: 13
+            font.pixelSize: Commons.Theme.fontSizeSubheading
             font.weight: Font.DemiBold
             font.family: Commons.Theme.fontUI
             font.letterSpacing: isPopup ? -0.1 : 0

@@ -16,8 +16,10 @@ Item {
     readonly property bool isHovered: mouseArea.containsMouse
     
     implicitWidth: isVertical ? 28 : 20
-    implicitHeight: isVertical ? 28 : 20
-    
+    implicitHeight: Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
+
     // Notification icon
     Text {
         id: notifIcon

@@ -6,8 +6,11 @@ Rectangle {
     id: root
     
     property color dividerColor: Commons.Theme.surfaceBorder
+    property real dividerOpacity: Commons.Theme.dividerOpacity
     property int thickness: 1
     property bool vertical: false
+    
+    opacity: root.dividerOpacity
     
     Layout.fillWidth: !root.vertical
     Layout.fillHeight: root.vertical

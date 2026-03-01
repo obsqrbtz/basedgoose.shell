@@ -59,7 +59,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: Commons.Theme.surfaceBase
-        radius: Commons.Theme.radius * 2
+        radius: Commons.Theme.radiusPanel
         
         border.color: Commons.Theme.border
         border.width: 1
@@ -130,12 +130,12 @@ Widgets.PopupWindow {
         
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 16
+            anchors.margins: Commons.Config.popupContentPadding
+            spacing: Commons.Theme.spacingLg
             
             Text {
                 text: "Applications"
-                font.pixelSize: 20
+                font.pixelSize: Commons.Theme.fontSizeHeading
                 font.weight: Font.Bold
                 font.family: Commons.Theme.fontUI
                 color: cText
@@ -146,14 +146,14 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 48
                 color: searchInput.activeFocus ? cSurfaceContainer : cSurfaceContainer
-                radius: Commons.Theme.radius
+                radius: Commons.Theme.radiusLg
                 border.color: searchInput.activeFocus ? Commons.Theme.borderFocused : cBorder
                 border.width: 1
                 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 12
+                    anchors.margins: Commons.Theme.spacingMd
+                    spacing: Commons.Theme.spacingMd
                     
                     Text {
                         text: "󰍉"

@@ -26,8 +26,8 @@ Widgets.PopupWindow {
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
     
-    implicitWidth: 240
-    implicitHeight: contentColumn.implicitHeight + 32
+    implicitWidth: 260
+    implicitHeight: contentColumn.implicitHeight + 40
     
     Rectangle {
         anchors.fill: backgroundRect
@@ -38,9 +38,9 @@ Widgets.PopupWindow {
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true
-            shadowColor: Qt.rgba(0, 0, 0, 0.35)
-            shadowBlur: 0.8
-            shadowVerticalOffset: 8
+            shadowColor: Qt.rgba(0, 0, 0, Commons.Theme.popupShadowOpacity)
+            shadowBlur: Commons.Theme.popupShadowBlur
+            shadowVerticalOffset: Commons.Theme.popupShadowOffset
         }
     }
 
@@ -48,7 +48,7 @@ Widgets.PopupWindow {
         id: backgroundRect
         anchors.fill: parent
         color: Commons.Theme.background
-        radius: Commons.Theme.radius * 2
+        radius: Commons.Theme.radiusPanel
         
         border.color: Commons.Theme.border
         border.width: 1
@@ -56,8 +56,8 @@ Widgets.PopupWindow {
         ColumnLayout {
             id: contentColumn
             anchors.fill: parent
-            anchors.margins: 12
-            spacing: 8
+            anchors.margins: Commons.Config.popupContentPadding
+            spacing: Commons.Theme.spacingMd
             
             Widgets.HeaderWithIcon {
                 Layout.fillWidth: true
@@ -72,6 +72,7 @@ Widgets.PopupWindow {
             
             Widgets.MenuItem {
                 Layout.fillWidth: true
+                Layout.preferredHeight: 52
                 icon: "󰌌"
                 text: "IPC Cheatsheet"
                 iconColor: cPrimary
@@ -88,6 +89,7 @@ Widgets.PopupWindow {
             
             Widgets.MenuItem {
                 Layout.fillWidth: true
+                Layout.preferredHeight: 52
                 icon: "\uf03e"
                 text: "Wallpaper Selector"
                 iconColor: cPrimary
@@ -104,6 +106,7 @@ Widgets.PopupWindow {
             
             Widgets.MenuItem {
                 Layout.fillWidth: true
+                Layout.preferredHeight: 52
                 icon: "󰍹"
                 text: "Display Manager"
                 iconColor: cPrimary
@@ -120,6 +123,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
+                Layout.preferredHeight: 52
                 icon: "\uf013"
                 text: "Settings"
                 iconColor: cPrimary
@@ -136,6 +140,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
+                Layout.preferredHeight: 52
                 icon: "󰑐"
                 text: "Reload Quickshell"
                 iconColor: cPrimary

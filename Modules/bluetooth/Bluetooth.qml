@@ -18,8 +18,10 @@ Item {
     readonly property bool isHovered: mouseArea.containsMouse
     
     implicitWidth: isVertical ? 28 : bluetoothRow.implicitWidth
-    implicitHeight: isVertical ? bluetoothCol.implicitHeight : 20
-    
+    implicitHeight: isVertical ? bluetoothCol.implicitHeight : Commons.Config.componentHeight
+    width: parent ? parent.width : implicitWidth
+    height: parent ? parent.height : implicitHeight
+
     // Horizontal layout
     RowLayout {
         id: bluetoothRow
