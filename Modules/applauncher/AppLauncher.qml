@@ -16,6 +16,8 @@ Widgets.PopupWindow {
     transformOriginY: 0.5
     closeOnClickOutside: true
 
+    onShouldShowChanged: if (shouldShow) searchInput.text = ""
+
     anchors {
         top: true
         left: true
