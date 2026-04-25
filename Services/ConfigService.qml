@@ -20,7 +20,7 @@ Singleton {
     property var barModules: ({
         "left": ["shellmenu", "workspaces", "mediaplayer"],
         "center": ["systemstats"],
-        "right": ["clock", "systemtray", "volume", "bluetooth", "notifications", "power"]
+        "right": ["clock", "systemtray", "volume", "network", "bluetooth", "notifications", "power"]
     })
     
     Component.onCompleted: {

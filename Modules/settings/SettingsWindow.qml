@@ -43,6 +43,7 @@ Widgets.PopupWindow {
             property string moduleName: ""
             property bool isDraggable: true
             property string sourceSection: ""
+            property int sourceIndex: -1
             property color chipColor: Qt.rgba(popupWindow.cText.r, popupWindow.cText.g, popupWindow.cText.b, 0.08)
             property color chipBorderColor: Qt.rgba(popupWindow.cText.r, popupWindow.cText.g, popupWindow.cText.b, 0.2)
             property color chipTextColor: popupWindow.cText
@@ -87,7 +88,7 @@ Widgets.PopupWindow {
                     Drag.supportedActions: Qt.MoveAction
                     Drag.keys: ["text/plain"]
                     Drag.mimeData: {
-                        "text/plain": "module:" + chipContainer.moduleName + ":" + chipContainer.sourceSection
+                        "text/plain": "module:" + chipContainer.moduleName + ":" + chipContainer.sourceSection + ":" + chipContainer.sourceIndex
                     }
 
                     Rectangle {
@@ -113,7 +114,7 @@ Widgets.PopupWindow {
     }
 
     function addModuleToSection(moduleName, section) {
-        var updatedBarModules = Object.assign({}, Services.ConfigService.barModules)
+        var updatedBarModules = cloneBarModules()
         if (!updatedBarModules[section]) {
             updatedBarModules[section] = []
         }
@@ -124,7 +125,7 @@ Widgets.PopupWindow {
     }
 
     function removeModuleFromSection(moduleName, section) {
-        var updatedBarModules = Object.assign({}, Services.ConfigService.barModules)
+        var updatedBarModules = cloneBarModules()
         if (updatedBarModules[section]) {
             var index = updatedBarModules[section].indexOf(moduleName)
             if (index !== -1) {
@@ -132,6 +133,62 @@ Widgets.PopupWindow {
                 Services.ConfigService.setBarModules(updatedBarModules)
             }
         }
+    }
+
+    function cloneBarModules() {
+        var current = Services.ConfigService.barModules || {}
+        return {
+            "left": (current.left || []).slice(),
+            "center": (current.center || []).slice(),
+            "right": (current.right || []).slice()
+        }
+    }
+
+    function moveModuleToSection(moduleName, sourceSection, targetSection, targetIndex) {
+        var updatedBarModules = cloneBarModules()
+        if (!updatedBarModules[targetSection]) {
+            updatedBarModules[targetSection] = []
+        }
+
+        var sourceModules = sourceSection !== "" && updatedBarModules[sourceSection] ? updatedBarModules[sourceSection] : null
+        var removeIndex = -1
+        if (sourceModules) {
+            removeIndex = sourceModules.indexOf(moduleName)
+            if (removeIndex !== -1) {
+                sourceModules.splice(removeIndex, 1)
+            }
+        }
+
+        var targetModules = updatedBarModules[targetSection]
+        var existingTargetIndex = targetModules.indexOf(moduleName)
+        if (existingTargetIndex !== -1) {
+            targetModules.splice(existingTargetIndex, 1)
+        }
+
+        var insertionIndex = typeof targetIndex === "number" ? targetIndex : targetModules.length
+        if (sourceSection === targetSection && removeIndex !== -1 && removeIndex < insertionIndex) {
+            insertionIndex -= 1
+        }
+        insertionIndex = Math.max(0, Math.min(insertionIndex, targetModules.length))
+        targetModules.splice(insertionIndex, 0, moduleName)
+
+        Services.ConfigService.setBarModules(updatedBarModules)
+    }
+
+    function getDropInsertionIndex(flowItem, dropX, dropY, fallbackIndex) {
+        for (var i = 0; i < flowItem.children.length; i++) {
+            var child = flowItem.children[i]
+            if (child.moduleIndex === undefined || child.width <= 0 || child.height <= 0) {
+                continue
+            }
+            if (dropY < child.y + child.height / 2) {
+                return child.moduleIndex
+            }
+            if (dropY < child.y + child.height && dropX < child.x + child.width / 2) {
+                return child.moduleIndex
+            }
+        }
+        return fallbackIndex
     }
 
     Rectangle {
@@ -294,12 +351,13 @@ radius: Commons.Theme.radius
                                     id: modulePool
                                     Layout.fillWidth: true
                                     Layout.minimumHeight: 80
+                                    Layout.preferredHeight: Math.max(80, availableFlow.implicitHeight + 16)
                                     radius: Commons.Theme.radius
                                     color: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.08)
                                     border.color: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.2)
                                     border.width: 1
 
-                                    property var availableModules: ["shellmenu", "workspaces", "mediaplayer", "systemstats", "clock", "systemtray", "volume", "bluetooth", "notifications", "power"]
+                                    property var availableModules: ["shellmenu", "workspaces", "mediaplayer", "systemstats", "clock", "systemtray", "volume", "network", "bluetooth", "notifications", "power"]
                                     property var usedModules: {
                                         var used = []
                                         if (Services.ConfigService.barModules.left) used = used.concat(Services.ConfigService.barModules.left)
@@ -309,6 +367,7 @@ radius: Commons.Theme.radius
                                     }
 
                                     Flow {
+                                        id: availableFlow
                                         anchors.fill: parent
                                         anchors.margins: 8
                                         spacing: 6
@@ -330,6 +389,8 @@ radius: Commons.Theme.radius
                                                 onLoaded: {
                                                     item.moduleName = moduleName
                                                     item.isDraggable = isDraggable
+                                                    item.sourceSection = ""
+                                                    item.sourceIndex = -1
                                                     item.chipColor = chipColor
                                                     item.chipBorderColor = chipBorderColor
                                                     item.chipTextColor = chipTextColor
@@ -385,6 +446,7 @@ radius: Commons.Theme.radius
                                     Rectangle {
                                         Layout.fillWidth: true
                                         Layout.minimumHeight: 50
+                                        Layout.preferredHeight: Math.max(50, moduleFlow.implicitHeight + 16)
                                         radius: Commons.Theme.radius
                                         color: dropArea.containsDrag ? 
                                                Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15) :
@@ -406,29 +468,39 @@ radius: Commons.Theme.radius
                                             Repeater {
                                                 model: Services.ConfigService.barModules[sectionName] || []
 
-                                                delegate: Loader {
-                                                    sourceComponent: moduleChipComponent
+                                                delegate: Item {
+                                                    id: chipWrapper
+                                                    property int moduleIndex: index
+                                                    width: moduleLoader.item ? moduleLoader.item.width : 0
+                                                    height: moduleLoader.item ? moduleLoader.item.height : 0
 
-                                                    property string moduleName: modelData
-                                                    property bool isDraggable: true
-                                                    property string sourceSection: sectionName
-                                                    property color chipColor: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
-                                                    property color chipBorderColor: Qt.rgba(cText.r, cText.g, cText.b, 0.2)
-                                                    property color chipTextColor: cText
+                                                    Loader {
+                                                        id: moduleLoader
+                                                        sourceComponent: moduleChipComponent
 
-                                                    onLoaded: {
-                                                        item.moduleName = moduleName
-                                                        item.isDraggable = isDraggable
-                                                        item.sourceSection = sourceSection
-                                                        item.chipColor = chipColor
-                                                        item.chipBorderColor = chipBorderColor
-                                                        item.chipTextColor = chipTextColor
+                                                        property string moduleName: modelData
+                                                        property bool isDraggable: true
+                                                        property string sourceSection: sectionName
+                                                        property int sourceIndex: index
+                                                        property color chipColor: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
+                                                        property color chipBorderColor: Qt.rgba(cText.r, cText.g, cText.b, 0.2)
+                                                        property color chipTextColor: cText
+
+                                                        onLoaded: {
+                                                            item.moduleName = moduleName
+                                                            item.isDraggable = isDraggable
+                                                            item.sourceSection = sourceSection
+                                                            item.sourceIndex = sourceIndex
+                                                            item.chipColor = chipColor
+                                                            item.chipBorderColor = chipBorderColor
+                                                            item.chipTextColor = chipTextColor
+                                                        }
                                                     }
                                                 }
                                             }
 
                                             Text {
-                                                visible: moduleFlow.children.length === 1
+                                                visible: (Services.ConfigService.barModules[sectionName] || []).length === 0
                                                 text: "Drop modules here"
                                                 font.family: Commons.Theme.fontUI
                                                 font.pixelSize: 11
@@ -452,15 +524,15 @@ radius: Commons.Theme.radius
                                                     if (parts.length >= 3) {
                                                         var moduleName = parts[1]
                                                         var sourceSection = parts[2]
+                                                        var pointerX = drop.x !== undefined ? drop.x : (drop.position ? drop.position.x : 0)
+                                                        var pointerY = drop.y !== undefined ? drop.y : (drop.position ? drop.position.y : 0)
+                                                        var flowX = pointerX - moduleFlow.x
+                                                        var flowY = pointerY - moduleFlow.y
+                                                        var sectionModules = Services.ConfigService.barModules[sectionName] || []
+                                                        var targetIndex = popupWindow.getDropInsertionIndex(moduleFlow, flowX, flowY, sectionModules.length)
                                                         console.log("[Drop] Moving module:", moduleName, "from:", sourceSection, "to:", sectionName)
-                                                        
-                                                        if (sourceSection !== "" && sourceSection !== sectionName) {
-                                                            popupWindow.removeModuleFromSection(moduleName, sourceSection)
-                                                        }
-                                                        
-                                                        if (sourceSection !== sectionName) {
-                                                            popupWindow.addModuleToSection(moduleName, sectionName)
-                                                        }
+
+                                                        popupWindow.moveModuleToSection(moduleName, sourceSection, sectionName, targetIndex)
                                                         drop.accept()
                                                     }
                                                 }

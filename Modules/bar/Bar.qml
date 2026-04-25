@@ -15,6 +15,7 @@ import "../../Modules/systemstats" as SystemStats
 import "../../Modules/systemtray" as SystemTray
 import "../../Modules/workspaces" as Workspaces
 import "../../Modules/bluetooth" as Bluetooth
+import "../../Modules/network" as Network
 import "../../Modules/mediaplayer" as MediaPlayer
 import "../../Modules/volume" as Volume
 
@@ -24,6 +25,7 @@ PanelWindow {
     signal showPowerMenu()
 
     property var bluetoothPopup
+    property var networkPopup
     property var calendarPopup
     property var mediaPopup
     property var volumePopup
@@ -68,6 +70,10 @@ PanelWindow {
         id: btPopup
     }
 
+    Network.NetworkPopup {
+        id: netPopup
+    }
+
     Volume.VolumePopup {
         id: volPopup
     }
@@ -78,6 +84,7 @@ PanelWindow {
 
     Component.onCompleted: {
         bar.bluetoothPopup = btPopup
+        bar.networkPopup = netPopup
         bar.volumePopup = volPopup
         bar.calendarPopup = calPopup
         
@@ -165,6 +172,15 @@ PanelWindow {
     }
 
     Component {
+        id: networkComponent
+        Network.Network {
+            barWindow: bar
+            networkPopup: bar.networkPopup
+            isVertical: bar.isVertical
+        }
+    }
+
+    Component {
         id: notificationsComponent
         Notifications.NotificationButton {
             notificationCenter: bar.notificationCenter
@@ -193,22 +209,23 @@ PanelWindow {
             case "systemtray": return systemTrayComponent
             case "volume": return volumeComponent
             case "bluetooth": return bluetoothComponent
+            case "network": return networkComponent
             case "notifications": return notificationsComponent
             case "power": return powerComponent
             default: return null
         }
     }
 
-    RowLayout {
+    Item {
         anchors.fill: parent
-        anchors.margins: Commons.Config.barPadding
-        spacing: 0
         visible: isHorizontal
 
         // Start section
         RowLayout {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredHeight: Commons.Config.componentHeight
+            id: leftRowH
+            anchors.left: parent.left
+            anchors.leftMargin: Commons.Config.barPadding
+            anchors.verticalCenter: parent.verticalCenter
             spacing: Commons.Config.barSpacing
 
             Repeater {
@@ -216,18 +233,16 @@ PanelWindow {
                 delegate: Loader {
                     required property string modelData
                     sourceComponent: bar.getModuleComponent(modelData)
-                    Layout.alignment: Qt.AlignVCenter
                     Layout.preferredHeight: Commons.Config.componentHeight
                 }
             }
         }
 
-        Item { Layout.fillWidth: true }
-
         // Center section
         RowLayout {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredHeight: Commons.Config.componentHeight
+            id: centerRowH
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             spacing: Commons.Config.barSpacing
 
             Repeater {
@@ -235,18 +250,16 @@ PanelWindow {
                 delegate: Loader {
                     required property string modelData
                     sourceComponent: bar.getModuleComponent(modelData)
-                    Layout.alignment: Qt.AlignVCenter
                     Layout.preferredHeight: Commons.Config.componentHeight
                 }
             }
         }
 
-        Item { Layout.fillWidth: true }
-
         // End section
         Rectangle {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredHeight: Commons.Config.componentHeight
+            anchors.right: parent.right
+            anchors.rightMargin: Commons.Config.barPadding
+            anchors.verticalCenter: parent.verticalCenter
             implicitWidth: rightRowH.implicitWidth + Commons.Theme.spacingXl
             implicitHeight: Commons.Config.componentHeight
             color: Commons.Theme.surfaceBase
@@ -270,15 +283,16 @@ PanelWindow {
         }
     }
 
-    ColumnLayout {
+    Item {
         anchors.fill: parent
-        anchors.margins: Commons.Config.barPadding
-        spacing: 0
         visible: isVertical
 
         // Start section
         ColumnLayout {
-            Layout.alignment: Qt.AlignHCenter
+            id: leftColV
+            anchors.top: parent.top
+            anchors.topMargin: Commons.Config.barPadding
+            anchors.horizontalCenter: parent.horizontalCenter
             spacing: Commons.Config.barSpacing
 
             Repeater {
@@ -291,11 +305,11 @@ PanelWindow {
             }
         }
 
-        Item { Layout.fillHeight: true }
-
         // Center section
         ColumnLayout {
-            Layout.alignment: Qt.AlignHCenter
+            id: centerColV
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             spacing: Commons.Config.barSpacing
 
             Repeater {
@@ -308,11 +322,11 @@ PanelWindow {
             }
         }
 
-        Item { Layout.fillHeight: true }
-
         // End section
         Rectangle {
-            Layout.alignment: Qt.AlignHCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: Commons.Config.barPadding
+            anchors.horizontalCenter: parent.horizontalCenter
             implicitWidth: Commons.Config.barWidth - Commons.Config.barPadding * 2
             implicitHeight: rightColV.implicitHeight + 16
             color: Commons.Theme.surfaceBase

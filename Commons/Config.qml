@@ -10,7 +10,7 @@ QtObject {
     readonly property var defaultBarModules: ({
         "left": ["shellmenu", "workspaces", "mediaplayer"],
         "center": ["systemstats"],
-        "right": ["clock", "systemtray", "volume", "bluetooth", "notifications", "power"]
+        "right": ["network", "clock", "systemtray", "volume", "bluetooth", "notifications", "power"]
     })
     
     readonly property var barModules: Services.ConfigService.initialized ? Services.ConfigService.barModules : defaultBarModules
