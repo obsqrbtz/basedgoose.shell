@@ -4,30 +4,30 @@ import QtQuick
 QtObject {
     id: theme
 
-    readonly property color background:       '#0D1520'
-    readonly property color surfaceBase:      '#131D2E'
-    readonly property color surfaceContainer: '#1A2640'
+    readonly property color background:       '#0C0C0C'
+    readonly property color surfaceBase:      '#111111'
+    readonly property color surfaceContainer: '#181818'
 
-    readonly property color border:           '#2A3554'
+    readonly property color border:           '#2A2A2A'
     readonly property color borderFocused:    Qt.lighter(primary, 1.3)
-    readonly property color surfaceBorder:    '#212F47'
+    readonly property color surfaceBorder:    '#222222'
 
-    readonly property color foreground:         '#C8D0E0'
-    readonly property color foregroundMuted:    '#5A6478'
+    readonly property color foreground:         '#C8C8C8'
+    readonly property color foregroundMuted:    '#525252'
     readonly property color surfaceText:        foreground
-    readonly property color surfaceTextVariant: '#5A6478'
+    readonly property color surfaceTextVariant: '#525252'
 
-    readonly property color primary:      '#7B6ECB'
-    readonly property color primaryMuted: '#1E1A42'
-    readonly property color secondary:    '#4D9E7C'
-    readonly property color secondaryMuted: '#142B22'
+    readonly property color primary:      '#5FAD5F'
+    readonly property color primaryMuted: '#0A190A'
+    readonly property color secondary:    '#B89A3C'
+    readonly property color secondaryMuted: '#1A150A'
     readonly property color surfaceAccent: primaryMuted
 
-    readonly property color warning: '#C49138'
-    readonly property color success: '#4D9E7C'
-    readonly property color error:   '#B8524E'
+    readonly property color warning: '#B89A3C'
+    readonly property color success: '#5FAD5F'
+    readonly property color error:   '#B85450'
 
-    readonly property string fontUI:   "Inter"
+    readonly property string fontUI:   "JetBrainsMono Nerd Font"
     readonly property string fontMono: "JetBrainsMono Nerd Font"
     readonly property string fontIcon: "JetBrainsMono Nerd Font"
 
@@ -47,10 +47,10 @@ QtObject {
     readonly property real stateLayerHover:   0.08
     readonly property real stateLayerPressed: 0.12
 
-    readonly property int radius:      4
-    readonly property int radiusSm:    2
-    readonly property int radiusLg:    12
-    readonly property int radiusPanel: 10
+    readonly property int radius:      0
+    readonly property int radiusSm:    0
+    readonly property int radiusLg:    0
+    readonly property int radiusPanel: 2
 
     readonly property int spacingXs: 4
     readonly property int spacingSm: 8

@@ -122,10 +122,9 @@ PanelWindow {
             anchors.verticalCenter: parent.verticalCenter
             width: leftRowH.implicitWidth + Commons.Config.sectionPillPadding * 2
             height: Commons.Config.componentHeight
-            color: Commons.Theme.surfaceContainer
-            radius: Commons.Theme.radiusLg
-            border.width: 1
-            border.color: Qt.rgba(Commons.Theme.border.r, Commons.Theme.border.g, Commons.Theme.border.b, 0.45)
+            color: "transparent"
+            radius: 0
+            border.width: 0
             visible: (Commons.Config.barModules.left || []).length > 0
 
             RowLayout {
@@ -150,10 +149,9 @@ PanelWindow {
             anchors.verticalCenter: parent.verticalCenter
             width: centerRowH.implicitWidth + Commons.Config.sectionPillPadding * 2
             height: Commons.Config.componentHeight
-            color: Commons.Theme.surfaceContainer
-            radius: Commons.Theme.radiusLg
-            border.width: 1
-            border.color: Qt.rgba(Commons.Theme.border.r, Commons.Theme.border.g, Commons.Theme.border.b, 0.45)
+            color: "transparent"
+            radius: 0
+            border.width: 0
             visible: (Commons.Config.barModules.center || []).length > 0
 
             RowLayout {
@@ -179,10 +177,9 @@ PanelWindow {
             anchors.verticalCenter: parent.verticalCenter
             width: rightRowH.implicitWidth + Commons.Config.sectionPillPadding * 2
             height: Commons.Config.componentHeight
-            color: Commons.Theme.surfaceContainer
-            radius: Commons.Theme.radiusLg
-            border.width: 1
-            border.color: Qt.rgba(Commons.Theme.border.r, Commons.Theme.border.g, Commons.Theme.border.b, 0.45)
+            color: "transparent"
+            radius: 0
+            border.width: 0
             visible: (Commons.Config.barModules.right || []).length > 0
 
             RowLayout {
