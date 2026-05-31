@@ -20,25 +20,29 @@ Item {
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
 
-    // Notification icon
+    Rectangle {
+        anchors.fill: parent
+        radius: Commons.Theme.radiusLg
+        color: Commons.Theme.primary
+        opacity: isHovered ? Commons.Theme.stateLayerHover : 0.0
+        Behavior on opacity { NumberAnimation { duration: Commons.Theme.animNormal } }
+    }
+
     Text {
         id: notifIcon
         anchors.centerIn: parent
         text: root.hasDnd ? "󰂛" : (root.unreadCount > 0 ? "󰵅" : "󰂚")
         font.family: Commons.Theme.fontIcon
-        font.pixelSize: 14
+        font.pixelSize: Commons.Theme.iconSize
         color: {
             if (root.hasDnd) return Commons.Theme.error
             if (root.isHovered) return Commons.Theme.secondary
             return Commons.Theme.foreground
         }
-        
-        Behavior on color { ColorAnimation { duration: 150 } }
-        scale: root.isHovered ? 1.05 : 1.0
-        Behavior on scale { NumberAnimation { duration: 100 } }
+
+        Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
     }
     
-    // dot indicator
     Rectangle {
         visible: root.unreadCount > 0 && !root.hasDnd
         width: 6
@@ -84,7 +88,7 @@ Item {
             target: notifIcon
             property: "scale"
             from: 1.15
-            to: root.isHovered ? 1.05 : 1.0
+            to: 1.0
             duration: 150
             easing.type: Easing.InQuad
         }

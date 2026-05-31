@@ -23,33 +23,34 @@ QtObject {
         console.log("[Config] barModules.left:", barModules.left)
     }
 
-    readonly property int barHeight: 48
-    readonly property int barWidth: 52
-    readonly property int barMargin: 8
+    readonly property int barHeight: 40
+    readonly property int barWidth: 48
+    readonly property int barMargin: 0
     readonly property int barPadding: 8
     readonly property int barSpacing: 6
+    readonly property int sectionPillPadding: 8
 
-    readonly property int componentHeight: 32
-    readonly property int componentPadding: 10
+    readonly property int componentHeight: 30
+    readonly property int componentPadding: 8
 
     readonly property int workspaceCount: 9
-    readonly property int workspaceIndicatorWidth: 10
-    readonly property int workspaceIndicatorActiveWidth: 32
-    readonly property int workspaceIndicatorHeight: 10
-    readonly property int workspaceIndicatorInactiveHeight: 6
-    readonly property int workspaceIndicatorRadius: 999
-    readonly property int workspaceSpacing: 8
+    readonly property int workspaceIndicatorWidth: 8
+    readonly property int workspaceIndicatorActiveWidth: 28
+    readonly property int workspaceIndicatorHeight: 8
+    readonly property int workspaceIndicatorInactiveHeight: 5
+    readonly property int workspaceIndicatorRadius: 3
+    readonly property int workspaceSpacing: 6
 
     readonly property int statsSeparatorWidth: 1
-    readonly property int statsSeparatorHeight: 14
-    readonly property real statsSeparatorOpacity: 0.3
-    readonly property int statsSpacing: 10
-    readonly property int statsLabelSpacing: 8
+    readonly property int statsSeparatorHeight: 12
+    readonly property real statsSeparatorOpacity: 0.4
+    readonly property int statsSpacing: 8
+    readonly property int statsLabelSpacing: 4
 
-    readonly property int trayIconSize: 28
-    readonly property int trayIconImageSize: 18
-    readonly property int trayIconRadius: Theme.radiusLg
-    readonly property int traySpacing: 0
+    readonly property int trayIconSize: 22
+    readonly property int trayIconImageSize: 14
+    readonly property int trayIconRadius: Theme.radiusSm
+    readonly property int traySpacing: 2
 
     readonly property string clockFormat: "HH:mm  ddd MMM dd"
     readonly property int clockUpdateInterval: 1000

@@ -63,66 +63,71 @@ PanelWindow {
     }
     
     function positionNear(moduleItem, barWindow) {
-        if (!moduleItem || !barWindow) {
-            console.log("[PopupWindow] positionNear called with invalid parameters")
+        if (!moduleItem) {
+            console.log("[PopupWindow] positionNear called with no moduleItem")
             return
         }
-        
+
         const screen = root.screen || Quickshell.screens[0]
         if (!screen) {
             console.log("[PopupWindow] No screen available")
             return
         }
-        
+
         const screenWidth = screen.width
         const screenHeight = screen.height
         const popupWidth = root.implicitWidth || 320
         const popupHeight = root.implicitHeight || 400
-        
+
         const moduleWidth = moduleItem.width || 30
         const moduleHeight = moduleItem.height || 30
-        
-        if (typeof moduleItem.mapToGlobal !== 'function') {
-            console.error("[PopupWindow] mapToGlobal not available")
-            return
-        }
-        
-        const globalPos = moduleItem.mapToGlobal(0, 0)
-        const moduleScreenX = globalPos.x
-        const moduleScreenY = globalPos.y
-        
-        console.log("[PopupWindow] barPosition:", barPosition, "moduleScreenPos:", moduleScreenX, moduleScreenY, "screenSize:", screenWidth, screenHeight)
-        
+
+        const scenePos = moduleItem.mapToItem(null, 0, 0)
+        const moduleX = scenePos.x
+        const moduleY = scenePos.y
+
         var targetX = 0
         var targetY = 0
-        
+
         if (barPosition === "top" || barPosition === "bottom") {
-            targetX = moduleScreenX + moduleWidth / 2 - popupWidth / 2
-            targetX = Math.max(Commons.Config.popupMargin, Math.min(screenWidth - popupWidth - Commons.Config.popupMargin, targetX))
-            
-            if (barPosition === "top") {
-                targetY = barOffset
+            const moduleCenterX = moduleX + moduleWidth / 2
+            const margin = Commons.Config.popupMargin
+
+            if (moduleCenterX > screenWidth * 2 / 3) {
+                targetX = moduleX + moduleWidth - popupWidth
+            } else if (moduleCenterX < screenWidth / 3) {
+                targetX = moduleX
             } else {
-                targetY = screenHeight - popupHeight - barOffset
+                targetX = moduleCenterX - popupWidth / 2
             }
-            console.log("[PopupWindow] Horizontal bar - targetX:", targetX, "targetY:", targetY)
+
+            targetX = Math.max(margin, Math.min(screenWidth - popupWidth - margin, targetX))
+
+            targetY = barPosition === "top"
+                ? barOffset
+                : screenHeight - popupHeight - barOffset
+
         } else {
-            targetY = moduleScreenY + moduleHeight / 2 - popupHeight / 2
-            console.log("[PopupWindow] Vertical bar - before clamp targetY:", targetY)
-            targetY = Math.max(Commons.Config.popupMargin, Math.min(screenHeight - popupHeight - Commons.Config.popupMargin, targetY))
-            console.log("[PopupWindow] Vertical bar - after clamp targetY:", targetY)
-            
-            if (barPosition === "left") {
-                targetX = barOffset
+            const moduleCenterY = moduleY + moduleHeight / 2
+            const margin = Commons.Config.popupMargin
+
+            if (moduleCenterY > screenHeight * 2 / 3) {
+                targetY = moduleY + moduleHeight - popupHeight
+            } else if (moduleCenterY < screenHeight / 3) {
+                targetY = moduleY
             } else {
-                targetX = screenWidth - popupWidth - barOffset
+                targetY = moduleCenterY - popupHeight / 2
             }
-            console.log("[PopupWindow] Vertical bar - targetX:", targetX, "targetY:", targetY)
+
+            targetY = Math.max(margin, Math.min(screenHeight - popupHeight - margin, targetY))
+
+            targetX = barPosition === "left"
+                ? barOffset
+                : screenWidth - popupWidth - barOffset
         }
-        
+
         relativeX = targetX
         relativeY = targetY
-        console.log("[PopupWindow] Final relativeX:", relativeX, "relativeY:", relativeY)
     }
     
     default property alias content: contentContainer.children

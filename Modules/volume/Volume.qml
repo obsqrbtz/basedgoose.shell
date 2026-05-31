@@ -22,13 +22,20 @@ Item {
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
 
-    // Horizontal layout
+    Rectangle {
+        anchors.fill: parent
+        radius: Commons.Theme.radiusLg
+        color: Commons.Theme.primary
+        opacity: isHovered ? Commons.Theme.stateLayerHover : 0.0
+        Behavior on opacity { NumberAnimation { duration: Commons.Theme.animNormal } }
+    }
+
     RowLayout {
         id: volumeRow
         anchors.centerIn: parent
-        spacing: 3
+        spacing: Commons.Theme.spacingXs
         visible: !isVertical
-        
+
         Text {
             id: volumeIcon
             text: {
@@ -38,33 +45,30 @@ Item {
                 return "󰕿"
             }
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
-            color: isMuted ? Commons.Theme.foreground : (isHovered ? Commons.Theme.secondary : Commons.Theme.foreground)
-            
-            Behavior on color { ColorAnimation { duration: 150 } }
-            scale: isHovered ? 1.05 : 1.0
-            Behavior on scale { NumberAnimation { duration: 100 } }
+            font.pixelSize: Commons.Theme.iconSize
+            color: isMuted ? Commons.Theme.foregroundMuted : (isHovered ? Commons.Theme.secondary : Commons.Theme.foreground)
+
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
-        
+
         Text {
             id: volumeText
-            text: percentage
+            text: percentage + "%"
             font.family: Commons.Theme.fontMono
-            font.pixelSize: 10
+            font.pixelSize: Commons.Theme.fontSizeCaption
             font.weight: Font.Medium
             color: isMuted ? Commons.Theme.foregroundMuted : Commons.Theme.foreground
-            
-            Behavior on color { ColorAnimation { duration: 150 } }
+
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
     }
-    
-    // Vertical layout
+
     Column {
         id: volumeCol
         anchors.centerIn: parent
         spacing: 2
         visible: isVertical
-        
+
         Text {
             id: volumeIconV
             anchors.horizontalCenter: parent.horizontalCenter
@@ -75,19 +79,17 @@ Item {
                 return "󰕿"
             }
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
-            color: isMuted ? Commons.Theme.foreground : (isHovered ? Commons.Theme.secondary : Commons.Theme.foreground)
-            
-            Behavior on color { ColorAnimation { duration: 150 } }
-            scale: isHovered ? 1.05 : 1.0
-            Behavior on scale { NumberAnimation { duration: 100 } }
+            font.pixelSize: Commons.Theme.iconSize
+            color: isMuted ? Commons.Theme.foregroundMuted : (isHovered ? Commons.Theme.secondary : Commons.Theme.foreground)
+
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
-        
+
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: percentage
+            text: percentage + "%"
             font.family: Commons.Theme.fontMono
-            font.pixelSize: 9
+            font.pixelSize: Commons.Theme.fontSizeTiny
             font.weight: Font.Medium
             color: isMuted ? Commons.Theme.foregroundMuted : Commons.Theme.foreground
         }
@@ -96,7 +98,6 @@ Item {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        anchors.margins: -4
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         
@@ -127,7 +128,7 @@ Item {
     
     SequentialAnimation {
         id: pulseAnim
-        
+
         NumberAnimation {
             target: isVertical ? volumeIconV : volumeIcon
             property: "scale"
@@ -137,7 +138,7 @@ Item {
         NumberAnimation {
             target: isVertical ? volumeIconV : volumeIcon
             property: "scale"
-            to: isHovered ? 1.05 : 1.0
+            to: 1.0
             duration: 120
         }
     }

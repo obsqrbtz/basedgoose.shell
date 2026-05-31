@@ -7,7 +7,7 @@ Rectangle {
     property bool checked: false
     property color checkedColor: Commons.Theme.primary
     property color uncheckedColor: Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.15)
-    property color thumbColor: "#ffffff"
+    property color thumbColor: Commons.Theme.colorWhite
     property string icon: ""
     property color iconColor: Commons.Theme.primary
     property int animationDuration: 200
@@ -48,7 +48,7 @@ Rectangle {
             anchors.centerIn: parent
             text: root.icon || ""
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
+            font.pixelSize: Commons.Theme.iconSize
             color: root.iconColor
             visible: root.icon.length > 0
         }

@@ -90,7 +90,6 @@ Widgets.PopupWindow {
                         checked: adapter?.enabled ?? false
                         checkedColor: cPrimary
                         uncheckedColor: Qt.rgba(cText.r, cText.g, cText.b, 0.15)
-                        thumbColor: "#ffffff"
                         animationDuration: 150
                         onToggled: if (adapter) adapter.enabled = !adapter.enabled
                     }

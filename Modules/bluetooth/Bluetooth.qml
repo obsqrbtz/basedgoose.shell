@@ -22,13 +22,20 @@ Item {
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
 
-    // Horizontal layout
+    Rectangle {
+        anchors.fill: parent
+        radius: Commons.Theme.radiusLg
+        color: Commons.Theme.primary
+        opacity: isHovered ? Commons.Theme.stateLayerHover : 0.0
+        Behavior on opacity { NumberAnimation { duration: Commons.Theme.animNormal } }
+    }
+
     RowLayout {
         id: bluetoothRow
         anchors.centerIn: parent
-        spacing: 3
+        spacing: Commons.Theme.spacingXs
         visible: !isVertical
-        
+
         Text {
             text: {
                 if (!isEnabled) return "󰂲"
@@ -36,18 +43,16 @@ Item {
                 return "󰂯"
             }
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
+            font.pixelSize: Commons.Theme.iconSize
             color: {
-                if (!isEnabled) return Commons.Theme.foreground
+                if (!isEnabled) return Commons.Theme.foregroundMuted
                 if (isHovered) return Commons.Theme.secondary
                 if (hasConnection) return Commons.Theme.success
                 return Commons.Theme.foreground
             }
-            Behavior on color { ColorAnimation { duration: 150 } }
-            scale: isHovered ? 1.05 : 1.0
-            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
-        
+
         Text {
             text: {
                 if (!isEnabled) return "Off"
@@ -55,26 +60,25 @@ Item {
                 if (deviceCount > 1) return deviceName + " +" + (deviceCount - 1)
                 return deviceName
             }
-            font.family: Commons.Theme.fontUI
-            font.pixelSize: 10
+            font.family: Commons.Theme.fontMono
+            font.pixelSize: Commons.Theme.fontSizeCaption
             font.weight: hasConnection ? Font.Medium : Font.Normal
             color: {
-                if (!isEnabled || !hasConnection) return Commons.Theme.foreground
+                if (!isEnabled || !hasConnection) return Commons.Theme.foregroundMuted
                 if (isHovered) return Commons.Theme.primary
                 return Commons.Theme.foreground
             }
             visible: text !== ""
-            Behavior on color { ColorAnimation { duration: 150 } }
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
     }
-    
-    // Vertical layout
+
     Column {
         id: bluetoothCol
         anchors.centerIn: parent
         spacing: 2
         visible: isVertical
-        
+
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: {
@@ -83,18 +87,16 @@ Item {
                 return "󰂯"
             }
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
+            font.pixelSize: Commons.Theme.iconSize
             color: {
-                if (!isEnabled) return Commons.Theme.foreground
+                if (!isEnabled) return Commons.Theme.foregroundMuted
                 if (isHovered) return Commons.Theme.secondary
                 if (hasConnection) return Commons.Theme.success
                 return Commons.Theme.foreground
             }
-            Behavior on color { ColorAnimation { duration: 150 } }
-            scale: isHovered ? 1.05 : 1.0
-            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
-        
+
         Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 4

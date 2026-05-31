@@ -1,5 +1,6 @@
 module Bar
 Bar 1.0 Bar.qml
+ModuleRegistry 1.0 ModuleRegistry.qml
 
 
 

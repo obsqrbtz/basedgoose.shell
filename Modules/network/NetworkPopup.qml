@@ -94,7 +94,6 @@ Widgets.PopupWindow {
                     checked: wifiEnabled
                     checkedColor: cPrimary
                     uncheckedColor: Qt.rgba(cText.r, cText.g, cText.b, 0.15)
-                    thumbColor: "#ffffff"
                     animationDuration: 150
                     onToggled: Services.Network.setWifiEnabled(!wifiEnabled)
                 }

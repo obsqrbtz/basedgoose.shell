@@ -40,37 +40,44 @@ Item {
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
 
+    Rectangle {
+        anchors.fill: parent
+        radius: Commons.Theme.radiusLg
+        color: Commons.Theme.primary
+        opacity: isHovered ? Commons.Theme.stateLayerHover : 0.0
+        Behavior on opacity { NumberAnimation { duration: Commons.Theme.animNormal } }
+    }
+
     RowLayout {
         id: networkRow
         anchors.centerIn: parent
-        spacing: 3
+        spacing: Commons.Theme.spacingXs
         visible: !isVertical
 
         Text {
             text: root.signalIcon()
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
+            font.pixelSize: Commons.Theme.iconSize
             color: {
                 if (!wifiEnabled && !ethernetConnected) return Commons.Theme.foregroundMuted
                 if (connected && isHovered) return Commons.Theme.secondary
                 if (connected) return Commons.Theme.success
                 return Commons.Theme.foreground
             }
-            Behavior on color { ColorAnimation { duration: 150 } }
-            scale: isHovered ? 1.05 : 1.0
-            Behavior on scale { NumberAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
 
         Text {
             text: statusText
-            font.family: Commons.Theme.fontUI
-            font.pixelSize: 10
+            font.family: Commons.Theme.fontMono
+            font.pixelSize: Commons.Theme.fontSizeCaption
+            font.weight: Font.Medium
             color: connected || wifiEnabled || ethernetAvailable ? Commons.Theme.foreground : Commons.Theme.foregroundMuted
             visible: text !== ""
             elide: Text.ElideRight
             maximumLineCount: 1
             Layout.maximumWidth: 120
-            Behavior on color { ColorAnimation { duration: 150 } }
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
     }
 
@@ -84,14 +91,14 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             text: root.signalIcon()
             font.family: Commons.Theme.fontIcon
-            font.pixelSize: 14
+            font.pixelSize: Commons.Theme.iconSize
             color: {
                 if (!wifiEnabled && !ethernetConnected) return Commons.Theme.foregroundMuted
                 if (connected && isHovered) return Commons.Theme.secondary
                 if (connected) return Commons.Theme.success
                 return Commons.Theme.foreground
             }
-            Behavior on color { ColorAnimation { duration: 150 } }
+            Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
 
         Rectangle {

@@ -12,15 +12,12 @@ Rectangle {
     property var barWindow
     property bool isVertical: false
     
-    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : (statsRowH.implicitWidth + 20)
-    implicitHeight: isVertical ? (statsColV.implicitHeight + 16) : Commons.Config.componentHeight
+    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : statsRowH.implicitWidth
+    implicitHeight: isVertical ? statsColV.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
-    color: Commons.Theme.surfaceBase
-    radius: Commons.Theme.radiusPanel
-    clip: true
+    color: "transparent"
     
-    // Horizontal layout
     RowLayout {
         id: statsRowH
         anchors.centerIn: parent
@@ -65,31 +62,30 @@ Rectangle {
         }
     }
     
-    // Vertical layout
     ColumnLayout {
         id: statsColV
         anchors.centerIn: parent
-        spacing: 8
+        spacing: Commons.Config.statsSpacing
         visible: isVertical
-        
+
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
             spacing: 2
-            
+
             Text {
                 Layout.alignment: Qt.AlignHCenter
                 text: "\uf4bc"
                 color: Commons.Theme.primary
-                font { family: Commons.Theme.fontMono; pixelSize: 14; weight: Font.DemiBold }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.iconSize; weight: Font.DemiBold }
             }
             Text {
                 Layout.alignment: Qt.AlignHCenter
                 text: systemStats.cpuUsage + "%"
                 color: Commons.Theme.foreground
-                font { family: Commons.Theme.fontMono; pixelSize: 9; weight: Font.Medium }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSizeCaption; weight: Font.Medium }
             }
         }
-        
+
         Rectangle {
             Layout.alignment: Qt.AlignHCenter
             width: 16
@@ -97,22 +93,22 @@ Rectangle {
             color: Commons.Theme.foregroundMuted
             opacity: Commons.Config.statsSeparatorOpacity
         }
-        
+
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
             spacing: 2
-            
+
             Text {
                 Layout.alignment: Qt.AlignHCenter
                 text: "\uefc5"
                 color: Commons.Theme.primary
-                font { family: Commons.Theme.fontMono; pixelSize: 14; weight: Font.DemiBold }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.iconSize; weight: Font.DemiBold }
             }
             Text {
                 Layout.alignment: Qt.AlignHCenter
                 text: systemStats.memUsed.toFixed(1) + "G"
                 color: Commons.Theme.foreground
-                font { family: Commons.Theme.fontMono; pixelSize: 9; weight: Font.Medium }
+                font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSizeCaption; weight: Font.Medium }
             }
         }
     }

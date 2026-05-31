@@ -19,7 +19,6 @@ Item {
 
     visible: SystemTray.items.values.length > 0
     
-    // Horizontal layout
     RowLayout {
         id: trayRowH
         anchors.centerIn: parent
@@ -32,7 +31,7 @@ Item {
             Rectangle {
                 width: Commons.Config.trayIconSize
                 height: Commons.Config.trayIconSize
-                color: trayMaH.containsMouse ? Commons.Theme.background : "transparent"
+                color: trayMaH.containsMouse ? Commons.Theme.surfaceContainer : "transparent"
                 radius: Commons.Config.trayIconRadius
                 
                 Image {
@@ -81,7 +80,6 @@ Item {
         }
     }
     
-    // Vertical layout
     ColumnLayout {
         id: trayColV
         anchors.centerIn: parent
@@ -94,7 +92,7 @@ Item {
             Rectangle {
                 width: Commons.Config.trayIconSize
                 height: Commons.Config.trayIconSize
-                color: trayMaV.containsMouse ? Commons.Theme.background : "transparent"
+                color: trayMaV.containsMouse ? Commons.Theme.surfaceContainer : "transparent"
                 radius: Commons.Config.trayIconRadius
                 
                 Image {
