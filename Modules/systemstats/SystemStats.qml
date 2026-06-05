@@ -10,13 +10,36 @@ Rectangle {
     property real memUsed: 0
     property real memTotal: 0
     property var barWindow
+    property var statsPopup: null
     property bool isVertical: false
-    
+
     implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : statsRowH.implicitWidth
     implicitHeight: isVertical ? statsColV.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
     color: "transparent"
+
+    Rectangle {
+        anchors.fill: parent
+        radius: Commons.Theme.radiusLg
+        color: Commons.Theme.primary
+        opacity: statsMa.containsMouse ? Commons.Theme.stateLayerHover : 0.0
+        Behavior on opacity { NumberAnimation { duration: Commons.Theme.animNormal } }
+    }
+
+    MouseArea {
+        id: statsMa
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            if (statsPopup && barWindow) {
+                if (!statsPopup.shouldShow)
+                    statsPopup.positionNear(systemStats, barWindow)
+                statsPopup.shouldShow = !statsPopup.shouldShow
+            }
+        }
+    }
     
     RowLayout {
         id: statsRowH

@@ -22,6 +22,9 @@ Singleton {
         "center": ["systemstats"],
         "right": ["clock", "systemtray", "volume", "network", "bluetooth", "notifications", "power"]
     })
+
+    // Monitor servers: [{name, host, port}]
+    property var monitorServers: []
     
     Component.onCompleted: {
         loadConfig()
@@ -75,8 +78,11 @@ Singleton {
                     if (config.barModules) {
                         root.barModules = config.barModules
                     }
+                    if (config.monitorServers) {
+                        root.monitorServers = config.monitorServers
+                    }
                     // Save config if any defaults are missing
-                    if (!config.wallpaperDirectory || !config.wallpaperDownloadDirectory || !config.wallpaperResizeMode || 
+                    if (!config.wallpaperDirectory || !config.wallpaperDownloadDirectory || !config.wallpaperResizeMode ||
                         !config.hyprlandMonitorsConfigPath || !config.barPosition || !config.barModules) {
                         root.saveConfig()
                     }
@@ -100,7 +106,8 @@ Singleton {
             wallpaperResizeMode: root.wallpaperResizeMode,
             hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath,
             barPosition: root.barPosition,
-            barModules: root.barModules
+            barModules: root.barModules,
+            monitorServers: root.monitorServers
         }
         
         var configJson = JSON.stringify(config, null, 2)
@@ -146,6 +153,11 @@ Singleton {
     
     function setBarModules(modules) {
         root.barModules = modules
+        root.saveConfig()
+    }
+
+    function setMonitorServers(servers) {
+        root.monitorServers = servers
         root.saveConfig()
     }
 }

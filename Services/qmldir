@@ -1,5 +1,8 @@
 CpuMonitor 1.0 CpuMonitor.qml
 MemoryMonitor 1.0 MemoryMonitor.qml
+NetworkMonitor 1.0 NetworkMonitor.qml
+DriveMonitor 1.0 DriveMonitor.qml
+PrometheusClient 1.0 PrometheusClient.qml
 DisplayManagerService 1.0 DisplayManagerService.qml
 
 singleton Audio 1.0 Audio.qml

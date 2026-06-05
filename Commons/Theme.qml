@@ -23,6 +23,8 @@ QtObject {
     readonly property color secondaryMuted: '#1A150A'
     readonly property color surfaceAccent: primaryMuted
 
+    readonly property color info: '#7AA2F7'
+
     readonly property color warning: '#B89A3C'
     readonly property color success: '#5FAD5F'
     readonly property color error:   '#B85450'

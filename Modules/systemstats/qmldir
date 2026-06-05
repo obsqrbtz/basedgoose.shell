@@ -1,3 +1,5 @@
 module SystemStats
 SystemStats 1.0 SystemStats.qml
+MonitorPopup 1.0 MonitorPopup.qml
+StatsPanel 1.0 StatsPanel.qml
 

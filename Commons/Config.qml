@@ -63,6 +63,7 @@ QtObject {
 
     readonly property int cpuUpdateInterval: 3000
     readonly property int memoryUpdateInterval: 3000
+    readonly property int driveUpdateInterval: 3000
 
     readonly property string wallpaperDirectory: Services.ConfigService.initialized ? Services.ConfigService.wallpaperDirectory : "~/Pictures/walls"
     readonly property string wallpaperDownloadDirectory: Services.ConfigService.initialized ? Services.ConfigService.wallpaperDownloadDirectory : "~/Pictures/walls/downloaded"

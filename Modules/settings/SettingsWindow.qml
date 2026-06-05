@@ -550,6 +550,251 @@ radius: Commons.Theme.radius
                                 }
                             }
                         }
+
+                        // ── Monitoring Servers ──────────────────────────────
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+
+                            Widgets.SectionLabel {
+                                Layout.fillWidth: true
+                                text: "Monitoring Servers"
+                                color: cText
+                            }
+
+                            Text {
+                                Layout.fillWidth: true
+                                text: "Add Prometheus servers to monitor in the system stats popup"
+                                font.family: Commons.Theme.fontUI
+                                font.pixelSize: 12
+                                color: cSubText
+                                wrapMode: Text.WordWrap
+                            }
+
+                            // Existing server list
+                            Repeater {
+                                model: Services.ConfigService.monitorServers || []
+                                delegate: Rectangle {
+                                    required property var modelData
+                                    required property int index
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 44
+                                    radius: Commons.Theme.radius
+                                    color: Qt.rgba(cText.r, cText.g, cText.b, 0.03)
+                                    border.color: Qt.rgba(cText.r, cText.g, cText.b, 0.1)
+                                    border.width: 1
+
+                                    RowLayout {
+                                        anchors {
+                                            left: parent.left; leftMargin: 12
+                                            right: parent.right; rightMargin: 8
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        spacing: 8
+
+                                        Text {
+                                            text: modelData.name || ("Server " + (index + 1))
+                                            font.family: Commons.Theme.fontUI
+                                            font.pixelSize: 13
+                                            font.weight: Font.Medium
+                                            color: cText
+                                        }
+
+                                        Text {
+                                            text: modelData.host + ":" + (modelData.port || "9091")
+                                            font.family: Commons.Theme.fontMono
+                                            font.pixelSize: 11
+                                            color: cSubText
+                                            Layout.fillWidth: true
+                                        }
+
+                                        Rectangle {
+                                            width: 28; height: 28
+                                            radius: Commons.Theme.radiusSm
+                                            color: delMa.containsMouse ? Qt.rgba(Commons.Theme.error.r, Commons.Theme.error.g, Commons.Theme.error.b, 0.15) : "transparent"
+                                            border.color: delMa.containsMouse ? Commons.Theme.error : Qt.rgba(cText.r, cText.g, cText.b, 0.1)
+                                            border.width: 1
+                                            Behavior on color { ColorAnimation { duration: 100 } }
+
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: ""
+                                                font.family: Commons.Theme.fontIcon
+                                                font.pixelSize: 12
+                                                color: delMa.containsMouse ? Commons.Theme.error : cSubText
+                                                Behavior on color { ColorAnimation { duration: 100 } }
+                                            }
+
+                                            MouseArea {
+                                                id: delMa
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+                                                cursorShape: Qt.PointingHandCursor
+                                                onClicked: {
+                                                    var servers = (Services.ConfigService.monitorServers || []).slice()
+                                                    servers.splice(index, 1)
+                                                    Services.ConfigService.setMonitorServers(servers)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Empty state
+                            Text {
+                                Layout.fillWidth: true
+                                visible: (Services.ConfigService.monitorServers || []).length === 0
+                                text: "No servers configured"
+                                font.family: Commons.Theme.fontUI
+                                font.pixelSize: 12
+                                color: cSubText
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            // Add server form
+                            Rectangle {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: addFormCol.implicitHeight + 20
+                                radius: Commons.Theme.radius
+                                color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.05)
+                                border.color: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                                border.width: 1
+
+                                ColumnLayout {
+                                    id: addFormCol
+                                    anchors {
+                                        left: parent.left; right: parent.right
+                                        top: parent.top; margins: 10
+                                    }
+                                    spacing: 8
+
+                                    Text {
+                                        text: "Add Server"
+                                        font.family: Commons.Theme.fontUI
+                                        font.pixelSize: 12
+                                        font.weight: Font.DemiBold
+                                        color: cText
+                                    }
+
+                                    // Name field
+                                    Rectangle {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 34
+                                        radius: Commons.Theme.radius
+                                        color: Qt.rgba(cText.r, cText.g, cText.b, 0.04)
+                                        border.color: nameInput.activeFocus ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.12)
+                                        border.width: 1
+                                        Behavior on border.color { ColorAnimation { duration: 100 } }
+
+                                        TextInput {
+                                            id: nameInput
+                                            anchors { fill: parent; margins: 8 }
+                                            color: cText
+                                            font { family: Commons.Theme.fontUI; pixelSize: 12 }
+                                            selectByMouse: true
+                                            clip: true
+
+                                            Text {
+                                                anchors.fill: parent
+                                                text: "Name  (e.g. home-server)"
+                                                color: cSubText
+                                                font: nameInput.font
+                                                visible: !nameInput.text && !nameInput.activeFocus
+                                            }
+                                        }
+                                    }
+
+                                    // Host + Port row
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 8
+
+                                        Rectangle {
+                                            Layout.fillWidth: true
+                                            Layout.preferredHeight: 34
+                                            radius: Commons.Theme.radius
+                                            color: Qt.rgba(cText.r, cText.g, cText.b, 0.04)
+                                            border.color: hostInput.activeFocus ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.12)
+                                            border.width: 1
+                                            Behavior on border.color { ColorAnimation { duration: 100 } }
+
+                                            TextInput {
+                                                id: hostInput
+                                                anchors { fill: parent; margins: 8 }
+                                                color: cText
+                                                font { family: Commons.Theme.fontMono; pixelSize: 12 }
+                                                selectByMouse: true
+                                                clip: true
+
+                                                Text {
+                                                    anchors.fill: parent
+                                                    text: "192.168.1.x or hostname"
+                                                    color: cSubText
+                                                    font: hostInput.font
+                                                    visible: !hostInput.text && !hostInput.activeFocus
+                                                }
+                                            }
+                                        }
+
+                                        Rectangle {
+                                            Layout.preferredWidth: 80
+                                            Layout.preferredHeight: 34
+                                            radius: Commons.Theme.radius
+                                            color: Qt.rgba(cText.r, cText.g, cText.b, 0.04)
+                                            border.color: portInput.activeFocus ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.12)
+                                            border.width: 1
+                                            Behavior on border.color { ColorAnimation { duration: 100 } }
+
+                                            TextInput {
+                                                id: portInput
+                                                anchors { fill: parent; margins: 8 }
+                                                color: cText
+                                                font { family: Commons.Theme.fontMono; pixelSize: 12 }
+                                                selectByMouse: true
+                                                clip: true
+                                                inputMethodHints: Qt.ImhDigitsOnly
+
+                                                Text {
+                                                    anchors.fill: parent
+                                                    text: "9091"
+                                                    color: cSubText
+                                                    font: portInput.font
+                                                    visible: !portInput.text && !portInput.activeFocus
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Widgets.TextButton {
+                                        Layout.preferredWidth: 90
+                                        Layout.preferredHeight: 32
+                                        text: "Add"
+                                        baseColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                                        hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.25)
+                                        textColor: cText
+                                        borderColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.3)
+                                        enabled: hostInput.text.trim().length > 0
+                                        opacity: enabled ? 1.0 : 0.4
+
+                                        onClicked: {
+                                            var host = hostInput.text.trim()
+                                            if (!host) return
+                                            var servers = (Services.ConfigService.monitorServers || []).slice()
+                                            servers.push({
+                                                name: nameInput.text.trim() || host,
+                                                host: host,
+                                                port: portInput.text.trim() || "9091"
+                                            })
+                                            Services.ConfigService.setMonitorServers(servers)
+                                            nameInput.text = ""
+                                            hostInput.text = ""
+                                            portInput.text = ""
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

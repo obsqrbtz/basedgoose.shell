@@ -9,6 +9,8 @@ Item {
     property int cpuUsage: 0
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
+    property var history: []
+    readonly property int maxHistory: 60
     
     Process {
         id: cpuProc
@@ -34,6 +36,12 @@ Item {
                 
                 cpuMonitor.lastCpuIdle = idle;
                 cpuMonitor.lastCpuTotal = total;
+
+                var h = cpuMonitor.history.slice();
+                h.push(cpuMonitor.cpuUsage);
+                if (h.length > cpuMonitor.maxHistory) h.shift();
+                cpuMonitor.history = h;
+
                 cpuTimer.start();
             }
         }

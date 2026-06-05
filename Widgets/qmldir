@@ -1,5 +1,6 @@
 module Widgets
 PopupWindow 1.0 PopupWindow.qml
+SparkGraph 1.0 SparkGraph.qml
 IconButton 1.0 IconButton.qml
 ToggleSwitch 1.0 ToggleSwitch.qml
 EmptyState 1.0 EmptyState.qml

@@ -9,6 +9,7 @@ import "../bluetooth" as Bluetooth
 import "../network" as Network
 import "../volume" as Volume
 import "../clock" as Clock
+import "../systemstats" as SystemStats
 
 PanelWindow {
     id: bar
@@ -28,8 +29,25 @@ PanelWindow {
 
     readonly property var volumePopup: volPopup
 
-    Services.CpuMonitor    { id: cpuMonitor }
-    Services.MemoryMonitor { id: memoryMonitor }
+    Services.CpuMonitor     { id: cpuMonitor }
+    Services.MemoryMonitor  { id: memoryMonitor }
+    Services.NetworkMonitor { id: networkMonitor }
+    Services.DriveMonitor   { id: driveMonitor }
+
+    SystemStats.MonitorPopup {
+        id: statsPopup
+        cpuUsage:     cpuMonitor.cpuUsage
+        cpuHistory:   cpuMonitor.history
+        memUsage:     memoryMonitor.memUsage
+        memUsed:      memoryMonitor.memUsed
+        memTotal:     memoryMonitor.memTotal
+        memHistory:   memoryMonitor.history
+        netRxSpeed:   networkMonitor.rxSpeed
+        netTxSpeed:   networkMonitor.txSpeed
+        netRxHistory: networkMonitor.rxHistory
+        netTxHistory: networkMonitor.txHistory
+        drives:       driveMonitor.drives
+    }
 
     readonly property string barPosition: Commons.Config.barPosition
     readonly property bool isHorizontal: barPosition === "top" || barPosition === "bottom"
@@ -50,6 +68,7 @@ PanelWindow {
         networkPopup:       netPopup
         volumePopup:        volPopup
         calendarPopup:      calPopup
+        statsPopup:         statsPopup
     }
 
     anchors.top:    barPosition === "top"    || barPosition === "left" || barPosition === "right"

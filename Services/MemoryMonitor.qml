@@ -9,6 +9,8 @@ Item {
     property int memUsage: 0
     property real memTotal: 0.0
     property real memUsed: 0.0
+    property var history: []
+    readonly property int maxHistory: 60
     
     Process {
         id: memProc
@@ -23,6 +25,12 @@ Item {
                 memoryMonitor.memTotal = parseFloat(line[1]) / 1024;
                 memoryMonitor.memUsed = parseFloat(line[2]) / 1024;
                 memoryMonitor.memUsage = Math.round(100 * memoryMonitor.memUsed / memoryMonitor.memTotal);
+
+                var h = memoryMonitor.history.slice();
+                h.push(memoryMonitor.memUsage);
+                if (h.length > memoryMonitor.maxHistory) h.shift();
+                memoryMonitor.history = h;
+
                 memTimer.start();
             }
         }

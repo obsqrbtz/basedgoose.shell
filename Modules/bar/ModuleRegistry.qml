@@ -30,6 +30,7 @@ QtObject {
     property var networkPopup
     property var volumePopup
     property var calendarPopup
+    property var statsPopup
 
     property Component shellMenuComp: Component {
         ShellMenu.ShellMenuButton {
@@ -67,6 +68,7 @@ QtObject {
             memUsed:    registry.memUsed
             memTotal:   registry.memTotal
             barWindow:  registry.barWindow
+            statsPopup: registry.statsPopup
             isVertical: registry.isVertical
         }
     }
