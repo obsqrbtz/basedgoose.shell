@@ -104,7 +104,7 @@ Widgets.PopupWindow {
                 hoverColor: cHover
                 onClicked: {
                     powerMenu.shouldShow = false
-                    processComponent.createObject(powerMenu, { cmd: ["hyprctl", "dispatch", "exit"] })
+                    processComponent.createObject(powerMenu, { cmd: ["hyprshutdown"] })
                 }
             }
         }

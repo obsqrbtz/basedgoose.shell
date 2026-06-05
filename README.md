@@ -32,6 +32,8 @@ Quickshell setup for Hyprland
    - `curl`
    - `imagemagick`
    - `fd`
+   - `nmcli`
+   - `hyprshutdown`
 
 2. Clone this repository to your Quickshell config directory:
    ```bash
