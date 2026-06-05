@@ -77,12 +77,13 @@ Widgets.PopupWindow {
         Process {
             id: appListProc
             running: true
-            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do exec_line=$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g'); exec_name=$(echo \"$exec_line\" | awk '{print $1}' | xargs basename); desktop_id=$(basename \"$f\"); echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_line|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_name|||$desktop_id\"; done"]
+            command: ["sh", "-c", "find /usr/share/applications ~/.local/share/applications -name '*.desktop' 2>/dev/null | while read f; do grep -q '^NoDisplay=true' \"$f\" && continue; exec_line=$(grep '^Exec=' \"$f\" | cut -d'=' -f2- | head -1 | sed 's/%[uUfF]//g' | sed 's/  */ /g'); exec_name=$(echo \"$exec_line\" | awk '{print $1}' | xargs basename); desktop_id=$(basename \"$f\"); echo \"$(grep '^Name=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_line|||$(grep '^Icon=' \"$f\" | cut -d'=' -f2 | head -1)|||$exec_name|||$desktop_id\"; done"]
             stdout: StdioCollector {
                 onStreamFinished: {
                     var output = text.trim();
                     var lines = output.split('\n');
-                    appModel.clear();
+                    var seen = {};
+                    var noId = [];
                     for (var i = 0; i < lines.length; i++) {
                         var parts = lines[i].split('|||');
                         if (parts.length >= 2 && parts[0] && parts[1]) {
@@ -92,15 +93,22 @@ Widgets.PopupWindow {
                             var execName = parts.length >= 4 ? parts[3].trim() : "";
                             var desktopId = parts.length >= 5 ? parts[4].trim() : "";
                             if (execStr.length > 0) {
-                                appModel.append({
-                                    name: name,
-                                    exec: execStr,
-                                    icon: iconStr,
-                                    execName: execName,
-                                    id: desktopId
-                                });
+                                var entry = { name: name, exec: execStr, icon: iconStr, execName: execName, id: desktopId };
+                                if (desktopId) {
+                                    seen[desktopId] = entry; // later entry (local) overwrites system
+                                } else {
+                                    noId.push(entry);
+                                }
                             }
                         }
+                    }
+                    appModel.clear();
+                    var keys = Object.keys(seen);
+                    for (var j = 0; j < keys.length; j++) {
+                        appModel.append(seen[keys[j]]);
+                    }
+                    for (var k = 0; k < noId.length; k++) {
+                        appModel.append(noId[k]);
                     }
                     filterApps();
                 }
@@ -263,21 +271,28 @@ Widgets.PopupWindow {
                     border.color: appList.currentIndex === index ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.3) : cBorder
                     
                     RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: 12
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+                            leftMargin: 12
+                            rightMargin: 12
+                        }
                         spacing: 12
-                        
+
                         Widgets.AppIcon {
                             Layout.preferredWidth: 28
                             Layout.preferredHeight: 28
+                            Layout.alignment: Qt.AlignVCenter
                             size: 28
                             iconSize: 18
                             iconSource: icon || ""
                             fallbackIcon: "󰀻"
                         }
-                        
+
                         ColumnLayout {
                             Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignVCenter
                             spacing: 2
                             
                             Text {
