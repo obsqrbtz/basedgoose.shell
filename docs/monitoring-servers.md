@@ -60,7 +60,7 @@ Add:
 ExecStart=
 ExecStart=/usr/bin/prometheus \
   --config.file=/etc/prometheus/prometheus.yml \
-  --web.listen-address=:9091
+  --web.listen-address=:9090
 ```
 
 ---
@@ -79,7 +79,7 @@ sudo systemctl restart prometheus
 Prometheus:
 
 ```
-http://localhost:9091/targets
+http://localhost:9090/targets
 ```
 
 Should show node exporter.

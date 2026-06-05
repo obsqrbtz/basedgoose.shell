@@ -601,7 +601,7 @@ radius: Commons.Theme.radius
                                         }
 
                                         Text {
-                                            text: modelData.host + ":" + (modelData.port || "9091")
+                                            text: modelData.host + ":" + (modelData.port || "9090")
                                             font.family: Commons.Theme.fontMono
                                             font.pixelSize: 11
                                             color: cSubText
@@ -618,7 +618,7 @@ radius: Commons.Theme.radius
 
                                             Text {
                                                 anchors.centerIn: parent
-                                                text: ""
+                                                text: ""
                                                 font.family: Commons.Theme.fontIcon
                                                 font.pixelSize: 12
                                                 color: delMa.containsMouse ? Commons.Theme.error : cSubText
@@ -757,7 +757,7 @@ radius: Commons.Theme.radius
 
                                                 Text {
                                                     anchors.fill: parent
-                                                    text: "9091"
+                                                    text: "9090"
                                                     color: cSubText
                                                     font: portInput.font
                                                     visible: !portInput.text && !portInput.activeFocus
@@ -784,7 +784,7 @@ radius: Commons.Theme.radius
                                             servers.push({
                                                 name: nameInput.text.trim() || host,
                                                 host: host,
-                                                port: portInput.text.trim() || "9091"
+                                                    port: portInput.text.trim() || "9090"
                                             })
                                             Services.ConfigService.setMonitorServers(servers)
                                             nameInput.text = ""

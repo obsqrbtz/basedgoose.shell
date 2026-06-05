@@ -216,7 +216,7 @@ Widgets.PopupWindow {
                     Services.PrometheusClient {
                         id: promClient
                         host: serverDelegate.modelData.host || ""
-                        port: serverDelegate.modelData.port || "9091"
+                        port: serverDelegate.modelData.port || "9090"
                         active: monitorPopup.shouldShow && serverDelegate.visible
                     }
 

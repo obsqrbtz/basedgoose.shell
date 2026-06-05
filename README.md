@@ -18,6 +18,8 @@ Quickshell setup for Hyprland
 - Volume controls
 - Wallpaper selector (local + Wallhaven)
 - Display manager
+- Network manager
+- System monitor popup with prometheus remotes support
 
 ## Installation
 
