@@ -13,8 +13,8 @@ Rectangle {
     
     signal clicked()
     
-    width: 100
-    height: 32
+    implicitWidth: 100
+    implicitHeight: 32
     radius: Commons.Theme.radius
     color: active ? Qt.rgba(activeColor.r, activeColor.g, activeColor.b, 0.2) : inactiveColor
     border.width: 1

@@ -17,7 +17,7 @@ Item {
     readonly property int deviceCount: Services.Bluetooth.deviceCount
     readonly property bool isHovered: mouseArea.containsMouse
     
-    implicitWidth: isVertical ? 28 : bluetoothRow.implicitWidth
+    implicitWidth: isVertical ? 28 : bluetoothRow.implicitWidth + Commons.Config.componentPadding * 2
     implicitHeight: isVertical ? bluetoothCol.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight

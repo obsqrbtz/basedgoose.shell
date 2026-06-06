@@ -22,8 +22,8 @@ Rectangle {
     
     signal clicked()
     
-    implicitWidth: icon && text ? 100 : (icon ? 36 : 80)
-    implicitHeight: 36
+    implicitWidth: icon && text ? 100 : (icon ? 30 : 80)
+    implicitHeight: 30
     radius: Commons.Theme.radius
     
     color: buttonArea.pressed ? pressedColor : (buttonArea.containsMouse ? hoverColor : baseColor)

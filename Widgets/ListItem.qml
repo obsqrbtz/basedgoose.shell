@@ -24,7 +24,7 @@ Rectangle {
     signal clicked()
     
     implicitWidth: 300
-    implicitHeight: 56
+    implicitHeight: 44
     radius: Commons.Theme.radiusLg
     color: itemArea.containsMouse ? hoverColor : baseColor
     border.width: showBorder ? 1 : 0

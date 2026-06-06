@@ -17,7 +17,7 @@ Item {
     readonly property bool isMuted: volumeMonitor.muted
     readonly property int percentage: volumeMonitor.percentage
     
-    implicitWidth: isVertical ? 28 : volumeRow.implicitWidth
+    implicitWidth: isVertical ? 28 : volumeRow.implicitWidth + Commons.Config.componentPadding * 2
     implicitHeight: isVertical ? volumeCol.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight

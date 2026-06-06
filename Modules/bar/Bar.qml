@@ -236,6 +236,8 @@ PanelWindow {
                     required property string modelData
                     sourceComponent: registry.getBarComponent(modelData)
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: Commons.Config.barWidth - Commons.Config.barPadding * 2
+                    Layout.preferredHeight: implicitHeight
                 }
             }
         }
@@ -252,6 +254,8 @@ PanelWindow {
                     required property string modelData
                     sourceComponent: registry.getBarComponent(modelData)
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: Commons.Config.barWidth - Commons.Config.barPadding * 2
+                    Layout.preferredHeight: implicitHeight
                 }
             }
         }
@@ -269,6 +273,8 @@ PanelWindow {
                     required property string modelData
                     sourceComponent: registry.getBarComponent(modelData)
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: Commons.Config.barWidth - Commons.Config.barPadding * 2
+                    Layout.preferredHeight: implicitHeight
                 }
             }
         }

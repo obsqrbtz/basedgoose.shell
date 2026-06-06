@@ -33,8 +33,20 @@ Widgets.PopupWindow {
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
 
-    implicitWidth: 600
-    implicitHeight: 640
+    implicitWidth: 560
+    implicitHeight: 600
+
+    property int currentTab: 0
+
+    // ── Hex color helpers ───────────────────────────────────────────────
+    function normHex(s) {
+        if (!s)
+            return ""
+        var v = s.trim().replace(/^#/, "")
+        if (/^[0-9A-Fa-f]{6}$/.test(v) || /^[0-9A-Fa-f]{8}$/.test(v))
+            return "#" + v.toUpperCase()
+        return ""
+    }
 
     property Component moduleChipComponent: Component {
         Item {
@@ -210,62 +222,83 @@ Widgets.PopupWindow {
         ColumnLayout {
             id: contentColumn
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 16
+            anchors.margins: 12
+            spacing: 12
 
-            Widgets.HeaderWithIcon {
+            // ── Header ──────────────────────────────────────────────────
+            RowLayout {
                 Layout.fillWidth: true
-                icon: "\uf013"
-                title: "Settings"
-                subtitle: "Configure basedgoose.shell"
-                iconColor: cPrimary
-                titleColor: cText
-                subtitleColor: cSubText
+                spacing: 12
+
+                Widgets.HeaderWithIcon {
+                    icon: ""
+                    title: "Settings"
+                    subtitle: "Configure basedgoose.shell"
+                    iconColor: cPrimary
+                    titleColor: cText
+                    subtitleColor: cSubText
+                }
+
+                Item { Layout.fillWidth: true }
+
+                Widgets.IconButton {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    icon: "󰅖"
+                    iconSize: 18
+                    iconColor: cSubText
+                    hoverIconColor: cText
+                    onClicked: popupWindow.shouldShow = false
+                }
             }
 
-            Widgets.Divider {
+            // ── Tab bar ─────────────────────────────────────────────────
+            RowLayout {
                 Layout.fillWidth: true
+                spacing: 4
+
+                Repeater {
+                    model: ["General", "Modules", "Monitoring", "Theme"]
+                    delegate: Widgets.TabButton {
+                        required property int index
+                        required property string modelData
+                        Layout.fillWidth: true
+                        text: modelData
+                        active: popupWindow.currentTab === index
+                        activeColor: cPrimary
+                        onClicked: popupWindow.currentTab = index
+                    }
+                }
             }
 
+            // ── Tab content ─────────────────────────────────────────────
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-radius: Commons.Theme.radius
-        color: cSurfaceContainer
+                radius: Commons.Theme.radius
+                color: cSurfaceContainer
                 clip: true
 
-                Flickable {
-                    id: settingsFlickable
+                StackLayout {
                     anchors.fill: parent
-                    anchors.margins: 16
-                    contentWidth: width
-                    contentHeight: settingsColumn.height
-                    boundsBehavior: Flickable.StopAtBounds
-                    clip: true
+                    anchors.margins: 12
+                    currentIndex: popupWindow.currentTab
 
-                    ColumnLayout {
-                        id: settingsColumn
-                        width: settingsFlickable.width
-                        spacing: 20
+                    // ════════════ GENERAL ════════════
+                    Flickable {
+                        contentWidth: width
+                        contentHeight: generalCol.height
+                        boundsBehavior: Flickable.StopAtBounds
+                        clip: true
 
-                        // Bar Position Section
                         ColumnLayout {
-                            Layout.fillWidth: true
+                            id: generalCol
+                            width: parent.width
                             spacing: 8
 
                             Widgets.SectionLabel {
                                 Layout.fillWidth: true
                                 text: "Bar Position"
                                 color: cText
-                            }
-
-                            Text {
-                                Layout.fillWidth: true
-                                text: "Choose where the bar appears on your screen"
-                                font.family: Commons.Theme.fontUI
-                                font.pixelSize: 12
-                                color: cSubText
-                                wrapMode: Text.WordWrap
                             }
 
                             RowLayout {
@@ -282,13 +315,13 @@ radius: Commons.Theme.radius
 
                                     delegate: Rectangle {
                                         Layout.fillWidth: true
-                                        Layout.preferredHeight: 44
+                                        Layout.preferredHeight: 34
                                         radius: Commons.Theme.radius
-                                        color: Services.ConfigService.barPosition === modelData.value ? 
-                                               Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15) : 
+                                        color: Services.ConfigService.barPosition === modelData.value ?
+                                               Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15) :
                                                Qt.rgba(cText.r, cText.g, cText.b, 0.03)
-                                        border.color: Services.ConfigService.barPosition === modelData.value ? 
-                                                     cPrimary : 
+                                        border.color: Services.ConfigService.barPosition === modelData.value ?
+                                                     cPrimary :
                                                      Qt.rgba(cText.r, cText.g, cText.b, 0.1)
                                         border.width: Services.ConfigService.barPosition === modelData.value ? 2 : 1
 
@@ -297,7 +330,7 @@ radius: Commons.Theme.radius
                                             text: modelData.label
                                             font.family: Commons.Theme.fontUI
                                             font.pixelSize: 13
-                                            color: Services.ConfigService.barPosition === modelData.value ? 
+                                            color: Services.ConfigService.barPosition === modelData.value ?
                                                    cText : cSubText
                                         }
 
@@ -313,10 +346,18 @@ radius: Commons.Theme.radius
                                 }
                             }
                         }
+                    }
 
-                        // Bar Modules Section
+                    // ════════════ MODULES ════════════
+                    Flickable {
+                        contentWidth: width
+                        contentHeight: modulesCol.height
+                        boundsBehavior: Flickable.StopAtBounds
+                        clip: true
+
                         ColumnLayout {
-                            Layout.fillWidth: true
+                            id: modulesCol
+                            width: parent.width
                             spacing: 12
 
                             Widgets.SectionLabel {
@@ -335,90 +376,81 @@ radius: Commons.Theme.radius
                             }
 
                             // Available modules
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 6
+                            Text {
+                                text: "Available Modules"
+                                font.family: Commons.Theme.fontUI
+                                font.pixelSize: 13
+                                font.weight: Font.Medium
+                                color: cText
+                            }
 
-                                Text {
-                                    text: "Available Modules"
-                                    font.family: Commons.Theme.fontUI
-                                    font.pixelSize: 13
-                                    font.weight: Font.Medium
-                                    color: cText
+                            Rectangle {
+                                id: modulePool
+                                Layout.fillWidth: true
+                                Layout.minimumHeight: 70
+                                Layout.preferredHeight: Math.max(70, availableFlow.implicitHeight + 16)
+                                radius: Commons.Theme.radius
+                                color: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.08)
+                                border.color: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.2)
+                                border.width: 1
+
+                                property var availableModules: ["shellmenu", "workspaces", "mediaplayer", "systemstats", "clock", "systemtray", "volume", "network", "bluetooth", "notifications", "power"]
+                                property var usedModules: {
+                                    var used = []
+                                    if (Services.ConfigService.barModules.left) used = used.concat(Services.ConfigService.barModules.left)
+                                    if (Services.ConfigService.barModules.center) used = used.concat(Services.ConfigService.barModules.center)
+                                    if (Services.ConfigService.barModules.right) used = used.concat(Services.ConfigService.barModules.right)
+                                    return used
                                 }
 
-                                Rectangle {
-                                    id: modulePool
-                                    Layout.fillWidth: true
-                                    Layout.minimumHeight: 80
-                                    Layout.preferredHeight: Math.max(80, availableFlow.implicitHeight + 16)
-                                    radius: Commons.Theme.radius
-                                    color: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.08)
-                                    border.color: Qt.rgba(Commons.Theme.primary.r, Commons.Theme.primary.g, Commons.Theme.primary.b, 0.2)
-                                    border.width: 1
+                                Flow {
+                                    id: availableFlow
+                                    anchors.fill: parent
+                                    anchors.margins: 8
+                                    spacing: 6
 
-                                    property var availableModules: ["shellmenu", "workspaces", "mediaplayer", "systemstats", "clock", "systemtray", "volume", "network", "bluetooth", "notifications", "power"]
-                                    property var usedModules: {
-                                        var used = []
-                                        if (Services.ConfigService.barModules.left) used = used.concat(Services.ConfigService.barModules.left)
-                                        if (Services.ConfigService.barModules.center) used = used.concat(Services.ConfigService.barModules.center)
-                                        if (Services.ConfigService.barModules.right) used = used.concat(Services.ConfigService.barModules.right)
-                                        return used
-                                    }
+                                    Repeater {
+                                        model: modulePool.availableModules.filter(function(m) {
+                                            return modulePool.usedModules.indexOf(m) === -1
+                                        })
 
-                                    Flow {
-                                        id: availableFlow
-                                        anchors.fill: parent
-                                        anchors.margins: 8
-                                        spacing: 6
+                                        delegate: Loader {
+                                            sourceComponent: moduleChipComponent
 
-                                        Repeater {
-                                            model: modulePool.availableModules.filter(function(m) {
-                                                return modulePool.usedModules.indexOf(m) === -1
-                                            })
+                                            property string moduleName: modelData
+                                            property bool isDraggable: true
+                                            property color chipColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                                            property color chipBorderColor: cPrimary
+                                            property color chipTextColor: cText
 
-                                            delegate: Loader {
-                                                sourceComponent: moduleChipComponent
-
-                                                property string moduleName: modelData
-                                                property bool isDraggable: true
-                                                property color chipColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
-                                                property color chipBorderColor: cPrimary
-                                                property color chipTextColor: cText
-
-                                                onLoaded: {
-                                                    item.moduleName = moduleName
-                                                    item.isDraggable = isDraggable
-                                                    item.sourceSection = ""
-                                                    item.sourceIndex = -1
-                                                    item.chipColor = chipColor
-                                                    item.chipBorderColor = chipBorderColor
-                                                    item.chipTextColor = chipTextColor
-                                                }
+                                            onLoaded: {
+                                                item.moduleName = moduleName
+                                                item.isDraggable = isDraggable
+                                                item.sourceSection = ""
+                                                item.sourceIndex = -1
+                                                item.chipColor = chipColor
+                                                item.chipBorderColor = chipBorderColor
+                                                item.chipTextColor = chipTextColor
                                             }
                                         }
                                     }
+                                }
 
-                                    DropArea {
-                                        anchors.fill: parent
-                                        keys: ["text/plain"]
+                                DropArea {
+                                    anchors.fill: parent
+                                    keys: ["text/plain"]
 
-                                        onDropped: function(drop) {
-                                            console.log("[Drop] Pool received drop")
-                                            var text = drop.getDataAsString("text/plain")
-                                            console.log("[Drop] Data:", text)
-                                            
-                                            if (text.startsWith("module:")) {
-                                                var parts = text.split(":")
-                                                if (parts.length >= 3) {
-                                                    var moduleName = parts[1]
-                                                    var sourceSection = parts[2]
-                                                    console.log("[Drop] Removing module:", moduleName, "from:", sourceSection)
-                                                    if (sourceSection !== "") {
-                                                        popupWindow.removeModuleFromSection(moduleName, sourceSection)
-                                                    }
-                                                    drop.accept()
+                                    onDropped: function(drop) {
+                                        var text = drop.getDataAsString("text/plain")
+                                        if (text.startsWith("module:")) {
+                                            var parts = text.split(":")
+                                            if (parts.length >= 3) {
+                                                var moduleName = parts[1]
+                                                var sourceSection = parts[2]
+                                                if (sourceSection !== "") {
+                                                    popupWindow.removeModuleFromSection(moduleName, sourceSection)
                                                 }
+                                                drop.accept()
                                             }
                                         }
                                     }
@@ -448,7 +480,7 @@ radius: Commons.Theme.radius
                                         Layout.minimumHeight: 50
                                         Layout.preferredHeight: Math.max(50, moduleFlow.implicitHeight + 16)
                                         radius: Commons.Theme.radius
-                                        color: dropArea.containsDrag ? 
+                                        color: dropArea.containsDrag ?
                                                Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15) :
                                                Qt.rgba(cText.r, cText.g, cText.b, 0.03)
                                         border.color: dropArea.containsDrag ?
@@ -515,10 +547,7 @@ radius: Commons.Theme.radius
                                             keys: ["text/plain"]
 
                                             onDropped: function(drop) {
-                                                console.log("[Drop] Section", sectionName, "received drop")
                                                 var text = drop.getDataAsString("text/plain")
-                                                console.log("[Drop] Data:", text)
-                                                
                                                 if (text.startsWith("module:")) {
                                                     var parts = text.split(":")
                                                     if (parts.length >= 3) {
@@ -530,30 +559,28 @@ radius: Commons.Theme.radius
                                                         var flowY = pointerY - moduleFlow.y
                                                         var sectionModules = Services.ConfigService.barModules[sectionName] || []
                                                         var targetIndex = popupWindow.getDropInsertionIndex(moduleFlow, flowX, flowY, sectionModules.length)
-                                                        console.log("[Drop] Moving module:", moduleName, "from:", sourceSection, "to:", sectionName)
-
                                                         popupWindow.moveModuleToSection(moduleName, sourceSection, sectionName, targetIndex)
                                                         drop.accept()
                                                     }
                                                 }
-                                            }
-
-                                            onEntered: function(drag) {
-                                                console.log("[Drop] Entered section:", sectionName)
-                                            }
-
-                                            onExited: {
-                                                console.log("[Drop] Exited section:", sectionName)
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                    }
 
-                        // ── Monitoring Servers ──────────────────────────────
+                    // ════════════ MONITORING ════════════
+                    Flickable {
+                        contentWidth: width
+                        contentHeight: monitoringCol.height
+                        boundsBehavior: Flickable.StopAtBounds
+                        clip: true
+
                         ColumnLayout {
-                            Layout.fillWidth: true
+                            id: monitoringCol
+                            width: parent.width
                             spacing: 12
 
                             Widgets.SectionLabel {
@@ -571,14 +598,13 @@ radius: Commons.Theme.radius
                                 wrapMode: Text.WordWrap
                             }
 
-                            // Existing server list
                             Repeater {
                                 model: Services.ConfigService.monitorServers || []
                                 delegate: Rectangle {
                                     required property var modelData
                                     required property int index
                                     Layout.fillWidth: true
-                                    Layout.preferredHeight: 44
+                                    Layout.preferredHeight: 34
                                     radius: Commons.Theme.radius
                                     color: Qt.rgba(cText.r, cText.g, cText.b, 0.03)
                                     border.color: Qt.rgba(cText.r, cText.g, cText.b, 0.1)
@@ -618,7 +644,7 @@ radius: Commons.Theme.radius
 
                                             Text {
                                                 anchors.centerIn: parent
-                                                text: ""
+                                                text: ""
                                                 font.family: Commons.Theme.fontIcon
                                                 font.pixelSize: 12
                                                 color: delMa.containsMouse ? Commons.Theme.error : cSubText
@@ -641,7 +667,6 @@ radius: Commons.Theme.radius
                                 }
                             }
 
-                            // Empty state
                             Text {
                                 Layout.fillWidth: true
                                 visible: (Services.ConfigService.monitorServers || []).length === 0
@@ -677,7 +702,6 @@ radius: Commons.Theme.radius
                                         color: cText
                                     }
 
-                                    // Name field
                                     Rectangle {
                                         Layout.fillWidth: true
                                         Layout.preferredHeight: 34
@@ -705,7 +729,6 @@ radius: Commons.Theme.radius
                                         }
                                     }
 
-                                    // Host + Port row
                                     RowLayout {
                                         Layout.fillWidth: true
                                         spacing: 8
@@ -784,7 +807,7 @@ radius: Commons.Theme.radius
                                             servers.push({
                                                 name: nameInput.text.trim() || host,
                                                 host: host,
-                                                    port: portInput.text.trim() || "9090"
+                                                port: portInput.text.trim() || "9090"
                                             })
                                             Services.ConfigService.setMonitorServers(servers)
                                             nameInput.text = ""
@@ -796,9 +819,229 @@ radius: Commons.Theme.radius
                             }
                         }
                     }
+
+                    // ════════════ THEME ════════════
+                    Flickable {
+                        contentWidth: width
+                        contentHeight: themeCol.height
+                        boundsBehavior: Flickable.StopAtBounds
+                        clip: true
+
+                        ColumnLayout {
+                            id: themeCol
+                            width: parent.width
+                            spacing: 12
+
+                            Widgets.SectionLabel {
+                                Layout.fillWidth: true
+                                text: "Colorscheme"
+                                color: cText
+                            }
+
+                            // Scheme picker cards
+                            GridLayout {
+                                Layout.fillWidth: true
+                                columns: 2
+                                rowSpacing: 8
+                                columnSpacing: 8
+
+                                Repeater {
+                                    model: Services.ThemeService.available
+
+                                    delegate: Rectangle {
+                                        required property var modelData
+                                        readonly property var schemeColors: modelData.colors
+                                        readonly property bool isActive: Services.ThemeService.activeScheme === modelData.file
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 56
+                                        radius: Commons.Theme.radius
+                                        color: isActive ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12)
+                                                        : Qt.rgba(cText.r, cText.g, cText.b, 0.03)
+                                        border.width: isActive ? 2 : 1
+                                        border.color: isActive ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.1)
+
+                                        ColumnLayout {
+                                            anchors {
+                                                left: parent.left; right: parent.right
+                                                verticalCenter: parent.verticalCenter
+                                                leftMargin: 10; rightMargin: 10
+                                            }
+                                            spacing: 6
+
+                                            Text {
+                                                text: modelData.name
+                                                font.family: Commons.Theme.fontUI
+                                                font.pixelSize: 12
+                                                font.weight: Font.Medium
+                                                color: cText
+                                                elide: Text.ElideRight
+                                                Layout.fillWidth: true
+                                            }
+
+                                            Row {
+                                                spacing: 4
+                                                Repeater {
+                                                    model: ["background", "primary", "secondary", "foreground", "error"]
+                                                    delegate: Rectangle {
+                                                        required property string modelData
+                                                        width: 16; height: 16
+                                                        radius: Commons.Theme.radiusSm
+                                                        color: schemeColors[modelData] || "#000000"
+                                                        border.width: 1
+                                                        border.color: Qt.rgba(cText.r, cText.g, cText.b, 0.15)
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: Services.ThemeService.setScheme(modelData.file)
+                                        }
+                                    }
+                                }
+                            }
+
+                            Widgets.Divider { Layout.fillWidth: true }
+
+                            // Color editor
+                            Widgets.SectionLabel {
+                                Layout.fillWidth: true
+                                text: "Customize Colors"
+                                color: cText
+                            }
+
+                            Repeater {
+                                model: Services.ThemeService.paletteKeys
+
+                                delegate: RowLayout {
+                                    required property string modelData
+                                    Layout.fillWidth: true
+                                    spacing: 8
+
+                                    Rectangle {
+                                        width: 24; height: 24
+                                        radius: Commons.Theme.radiusSm
+                                        color: Services.ThemeService.colors[modelData] || "#000000"
+                                        border.width: 1
+                                        border.color: Qt.rgba(cText.r, cText.g, cText.b, 0.2)
+                                    }
+
+                                    Text {
+                                        text: modelData
+                                        font.family: Commons.Theme.fontMono
+                                        font.pixelSize: 11
+                                        color: cText
+                                        Layout.preferredWidth: 130
+                                    }
+
+                                    Rectangle {
+                                        Layout.fillWidth: true
+                                        Layout.preferredHeight: 28
+                                        radius: Commons.Theme.radius
+                                        color: Qt.rgba(cText.r, cText.g, cText.b, 0.04)
+                                        border.color: hexInput.activeFocus ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.12)
+                                        border.width: 1
+                                        Behavior on border.color { ColorAnimation { duration: 100 } }
+
+                                        TextInput {
+                                            id: hexInput
+                                            property string key: modelData
+                                            anchors { fill: parent; margins: 6 }
+                                            verticalAlignment: TextInput.AlignVCenter
+                                            color: cText
+                                            font { family: Commons.Theme.fontMono; pixelSize: 11 }
+                                            selectByMouse: true
+                                            clip: true
+
+                                            Component.onCompleted: text = Services.ThemeService.colors[key]
+
+                                            Connections {
+                                                target: Services.ThemeService
+                                                function onColorsChanged() {
+                                                    if (!hexInput.activeFocus)
+                                                        hexInput.text = Services.ThemeService.colors[hexInput.key]
+                                                }
+                                            }
+
+                                            onTextEdited: {
+                                                var v = popupWindow.normHex(text)
+                                                if (v)
+                                                    Services.ThemeService.setColor(key, v)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Save / reset
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.topMargin: 4
+                                spacing: 8
+
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 32
+                                    radius: Commons.Theme.radius
+                                    color: Qt.rgba(cText.r, cText.g, cText.b, 0.04)
+                                    border.color: saveNameInput.activeFocus ? cPrimary : Qt.rgba(cText.r, cText.g, cText.b, 0.12)
+                                    border.width: 1
+                                    Behavior on border.color { ColorAnimation { duration: 100 } }
+
+                                    TextInput {
+                                        id: saveNameInput
+                                        anchors { fill: parent; margins: 8 }
+                                        verticalAlignment: TextInput.AlignVCenter
+                                        color: cText
+                                        font { family: Commons.Theme.fontUI; pixelSize: 12 }
+                                        selectByMouse: true
+                                        clip: true
+
+                                        Text {
+                                            anchors.fill: parent
+                                            verticalAlignment: Text.AlignVCenter
+                                            text: "New scheme name…"
+                                            color: cSubText
+                                            font: saveNameInput.font
+                                            visible: !saveNameInput.text && !saveNameInput.activeFocus
+                                        }
+                                    }
+                                }
+
+                                Widgets.TextButton {
+                                    Layout.preferredWidth: 90
+                                    Layout.preferredHeight: 32
+                                    text: "Save As"
+                                    baseColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.15)
+                                    hoverColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.25)
+                                    textColor: cText
+                                    borderColor: Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.3)
+                                    enabled: saveNameInput.text.trim().length > 0
+                                    opacity: enabled ? 1.0 : 0.4
+                                    onClicked: {
+                                        Services.ThemeService.saveScheme(saveNameInput.text.trim())
+                                        saveNameInput.text = ""
+                                    }
+                                }
+
+                                Widgets.TextButton {
+                                    Layout.preferredWidth: 80
+                                    Layout.preferredHeight: 32
+                                    text: "Reset"
+                                    baseColor: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
+                                    hoverColor: Qt.rgba(cText.r, cText.g, cText.b, 0.1)
+                                    textColor: cText
+                                    onClicked: Services.ThemeService.resetScheme()
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
+            // ── Footer ──────────────────────────────────────────────────
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 8

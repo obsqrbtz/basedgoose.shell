@@ -7,7 +7,7 @@ Rectangle {
     
     property string icon: ""
     property string text: ""
-    property int iconSize: 15
+    property int iconSize: 13
     property int textSize: Commons.Theme.fontSize
     property color iconColor: Commons.Theme.secondary
     property color textColor: Commons.Theme.foreground
@@ -15,7 +15,7 @@ Rectangle {
     property color baseColor: "transparent"
     property color hoverColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.06)
     property color borderColor: Commons.Theme.border
-    property int iconBoxSize: 30
+    property int iconBoxSize: 24
     property int iconBoxRadius: Commons.Theme.radiusLg
     property int animationDuration: 150
     property bool showBorder: false
@@ -23,7 +23,7 @@ Rectangle {
     signal clicked()
     
     implicitWidth: 200
-    implicitHeight: 52
+    implicitHeight: 40
     radius: Commons.Theme.radiusLg
     color: mouseArea.containsMouse ? hoverColor : baseColor
     border.width: showBorder ? 1 : 0

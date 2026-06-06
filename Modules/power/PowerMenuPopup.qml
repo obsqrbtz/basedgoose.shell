@@ -85,7 +85,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "\udb81\udc25"
                 text: "Shutdown"
                 iconColor: cPrimary
@@ -99,7 +99,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "\udb81\udf09"
                 text: "Reboot"
                 iconColor: cPrimary
@@ -113,7 +113,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "\udb81\uddfd"
                 text: "Logout"
                 iconColor: cPrimary

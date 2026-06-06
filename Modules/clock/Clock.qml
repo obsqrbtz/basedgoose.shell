@@ -13,7 +13,7 @@ Item {
     property string currentTime: Qt.formatDateTime(new Date(), "HH:mm")
     property string currentDate: Qt.formatDateTime(new Date(), "ddd MMM d")
 
-    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : clockColH.implicitWidth
+    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : clockColH.implicitWidth + Commons.Config.componentPadding * 2
     implicitHeight: isVertical ? clockColV.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight
@@ -26,21 +26,21 @@ Item {
         Behavior on opacity { NumberAnimation { duration: Commons.Theme.animNormal } }
     }
 
-    Column {
+    Row {
         id: clockColH
         anchors.centerIn: parent
-        spacing: 1
+        spacing: 6
         visible: !isVertical
 
         Text {
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             color: isHovered ? Commons.Theme.primary : Commons.Theme.foreground
-            font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSizeSubheading; weight: Font.DemiBold }
+            font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSize; weight: Font.DemiBold }
             text: root.currentTime
             Behavior on color { ColorAnimation { duration: Commons.Theme.animNormal } }
         }
         Text {
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             color: Commons.Theme.foregroundMuted
             font { family: Commons.Theme.fontMono; pixelSize: Commons.Theme.fontSizeCaption; weight: Font.Normal }
             text: root.currentDate

@@ -35,7 +35,7 @@ Item {
         return "󰤟"
     }
 
-    implicitWidth: isVertical ? 28 : networkRow.implicitWidth
+    implicitWidth: isVertical ? 28 : networkRow.implicitWidth + Commons.Config.componentPadding * 2
     implicitHeight: isVertical ? networkCol.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight

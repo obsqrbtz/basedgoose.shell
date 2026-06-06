@@ -36,8 +36,8 @@ Widgets.PopupWindow {
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
     readonly property color cPrimary: Commons.Theme.secondary
     
-    readonly property int launcherWidth: 420
-    readonly property int launcherHeight: 500
+    readonly property int launcherWidth: 380
+    readonly property int launcherHeight: 460
     
     implicitWidth: launcherWidth
     implicitHeight: launcherHeight
@@ -141,7 +141,7 @@ Widgets.PopupWindow {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: Commons.Config.popupContentPadding
-            spacing: Commons.Theme.spacingLg
+            spacing: Commons.Theme.spacingMd
             
             Text {
                 text: "Applications"
@@ -154,7 +154,7 @@ Widgets.PopupWindow {
             
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
+                Layout.preferredHeight: 38
                 color: searchInput.activeFocus ? cSurfaceContainer : cSurfaceContainer
                 radius: Commons.Theme.radiusLg
                 border.color: searchInput.activeFocus ? Commons.Theme.borderFocused : cBorder
@@ -168,7 +168,7 @@ Widgets.PopupWindow {
                     Text {
                         text: "󰍉"
                         font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 18
+                        font.pixelSize: 14
                         color: cSubText
                     }
                     
@@ -224,7 +224,7 @@ Widgets.PopupWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 model: filteredModel
-                spacing: 8
+                spacing: 4
                 currentIndex: 0
                 clip: true
                 
@@ -262,7 +262,7 @@ Widgets.PopupWindow {
                     required property int index
                     
                     width: appList.width
-                    height: 48
+                    height: 38
                     radius: Commons.Theme.radius
                     color: (appMa.containsMouse || appList.currentIndex === index) ? 
                            (appList.currentIndex === index ? Qt.rgba(cPrimary.r, cPrimary.g, cPrimary.b, 0.12) : cHover) : 
@@ -281,11 +281,11 @@ Widgets.PopupWindow {
                         spacing: 12
 
                         Widgets.AppIcon {
-                            Layout.preferredWidth: 28
-                            Layout.preferredHeight: 28
+                            Layout.preferredWidth: 22
+                            Layout.preferredHeight: 22
                             Layout.alignment: Qt.AlignVCenter
-                            size: 28
-                            iconSize: 18
+                            size: 22
+                            iconSize: 14
                             iconSource: icon || ""
                             fallbackIcon: "󰀻"
                         }

@@ -15,7 +15,7 @@ Item {
     readonly property bool hasDnd: notifs.dnd
     readonly property bool isHovered: mouseArea.containsMouse
     
-    implicitWidth: isVertical ? 28 : 20
+    implicitWidth: isVertical ? 28 : Commons.Theme.iconSize + Commons.Config.componentPadding * 2
     implicitHeight: Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight

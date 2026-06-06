@@ -25,6 +25,8 @@ Singleton {
 
     // Monitor servers: [{name, host, port}]
     property var monitorServers: []
+
+    property string colorScheme: "based-goose"
     
     Component.onCompleted: {
         loadConfig()
@@ -81,6 +83,9 @@ Singleton {
                     if (config.monitorServers) {
                         root.monitorServers = config.monitorServers
                     }
+                    if (config.colorScheme) {
+                        root.colorScheme = config.colorScheme
+                    }
                     // Save config if any defaults are missing
                     if (!config.wallpaperDirectory || !config.wallpaperDownloadDirectory || !config.wallpaperResizeMode ||
                         !config.hyprlandMonitorsConfigPath || !config.barPosition || !config.barModules) {
@@ -107,7 +112,8 @@ Singleton {
             hyprlandMonitorsConfigPath: root.hyprlandMonitorsConfigPath,
             barPosition: root.barPosition,
             barModules: root.barModules,
-            monitorServers: root.monitorServers
+            monitorServers: root.monitorServers,
+            colorScheme: root.colorScheme
         }
         
         var configJson = JSON.stringify(config, null, 2)
@@ -158,6 +164,11 @@ Singleton {
 
     function setMonitorServers(servers) {
         root.monitorServers = servers
+        root.saveConfig()
+    }
+
+    function setColorScheme(name) {
+        root.colorScheme = name
         root.saveConfig()
     }
 }

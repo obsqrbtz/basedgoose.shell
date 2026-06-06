@@ -12,8 +12,8 @@ RowLayout {
     property color iconBackgroundColor: Qt.rgba(iconColor.r, iconColor.g, iconColor.b, 0.15)
     property color titleColor: Commons.Theme.foreground
     property color subtitleColor: Qt.rgba(titleColor.r, titleColor.g, titleColor.b, 0.6)
-    property int iconSize: 18
-    property int iconBoxSize: 36
+    property int iconSize: 14
+    property int iconBoxSize: 28
     property int iconBoxRadius: Commons.Theme.radiusLg
     property int titleSize: Commons.Theme.fontSizeHeading
     property int subtitleSize: Commons.Theme.fontSizeCaption

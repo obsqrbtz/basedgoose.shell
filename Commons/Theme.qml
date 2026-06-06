@@ -1,33 +1,36 @@
 pragma Singleton
 import QtQuick
+import "../Services" as Services
 
 QtObject {
     id: theme
 
-    readonly property color background:       '#0C0C0C'
-    readonly property color surfaceBase:      '#111111'
-    readonly property color surfaceContainer: '#181818'
+    readonly property var palette: Services.ThemeService.colors
 
-    readonly property color border:           '#2A2A2A'
+    readonly property color background:       palette.background
+    readonly property color surfaceBase:      palette.surfaceBase
+    readonly property color surfaceContainer: palette.surfaceContainer
+
+    readonly property color border:           palette.border
     readonly property color borderFocused:    Qt.lighter(primary, 1.3)
-    readonly property color surfaceBorder:    '#222222'
+    readonly property color surfaceBorder:    palette.surfaceBorder
 
-    readonly property color foreground:         '#C8C8C8'
-    readonly property color foregroundMuted:    '#525252'
+    readonly property color foreground:         palette.foreground
+    readonly property color foregroundMuted:    palette.foregroundMuted
     readonly property color surfaceText:        foreground
-    readonly property color surfaceTextVariant: '#525252'
+    readonly property color surfaceTextVariant: foregroundMuted
 
-    readonly property color primary:      '#5FAD5F'
-    readonly property color primaryMuted: '#0A190A'
-    readonly property color secondary:    '#B89A3C'
-    readonly property color secondaryMuted: '#1A150A'
+    readonly property color primary:      palette.primary
+    readonly property color primaryMuted: palette.primaryMuted
+    readonly property color secondary:    palette.secondary
+    readonly property color secondaryMuted: palette.secondaryMuted
     readonly property color surfaceAccent: primaryMuted
 
-    readonly property color info: '#7AA2F7'
+    readonly property color info: palette.info
 
-    readonly property color warning: '#B89A3C'
-    readonly property color success: '#5FAD5F'
-    readonly property color error:   '#B85450'
+    readonly property color warning: palette.warning
+    readonly property color success: palette.success
+    readonly property color error:   palette.error
 
     readonly property string fontUI:   "JetBrainsMono Nerd Font"
     readonly property string fontMono: "JetBrainsMono Nerd Font"

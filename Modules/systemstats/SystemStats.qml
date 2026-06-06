@@ -13,7 +13,7 @@ Rectangle {
     property var statsPopup: null
     property bool isVertical: false
 
-    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : statsRowH.implicitWidth
+    implicitWidth: isVertical ? Commons.Config.barWidth - Commons.Config.barPadding * 2 - 4 : statsRowH.implicitWidth + Commons.Config.componentPadding * 2
     implicitHeight: isVertical ? statsColV.implicitHeight : Commons.Config.componentHeight
     width: parent ? parent.width : implicitWidth
     height: parent ? parent.height : implicitHeight

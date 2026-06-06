@@ -66,6 +66,9 @@ Widgets.PopupWindow {
                 onRefreshClicked: {
                     displayService.refreshMonitors();
                 }
+                onCloseClicked: {
+                    popupWindow.shouldShow = false;
+                }
             }
 
             MonitorLayoutPreview {

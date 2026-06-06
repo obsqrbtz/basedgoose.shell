@@ -90,9 +90,8 @@ Widgets.PopupWindow {
                 }
                 
                 ColumnLayout {
-                    Layout.fillWidth: true
                     spacing: 2
-                    
+
                     Text {
                         text: "IPC Cheatsheet"
                         font.family: Commons.Theme.fontUI
@@ -100,13 +99,24 @@ Widgets.PopupWindow {
                         font.weight: Font.Bold
                         color: cText
                     }
-                    
+
                     Text {
                         text: "Available IPC commands"
                         font.family: Commons.Theme.fontUI
                         font.pixelSize: 11
                         color: cSubText
                     }
+                }
+
+                Item { Layout.fillWidth: true }
+
+                Widgets.IconButton {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    icon: "󰅖"
+                    iconSize: 18
+                    iconColor: cSubText
+                    hoverIconColor: cText
+                    onClicked: popupWindow.shouldShow = false
                 }
             }
             

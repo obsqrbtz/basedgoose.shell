@@ -13,6 +13,7 @@ RowLayout {
     readonly property color cSubText: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.6)
 
     signal refreshClicked
+    signal closeClicked
 
     spacing: 12
 
@@ -37,6 +38,19 @@ RowLayout {
         hoverColor: Qt.rgba(root.cPrimary.r, root.cPrimary.g, root.cPrimary.b, 0.15)
         onClicked: {
             root.refreshClicked();
+        }
+    }
+
+    Widgets.IconButton {
+        width: 32
+        height: 32
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        icon: "󰅖"
+        iconSize: 18
+        iconColor: root.cSubText
+        hoverIconColor: Commons.Theme.foreground
+        onClicked: {
+            root.closeClicked();
         }
     }
 }

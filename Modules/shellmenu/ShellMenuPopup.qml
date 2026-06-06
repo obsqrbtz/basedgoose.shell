@@ -26,8 +26,8 @@ Widgets.PopupWindow {
     readonly property color cBorder: Qt.rgba(cText.r, cText.g, cText.b, 0.08)
     readonly property color cHover: Qt.rgba(cText.r, cText.g, cText.b, 0.06)
     
-    implicitWidth: 260
-    implicitHeight: contentColumn.implicitHeight + 40
+    implicitWidth: 240
+    implicitHeight: contentColumn.implicitHeight + 28
     
     Rectangle {
         anchors.fill: backgroundRect
@@ -72,7 +72,7 @@ Widgets.PopupWindow {
             
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "󰌌"
                 text: "IPC Cheatsheet"
                 iconColor: cPrimary
@@ -89,7 +89,7 @@ Widgets.PopupWindow {
             
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "\uf03e"
                 text: "Wallpaper Selector"
                 iconColor: cPrimary
@@ -106,7 +106,7 @@ Widgets.PopupWindow {
             
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "󰍹"
                 text: "Display Manager"
                 iconColor: cPrimary
@@ -123,7 +123,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "\uf013"
                 text: "Settings"
                 iconColor: cPrimary
@@ -140,7 +140,7 @@ Widgets.PopupWindow {
 
             Widgets.MenuItem {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 52
+                Layout.preferredHeight: 40
                 icon: "󰑐"
                 text: "Reload Quickshell"
                 iconColor: cPrimary

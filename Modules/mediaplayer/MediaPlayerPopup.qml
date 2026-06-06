@@ -21,8 +21,8 @@ Widgets.PopupWindow {
     
     initialScale: 0.96
     
-    implicitWidth: 340
-    implicitHeight: popupWindow.player ? contentColumn.implicitHeight + 40 : 0
+    implicitWidth: 300
+    implicitHeight: popupWindow.player ? contentColumn.implicitHeight + 28 : 0
     
     visible: shouldShow && popupWindow.player !== null
     
@@ -103,8 +103,8 @@ Widgets.PopupWindow {
             // Album Art
             Item {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 260
-                Layout.preferredHeight: 260
+                Layout.preferredWidth: 190
+                Layout.preferredHeight: 190
                 Layout.topMargin: 0
                 
                 // Glow effect background
@@ -162,7 +162,7 @@ Widgets.PopupWindow {
                         anchors.centerIn: parent
                         text: "󰎈"
                         font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 72
+                        font.pixelSize: 48
                         color: Commons.Theme.surfaceTextVariant
                         visible: !(popupWindow.player?.trackArtUrl ?? false)
                         opacity: 0.2
@@ -293,18 +293,18 @@ Widgets.PopupWindow {
                 
                 // Previous button
                 Rectangle {
-                    Layout.preferredWidth: 44
-                    Layout.preferredHeight: 44
+                    Layout.preferredWidth: 34
+                    Layout.preferredHeight: 34
                     radius: Commons.Theme.radiusLg
                     color: prevMouse.containsMouse ? Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08) : "transparent"
-                    
+
                     Behavior on color { ColorAnimation { duration: 150 } }
-                    
+
                     Text {
                         anchors.centerIn: parent
                         text: "󰒮"
                         font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 20
+                        font.pixelSize: 16
                         color: Commons.Theme.surfaceText
                     }
                     
@@ -321,26 +321,26 @@ Widgets.PopupWindow {
                 
                 // Play/Pause button
                 Rectangle {
-                    Layout.preferredWidth: 56
-                    Layout.preferredHeight: 56
+                    Layout.preferredWidth: 44
+                    Layout.preferredHeight: 44
                     radius: Commons.Theme.radiusLg
-                    color: playMouse.pressed ? Qt.darker(Commons.Theme.secondary, 1.1) : 
+                    color: playMouse.pressed ? Qt.darker(Commons.Theme.secondary, 1.1) :
                            (playMouse.containsMouse ? Qt.lighter(Commons.Theme.secondary, 1.1) : Commons.Theme.secondary)
-                    
+
                     Behavior on color { ColorAnimation { duration: 150 } }
-                    
+
                     scale: playMouse.pressed ? 0.95 : 1.0
-                    
+
                     Behavior on scale {
                         NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
                     }
-                    
+
                     Text {
                         anchors.centerIn: parent
                         anchors.horizontalCenterOffset: (popupWindow.player?.isPlaying ?? false) ? 0 : 2
                         text: (popupWindow.player?.isPlaying ?? false) ? "󰏤" : "󰐊"
                         font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 26
+                        font.pixelSize: 20
                         color: Commons.Theme.background
                     }
                     
@@ -357,18 +357,18 @@ Widgets.PopupWindow {
                 
                 // Next button
                 Rectangle {
-                    Layout.preferredWidth: 44
-                    Layout.preferredHeight: 44
+                    Layout.preferredWidth: 34
+                    Layout.preferredHeight: 34
                     radius: Commons.Theme.radiusLg
                     color: nextMouse.containsMouse ? Qt.rgba(Commons.Theme.surfaceText.r, Commons.Theme.surfaceText.g, Commons.Theme.surfaceText.b, 0.08) : "transparent"
-                    
+
                     Behavior on color { ColorAnimation { duration: 150 } }
-                    
+
                     Text {
                         anchors.centerIn: parent
                         text: "󰒭"
                         font.family: Commons.Theme.fontIcon
-                        font.pixelSize: 20
+                        font.pixelSize: 16
                         color: Commons.Theme.surfaceText
                     }
                     

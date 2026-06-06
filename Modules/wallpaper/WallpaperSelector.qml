@@ -66,14 +66,29 @@ Widgets.PopupWindow {
             spacing: 12
 
             // Header
-            Widgets.HeaderWithIcon {
+            RowLayout {
                 Layout.fillWidth: true
-                icon: "\uf03e"
-                title: "Wallpaper Selector"
-                subtitle: getSubtitleText()
-                iconColor: Wallpaper.WallpaperColors.primary
-                titleColor: Wallpaper.WallpaperColors.text
-                subtitleColor: Wallpaper.WallpaperColors.subText
+                spacing: 12
+
+                Widgets.HeaderWithIcon {
+                    icon: "\uf03e"
+                    title: "Wallpaper Selector"
+                    subtitle: getSubtitleText()
+                    iconColor: Wallpaper.WallpaperColors.primary
+                    titleColor: Wallpaper.WallpaperColors.text
+                    subtitleColor: Wallpaper.WallpaperColors.subText
+                }
+
+                Item { Layout.fillWidth: true }
+
+                Widgets.IconButton {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    icon: "\udb80\udd56"
+                    iconSize: 18
+                    iconColor: Wallpaper.WallpaperColors.subText
+                    hoverIconColor: Wallpaper.WallpaperColors.text
+                    onClicked: popupWindow.shouldShow = false
+                }
             }
 
             // Tab buttons
