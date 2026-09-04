@@ -19,11 +19,10 @@ BarItem {
     Icon {
         text: Notifications.dnd ? Icons.bellOff : Icons.bell
         color: root.hovered ? Theme.primary : Notifications.count > 0 ? Theme.text : Theme.textMuted
-    }
 
-    Badge {
-        text: Notifications.count
-        visible: Notifications.count > 0 && !Notifications.dnd
+        Dot {
+            visible: Notifications.count > 0 && !Notifications.dnd
+        }
     }
 
     NotificationCenter {

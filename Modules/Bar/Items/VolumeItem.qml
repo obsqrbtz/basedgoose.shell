@@ -12,9 +12,11 @@ BarItem {
     ipcName: "volume"
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
+    scrollable: true
 
     onClicked: popupWindow.toggle()
     onRightClicked: Audio.toggleMute()
+    onScrolled: steps => Audio.step(steps * 0.05)
 
     Icon {
         text: Icons.volumeLevel(Audio.percent, Audio.muted)

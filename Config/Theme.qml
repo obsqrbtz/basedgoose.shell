@@ -23,6 +23,7 @@ Singleton {
     readonly property color error: Schemes.colors.error
 
     readonly property string fontFamily: "JetBrainsMono Nerd Font"
+    readonly property string iconFontFamily: "JetBrainsMono Nerd Font Propo"
 
     readonly property int fontTiny: 8
     readonly property int fontCaption: 10

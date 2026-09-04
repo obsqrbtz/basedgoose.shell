@@ -45,6 +45,7 @@ Singleton {
 
     readonly property string bell: "󰂚"
     readonly property string bellOff: "󰂛"
+    readonly property string dnd: "󰍶"
     readonly property string calendar: "󰃭"
     readonly property string image: "󰋩"
     readonly property string display: "󰍹"

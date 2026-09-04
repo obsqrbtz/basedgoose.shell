@@ -17,11 +17,10 @@ BarItem {
     Icon {
         text: !Bluetooth.powered ? Icons.bluetoothOff : Bluetooth.connected.length > 0 ? Icons.bluetoothConnected : Icons.bluetooth
         color: root.hovered ? Theme.primary : Bluetooth.connected.length > 0 ? Theme.primary : Bluetooth.powered ? Theme.text : Theme.textMuted
-    }
 
-    Badge {
-        text: Bluetooth.connected.length
-        visible: Bluetooth.connected.length > 1
+        Dot {
+            visible: Bluetooth.connected.length > 1
+        }
     }
 
     BluetoothPopup {

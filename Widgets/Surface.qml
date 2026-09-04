@@ -6,6 +6,7 @@ Rectangle {
 
     property bool interactive: true
     property bool enabled: true
+    property bool scrollable: false
 
     property color accent: Theme.text
     property color baseColor: "transparent"
@@ -18,6 +19,7 @@ Rectangle {
 
     signal clicked(var event)
     signal rightClicked(var event)
+    signal scrolled(real steps)
 
     implicitHeight: Theme.spacingXl
     radius: Theme.radius
@@ -53,6 +55,12 @@ Rectangle {
                 root.rightClicked(event);
             else
                 root.clicked(event);
+        }
+
+        onWheel: event => {
+            event.accepted = root.scrollable;
+            if (root.scrollable)
+                root.scrolled(event.angleDelta.y / 120);
         }
     }
 }

@@ -17,11 +17,11 @@ BarPopup {
 
         PanelHeader {
             Layout.fillWidth: true
-            icon: Notifications.dnd ? Icons.bellOff : Icons.bell
+            icon: Icons.bell
             title: "Notifications"
 
             IconButton {
-                icon: Notifications.dnd ? Icons.bellOff : Icons.bell
+                icon: Icons.dnd
                 size: 22
                 active: Notifications.dnd
                 onClicked: Notifications.dnd = !Notifications.dnd
@@ -53,7 +53,13 @@ BarPopup {
                     Layout.fillWidth: true
 
                     SectionLabel { text: modelData }
-                    Badge { text: Notifications.grouped[modelData].length }
+
+                    StyledText {
+                        text: Notifications.grouped[modelData].length
+                        font.pixelSize: Theme.fontCaption
+                        color: Theme.textMuted
+                    }
+
                     Item { Layout.fillWidth: true }
 
                     IconButton {

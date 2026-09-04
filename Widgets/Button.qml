@@ -31,7 +31,9 @@ Surface {
 
     RowLayout {
         id: content
-        anchors.centerIn: parent
+
+        x: Math.round((root.width - width) / 2)
+        y: Math.round((root.height - height) / 2)
         spacing: Theme.spacingSm
 
         Icon {
