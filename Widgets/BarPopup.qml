@@ -65,35 +65,36 @@ PanelWindow {
         onPressed: root.open = false
     }
 
-    Panel {
-        id: panel
-
-        x: root.panelX
-        y: root.panelY
-        width: root.contentWidth
-        height: root.contentHeight
-        padding: root.padding
-
-        opacity: root.open ? 1 : 0
-        scale: root.open ? 1 : 0.96
-
-        Behavior on opacity {
-            NumberAnimation { duration: Theme.animNormal }
-        }
-        Behavior on scale {
-            NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-            z: -1
-        }
-    }
-
-    Item {
+    FocusScope {
         anchors.fill: parent
-        focus: root.open && root.focusable
+        focus: true
+
         Keys.onEscapePressed: root.open = false
+
+        Panel {
+            id: panel
+
+            x: root.panelX
+            y: root.panelY
+            width: root.contentWidth
+            height: root.contentHeight
+            padding: root.padding
+
+            opacity: root.open ? 1 : 0
+            scale: root.open ? 1 : 0.96
+
+            Behavior on opacity {
+                NumberAnimation { duration: Theme.animNormal }
+            }
+            Behavior on scale {
+                NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                z: -1
+            }
+        }
     }
 }

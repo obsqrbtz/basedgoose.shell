@@ -18,24 +18,30 @@ Singleton {
 
     property string backend: ""
 
+    property bool _restored: false
+
     signal applied(string path)
 
     function apply(path: string): void {
         if (!backend)
             return;
-        setter.exec(_command(path));
+
+        if (backend === "swaybg")
+            Quickshell.execDetached(["sh", "-c", 'pkill -x swaybg; exec swaybg -i "$1" -m "$2"',
+                                     "swaybg", path, Settings.wallpaperResizeMode === "fit" ? "fit" : "fill"]);
+        else
+            setter.exec([backend, "img", path, "--resize", Settings.wallpaperResizeMode,
+                         "--transition-type", "outer", "--transition-fps", "60"]);
+
         current = path;
         applied(path);
     }
 
-    function _command(path: string): var {
-        switch (backend) {
-        case "swww":
-        case "awww":
-            return [backend, "img", path, "--resize", Settings.wallpaperResizeMode, "--transition-type", "outer", "--transition-fps", "60"];
-        default:
-            return ["swaybg", "-i", path, "-m", Settings.wallpaperResizeMode === "fit" ? "fit" : "fill"];
-        }
+    function restore(): void {
+        if (_restored || !backend || !current)
+            return;
+        _restored = true;
+        apply(current);
     }
 
     function copyToSaved(path: string): void {
@@ -82,6 +88,7 @@ Singleton {
                 root.backend = text.trim();
                 if (["swww", "awww"].includes(root.backend))
                     Quickshell.execDetached([`${root.backend}-daemon`]);
+                root.restore();
             }
         }
     }
@@ -91,6 +98,7 @@ Singleton {
         watchChanges: true
         onFileChanged: reload()
         onAdapterUpdated: writeAdapter()
+        onLoaded: root.restore()
         onLoadFailed: error => {
             if (error === FileViewError.FileNotFound)
                 writeAdapter();

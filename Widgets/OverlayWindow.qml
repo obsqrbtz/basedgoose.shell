@@ -42,33 +42,34 @@ PanelWindow {
         }
     }
 
-    Panel {
-        id: panel
-
-        anchors.centerIn: parent
-        width: Math.min(root.contentWidth, root.width - Theme.spacingXl * 2)
-        height: Math.min(root.contentHeight, root.height - Theme.spacingXl * 2)
-        padding: root.padding
-
-        opacity: root.open ? 1 : 0
-        scale: root.open ? 1 : 0.97
-
-        Behavior on opacity {
-            NumberAnimation { duration: Theme.animNormal }
-        }
-        Behavior on scale {
-            NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            z: -1
-        }
-    }
-
-    Item {
+    FocusScope {
         anchors.fill: parent
-        focus: root.open
+        focus: true
+
         Keys.onEscapePressed: root.closeRequested()
+
+        Panel {
+            id: panel
+
+            anchors.centerIn: parent
+            width: Math.min(root.contentWidth, root.width - Theme.spacingXl * 2)
+            height: Math.min(root.contentHeight, root.height - Theme.spacingXl * 2)
+            padding: root.padding
+
+            opacity: root.open ? 1 : 0
+            scale: root.open ? 1 : 0.97
+
+            Behavior on opacity {
+                NumberAnimation { duration: Theme.animNormal }
+            }
+            Behavior on scale {
+                NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                z: -1
+            }
+        }
     }
 }
