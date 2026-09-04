@@ -1,56 +1,55 @@
 pragma Singleton
-import QtQuick
+
 import Quickshell
 import Quickshell.Bluetooth
 
 Singleton {
     id: root
-    
-    readonly property var adapter: Bluetooth.defaultAdapter
-    
-    readonly property bool powered: adapter ? (adapter.enabled === true) : false
-    readonly property var devices: Bluetooth.devices ? Bluetooth.devices.values : []
-    readonly property var connectedDevices: {
-        if (!devices || devices.length === 0) return []
-        return devices.filter(d => d && d.connected)
+
+    readonly property BluetoothAdapter adapter: Bluetooth.defaultAdapter
+    readonly property bool powered: adapter?.enabled ?? false
+    readonly property bool discovering: adapter?.discovering ?? false
+
+    readonly property list<BluetoothDevice> devices: Bluetooth.devices.values
+    readonly property list<BluetoothDevice> paired: devices.filter(d => d.paired || d.trusted)
+    readonly property list<BluetoothDevice> connected: devices.filter(d => d.connected)
+
+    readonly property string statusText: {
+        if (!adapter)
+            return "No adapter";
+        if (!powered)
+            return "Bluetooth off";
+        if (connected.length === 1)
+            return connected[0].name;
+        if (connected.length > 1)
+            return `${connected.length} devices`;
+        return "Not connected";
     }
-    readonly property bool connected: connectedDevices.length > 0
-    readonly property string deviceName: connected && connectedDevices[0]
-        ? (connectedDevices[0].name || "Device")
-        : ""
-    readonly property int deviceCount: connectedDevices.length
-    
-    Component.onCompleted: {
-        console.log("Bluetooth Service initialized")
-        console.log("Adapter exists:", adapter !== null)
-        console.log("Bluetooth object:", Bluetooth)
-        if (adapter) {
-            console.log("Adapter.enabled:", adapter.enabled)
-        }
+
+    function activate(device: BluetoothDevice): void {
+        if (device.connected)
+            device.disconnect();
+        else if (device.paired || device.trusted)
+            device.connect();
+        else
+            device.pair();
     }
-    
-    Connections {
-        target: adapter
-        function onEnabledChanged() {
-            console.log("Adapter.enabled changed to:", adapter.enabled)
-        }
+
+    function statusOf(device: BluetoothDevice): string {
+        if (device.pairing)
+            return "Pairing…";
+        if (device.connected)
+            return device.batteryAvailable ? `Connected · ${Math.round(device.battery * 100)}%` : "Connected";
+        return device.paired ? "Paired" : "Available";
     }
-    
-    onAdapterChanged: {
-        console.log("Adapter changed:", adapter)
+
+    function togglePower(): void {
+        if (adapter)
+            adapter.enabled = !adapter.enabled;
     }
-    
-    function togglePower() {
-        if (!adapter) {
-            console.warn("Cannot toggle: no Bluetooth adapter available")
-            return
-        }
-        
-        if (adapter.enabled === undefined) {
-            console.warn("Cannot toggle: adapter.enabled is undefined")
-            return
-        }
-        
-        adapter.enabled = !adapter.enabled
+
+    function setDiscovering(enabled: bool): void {
+        if (adapter && powered)
+            adapter.discovering = enabled;
     }
 }

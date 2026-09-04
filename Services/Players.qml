@@ -1,104 +1,52 @@
 pragma Singleton
 
+import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
-import QtQuick 6.10
 
 Singleton {
     id: root
 
-    readonly property var list: Mpris.players.values
+    readonly property list<MprisPlayer> list: Mpris.players.values
 
-    property var active: null
+    readonly property MprisPlayer active: list.find(p => p.isPlaying) ?? list[0] ?? null
 
-    property real currentPosition: 0
-    property real trackLength: 0
-    property bool isPlaying: false
+    readonly property bool playing: active?.isPlaying ?? false
+    readonly property bool hasPlayer: active !== null
 
-    function findActivePlayer() {
-        var all = Mpris.players && Mpris.players.values ? Mpris.players.values : []
-        if (!all || all.length === 0) return null
-        for (var i = 0; i < all.length; i++) {
-            if (all[i] && all[i].isPlaying) {
-                return all[i]
-            }
-        }
-        return all[0] || null
+    readonly property string title: active?.trackTitle || "Nothing playing"
+    readonly property string artist: active?.trackArtist ?? ""
+    readonly property string album: active?.trackAlbum ?? ""
+    readonly property string artUrl: active?.trackArtUrl ?? ""
+
+    readonly property real position: active?.position ?? 0
+    readonly property real length: active?.length ?? 0
+    readonly property real progress: length > 0 ? Math.min(1, position / length) : 0
+
+    function playPause(): void {
+        if (active?.canTogglePlaying)
+            active.togglePlaying();
     }
 
-    function updateActivePlayer() {
-        var candidate = findActivePlayer()
-        if (candidate !== active) {
-            active = candidate
-        }
+    function next(): void {
+        if (active?.canGoNext)
+            active.next();
     }
 
-    Component.onCompleted: {
-        updateActivePlayer()
+    function previous(): void {
+        if (active?.canGoPrevious)
+            active.previous();
     }
 
-    Connections {
-        target: Mpris.players
-        function onValuesChanged() {
-            updateActivePlayer()
-        }
-    }
-
-    Timer {
-        interval: 1500
-        repeat: true
-        running: true
-        triggeredOnStart: true
-        onTriggered: updateActivePlayer()
-    }
-
-    Connections {
-        target: active
-        function onPositionChanged() {
-            if (active) {
-                currentPosition = active.position || 0
-            }
-        }
-        function onPlaybackStateChanged() {
-            if (active) {
-                isPlaying = active.isPlaying
-                trackLength = (active.length && active.length < 9e18) ? active.length : 0
-                currentPosition = active.position || 0
-            }
-        }
-    }
-
-    onActiveChanged: {
-        if (active) {
-            currentPosition = active.position || 0
-            trackLength = (active.length && active.length < 9e18) ? active.length : 0
-            isPlaying = active.isPlaying
-        } else {
-            currentPosition = 0
-            trackLength = 0
-            isPlaying = false
-        }
+    function seek(fraction: real): void {
+        if (active?.canSeek && length > 0)
+            active.position = fraction * length;
     }
 
     Timer {
-        id: statePoller
-        interval: 800
+        running: root.playing && root.active?.positionSupported
+        interval: 1000
         repeat: true
-        running: true
-        onTriggered: {
-            if (active) {
-                currentPosition = active.position || 0
-                trackLength = (active.length && active.length < 9e18) ? active.length : 0
-                isPlaying = active.isPlaying
-            } else {
-                currentPosition = 0
-                trackLength = 0
-                isPlaying = false
-            }
-        }
-    }
-
-    function getIdentity(player: var): string {
-        return player?.identity ?? "Unknown"
+        onTriggered: root.active.positionChanged()
     }
 }

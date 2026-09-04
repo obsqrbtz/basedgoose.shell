@@ -1,169 +1,76 @@
 pragma Singleton
-import QtQuick 6.10
+
 import Quickshell
-import Quickshell.Io
+import Quickshell.Networking
 
 Singleton {
     id: root
 
-    property bool wifiEnabled: false
-    property bool ethernetAvailable: false
-    property bool ethernetConnected: false
-    property bool connected: false
-    property string activeType: "none"
-    property string connectionName: ""
-    property int signalStrength: 0
-    property var accessPoints: []
-    property bool refreshing: false
-    property string stateText: {
-        if (ethernetConnected) return connectionName.length > 0 ? connectionName : "Ethernet connected"
-        if (!wifiEnabled && !ethernetAvailable) return "Network unavailable"
-        if (!wifiEnabled && ethernetAvailable) return "Ethernet disconnected"
-        if (connected && connectionName.length > 0) return connectionName
-        return "Disconnected"
+    readonly property list<NetworkDevice> devices: Networking.devices.values
+
+    readonly property WifiDevice wifiDevice: devices.find(d => d.type === DeviceType.Wifi) ?? null
+
+    readonly property var wiredDevices: devices.filter(d => d.type === DeviceType.Wired)
+    readonly property WiredDevice wiredDevice: wiredDevices.find(d => d.connected) ?? wiredDevices[0] ?? null
+
+    readonly property bool wifiAvailable: wifiDevice !== null
+    readonly property bool wifiEnabled: Networking.wifiEnabled
+
+    readonly property bool ethernetConnected: wiredDevices.some(d => d.connected)
+    readonly property WifiNetwork activeWifi: wifiDevice?.networks.values.find(n => n.connected) ?? null
+    readonly property bool wifiConnected: activeWifi !== null
+
+    readonly property bool connected: ethernetConnected || wifiConnected
+    readonly property int signalStrength: Math.round((activeWifi?.signalStrength ?? 0) * 100)
+
+    readonly property var networks: {
+        const seen = {};
+        for (const n of wifiDevice?.networks.values ?? [])
+            if (!seen[n.name] || n.signalStrength > seen[n.name].signalStrength)
+                seen[n.name] = n;
+        return Object.values(seen).sort((a, b) => b.signalStrength - a.signalStrength);
     }
 
-    function updateStateFromOutput(output) {
-        var text = output.trim()
-        if (text.length === 0) {
-            root.wifiEnabled = false
-            root.ethernetAvailable = false
-            root.ethernetConnected = false
-            root.connected = false
-            root.activeType = "none"
-            root.connectionName = ""
-            return
-        }
-        var lines = text.split("\n")
-        var wifiPresent = false
-        var wifiConnected = false
-        var wifiConnection = ""
-        var ethernetPresent = false
-        var ethernetConnected = false
-        var ethernetConnection = ""
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i]
-            if (!line) continue
-            var parts = line.split(":")
-            var deviceType = parts.length > 0 ? parts[0] : ""
-            var state = parts.length > 1 ? parts[1] : "unavailable"
-            var connection = parts.length > 2 ? parts.slice(2).join(":") : ""
-            if (deviceType === "wifi") {
-                wifiPresent = true
-                if (state === "connected") {
-                    wifiConnected = true
-                    wifiConnection = connection
-                }
-            } else if (deviceType === "ethernet") {
-                ethernetPresent = true
-                if (state === "connected") {
-                    ethernetConnected = true
-                    ethernetConnection = connection
-                }
-            }
-        }
-        root.wifiEnabled = wifiPresent
-        root.ethernetAvailable = ethernetPresent
-        root.ethernetConnected = ethernetConnected
-
-        if (root.ethernetConnected) {
-            root.activeType = "ethernet"
-            root.connected = true
-            root.connectionName = ethernetConnection !== "--" ? ethernetConnection : ""
-            return
-        }
-
-        if (wifiConnected) {
-            root.activeType = "wifi"
-            root.connected = true
-            root.connectionName = wifiConnection !== "--" ? wifiConnection : ""
-            return
-        }
-
-        root.activeType = "none"
-        root.connected = false
-        root.connectionName = ""
+    readonly property string statusText: {
+        if (ethernetConnected)
+            return wifiConnected ? `Wired · ${activeWifi.name}` : "Wired";
+        if (wifiConnected)
+            return activeWifi.name;
+        if (!wifiAvailable && wiredDevices.length === 0)
+            return "No network devices";
+        return wifiEnabled ? "Disconnected" : "Wi-Fi off";
     }
 
-    function updateAccessPointsFromOutput(output) {
-        var text = output.trim()
-        var points = []
-        var strength = 0
-        if (text.length > 0) {
-            var lines = text.split("\n")
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i]
-                if (!line) continue
-                var parts = line.split(":")
-                if (parts.length < 4) continue
-                var inUse = parts[0] === "*"
-                var ssid = parts[1]
-                var signal = parseInt(parts[2])
-                var security = parts.slice(3).join(":")
-                points.push({
-                    inUse: inUse,
-                    ssid: ssid.length > 0 ? ssid : "Hidden network",
-                    signal: isNaN(signal) ? 0 : signal,
-                    security: security
-                })
-                if (inUse) strength = isNaN(signal) ? 0 : signal
-            }
-        }
-        root.accessPoints = points
-        root.signalStrength = strength
+    function deviceStatus(device: var): string {
+        return device ? ConnectionState.toString(device.state) : "";
     }
 
-    function refresh() {
-        if (root.refreshing) return
-        root.refreshing = true
-        wifiStateProcess.running = true
+    readonly property bool busy: networks.some(n => n.stateChanging)
+
+    function setWifiEnabled(enabled: bool): void {
+        Networking.wifiEnabled = enabled;
     }
 
-    function setWifiEnabled(enabled) {
-        toggleWifiProcess.command = ["nmcli", "radio", "wifi", enabled ? "on" : "off"]
-        toggleWifiProcess.running = true
+    function setScanning(enabled: bool): void {
+        if (wifiDevice)
+            wifiDevice.scannerEnabled = enabled;
     }
 
-    Process {
-        id: wifiStateProcess
-        running: false
-        command: ["sh", "-c", "nmcli -t -f TYPE,STATE,CONNECTION device status 2>/dev/null || true"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.updateStateFromOutput(text)
-                wifiListProcess.running = true
-            }
-        }
-        onExited: if (exitCode !== 0) wifiListProcess.running = true
+    function requiresPassword(network: WifiNetwork): bool {
+        return !network.known && [WifiSecurityType.WpaPsk, WifiSecurityType.Wpa2Psk, WifiSecurityType.Sae].includes(network.security);
     }
 
-    Process {
-        id: wifiListProcess
-        running: false
-        command: ["sh", "-c", "nmcli -t -f IN-USE,SSID,SIGNAL,SECURITY device wifi list --rescan auto 2>/dev/null || true"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.updateAccessPointsFromOutput(text)
-                root.refreshing = false
-            }
-        }
-        onExited: root.refreshing = false
+    function securityName(network: WifiNetwork): string {
+        return network.security === WifiSecurityType.None ? "Open" : WifiSecurityType.toString(network.security);
     }
 
-    Process {
-        id: toggleWifiProcess
-        running: false
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
-        onExited: root.refresh()
+    function activate(network: WifiNetwork): bool {
+        if (network.connected)
+            network.disconnect();
+        else if (requiresPassword(network))
+            return false;
+        else
+            network.connect();
+        return true;
     }
-
-    Timer {
-        interval: 5000
-        repeat: true
-        running: true
-        onTriggered: root.refresh()
-    }
-
-    Component.onCompleted: refresh()
 }

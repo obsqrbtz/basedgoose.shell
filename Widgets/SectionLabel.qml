@@ -1,14 +1,11 @@
-import QtQuick 6.10
-import "../Commons" as Commons
+import QtQuick
 
-Text {
-    id: root
-    
-    property color labelColor: Qt.rgba(Commons.Theme.foreground.r, Commons.Theme.foreground.g, Commons.Theme.foreground.b, 0.6)
-    
-    font.family: Commons.Theme.fontUI
-    font.pixelSize: Commons.Theme.fontSizeCaption
-    font.weight: Font.Medium
-    font.letterSpacing: 0.5
-    color: root.labelColor
+import qs.Config
+
+StyledText {
+    font.pixelSize: Theme.fontCaption
+    font.weight: Font.DemiBold
+    font.capitalization: Font.AllUppercase
+    font.letterSpacing: 0.6
+    color: Theme.textMuted
 }
