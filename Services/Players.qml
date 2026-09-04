@@ -14,10 +14,18 @@ Singleton {
     readonly property bool playing: active?.isPlaying ?? false
     readonly property bool hasPlayer: active !== null
 
-    readonly property string title: active?.trackTitle || "Nothing playing"
-    readonly property string artist: active?.trackArtist ?? ""
-    readonly property string album: active?.trackAlbum ?? ""
+    readonly property string title: root.track(active?.trackTitle ?? "") || "Nothing playing"
+    readonly property string artist: root.track(active?.trackArtist ?? "")
+    readonly property string album: root.track(active?.trackAlbum ?? "")
     readonly property string artUrl: active?.trackArtUrl ?? ""
+
+    function track(value: string): string {
+        const text = value.trim();
+        if (text === "")
+            return "";
+        const self = [active?.identity ?? "", active?.desktopEntry ?? ""];
+        return self.some(name => name.trim().toLowerCase() === text.toLowerCase()) ? "" : text;
+    }
 
     readonly property real position: active?.position ?? 0
     readonly property real length: active?.length ?? 0

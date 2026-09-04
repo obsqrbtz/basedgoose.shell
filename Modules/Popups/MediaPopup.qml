@@ -14,7 +14,8 @@ BarPopup {
     ColumnLayout {
         id: column
         anchors.fill: parent
-        spacing: Theme.spacingMd
+
+        spacing: 0
 
         ClippingRectangle {
             Layout.alignment: Qt.AlignHCenter
@@ -42,28 +43,35 @@ BarPopup {
 
         ColumnLayout {
             Layout.fillWidth: true
+            Layout.topMargin: 9
             spacing: 2
 
             StyledText {
                 Layout.fillWidth: true
+                Layout.preferredHeight: font.pixelSize
                 text: Players.title
-                font.pixelSize: Theme.fontLarge
+                font.pixelSize: Theme.fontHeading
                 font.weight: Font.DemiBold
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             StyledText {
                 Layout.fillWidth: true
+                Layout.preferredHeight: font.pixelSize
                 text: Players.artist
-                color: Theme.textMuted
+                font.pixelSize: Theme.fontSmall
+                opacity: 0.6
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 visible: Players.artist !== ""
             }
         }
 
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: Theme.spacingXs
+            Layout.topMargin: 11
+            spacing: 2
             visible: Players.length > 0
 
             Slider {
@@ -74,6 +82,7 @@ BarPopup {
 
             RowLayout {
                 Layout.fillWidth: true
+                spacing: 0
 
                 StyledText {
                     text: Format.time(Players.position)
@@ -87,17 +96,19 @@ BarPopup {
                     text: Format.time(Players.length)
                     font.pixelSize: Theme.fontTiny
                     color: Theme.textMuted
+                    horizontalAlignment: Text.AlignRight
                 }
             }
         }
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            spacing: Theme.spacingMd
+            Layout.topMargin: 9
+            spacing: Theme.spacingXs
 
             IconButton {
                 icon: Icons.previous
-                size: 32
+                size: 30
                 iconSize: Theme.iconHuge
                 enabled: Players.active?.canGoPrevious ?? false
                 onClicked: Players.previous()
@@ -105,15 +116,15 @@ BarPopup {
 
             IconButton {
                 icon: Players.playing ? Icons.pause : Icons.play
-                size: 40
-                iconSize: 24
+                size: 30
+                iconSize: Theme.iconHuge
                 variant: Button.Filled
                 onClicked: Players.playPause()
             }
 
             IconButton {
                 icon: Icons.next
-                size: 32
+                size: 30
                 iconSize: Theme.iconHuge
                 enabled: Players.active?.canGoNext ?? false
                 onClicked: Players.next()

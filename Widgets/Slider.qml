@@ -6,12 +6,13 @@ Item {
 
     property real value: 0
     property color accent: Theme.primary
-    property int barHeight: 4
+    property int barHeight: 6
+    property int handleSize: 10
 
     signal moved(real value)
 
     implicitWidth: 120
-    implicitHeight: 18
+    implicitHeight: Math.max(barHeight, handleSize) + 2
 
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter
@@ -32,8 +33,8 @@ Item {
         id: handle
         x: (parent.width - width) * Math.max(0, Math.min(1, root.value))
         anchors.verticalCenter: parent.verticalCenter
-        width: 10
-        height: 10
+        width: root.handleSize
+        height: root.handleSize
         radius: width / 2
         color: root.accent
         scale: mouse.containsMouse || mouse.pressed ? 1.3 : 1
