@@ -1,3 +1,5 @@
+//@ pragma UseQApplication
+
 import QtQml
 import Quickshell
 import Quickshell.Io
