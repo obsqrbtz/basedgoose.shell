@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Widgets
 import qs.Config
@@ -13,6 +14,29 @@ Surface {
 
     signal dismissed
 
+    readonly property var defaultAction: {
+        for (const action of notification.actions)
+            if (action.identifier === "default")
+                return action;
+        return null;
+    }
+
+    readonly property var visibleActions: {
+        const actions = [];
+        for (const action of notification.actions)
+            if (action.identifier !== "default" && action.text !== "")
+                actions.push(action);
+        return actions;
+    }
+
+    readonly property string iconSource: {
+        const image = notification.image;
+        if (image !== "")
+            return image.includes("/") ? image : Quickshell.iconPath(image, true);
+        const appIcon = notification.appIcon;
+        return appIcon !== "" ? Quickshell.iconPath(appIcon, true) : "";
+    }
+
     readonly property color urgencyColor: notification.urgency === NotificationUrgency.Critical ? Theme.error : notification.urgency === NotificationUrgency.Low ? Theme.textMuted : Theme.primary
 
     implicitHeight: layout.implicitHeight + Theme.spacingMd * 2
@@ -22,7 +46,11 @@ Surface {
     border.color: notification.urgency === NotificationUrgency.Critical ? Theme.error : Theme.borderSubtle
     accent: Theme.primary
 
-    onClicked: root.dismissed()
+    onClicked: {
+        if (root.defaultAction)
+            root.defaultAction.invoke();
+        root.dismissed();
+    }
 
     Rectangle {
         width: 2
@@ -43,11 +71,11 @@ Surface {
             Layout.preferredHeight: 32
             radius: Theme.radiusPanel
             color: Theme.alpha(root.urgencyColor, 0.15)
-            visible: root.notification.image !== "" || root.notification.appIcon !== ""
+            visible: root.iconSource !== ""
 
             Image {
                 anchors.fill: parent
-                source: root.notification.image || root.notification.appIcon
+                source: root.iconSource
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
                 sourceSize.width: 64
@@ -88,13 +116,13 @@ Surface {
 
             RowLayout {
                 spacing: Theme.spacingXs
-                visible: root.notification.actions.length > 0
+                visible: root.visibleActions.length > 0
 
                 Repeater {
-                    model: root.notification.actions
+                    model: root.visibleActions
 
                     Button {
-                        required property NotificationAction modelData
+                        required property var modelData
 
                         label: modelData.text
                         variant: Button.Outlined
