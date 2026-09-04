@@ -46,6 +46,15 @@ Singleton {
 
     readonly property ShellScreen focusedScreen: activeWorkspace?.projection?.screens[0] ?? Quickshell.screens[0] ?? null
 
+    function label(workspace: Windowset): string {
+        if (!workspace)
+            return "";
+        if (workspace.name)
+            return workspace.name.replace(/^special:/, "");
+        const coords = workspace.coordinates;
+        return coords.length > 0 ? String(coords[coords.length - 1]) : "\u2022";
+    }
+
     function activate(workspace: Windowset): void {
         if (workspace?.canActivate)
             workspace.activate();

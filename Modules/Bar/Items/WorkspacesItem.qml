@@ -22,21 +22,42 @@ BarItem {
             required property Windowset modelData
 
             readonly property bool active: modelData.active
+            readonly property bool focused: active && (Quickshell.screens.length <= 1 || root.onFocusedScreen)
+            readonly property bool urgent: modelData.urgent
 
-            width: root.vertical ? 8 : active ? 26 : 8
-            height: root.vertical ? (active ? 26 : 8) : 8
+            readonly property color tint: urgent ? Theme.error : Theme.primary
+            readonly property bool filled: focused || urgent
+            readonly property int padding: focused ? Theme.spacingSm : Theme.spacingXs
 
-            radius: 4
-            accent: Theme.primary
-            baseColor: active ? Theme.primary : modelData.urgent ? Theme.error : Theme.alpha(Theme.text, 0.25)
+            implicitWidth: Math.max(implicitHeight, Math.min(label.implicitWidth, 48) + padding * 2)
+            implicitHeight: 18
+
+            radius: Theme.radius
+            accent: tint
+            baseColor: filled ? tint : active ? Theme.alpha(tint, 0.18) : Theme.surfaceAlt
+
+            border.width: 1
+            border.color: active && !filled ? tint : "transparent"
 
             onClicked: Compositor.activate(modelData)
 
-            Behavior on width {
+            StyledText {
+                id: label
+
+                anchors.centerIn: parent
+                width: Math.min(implicitWidth, 48)
+                text: Compositor.label(pill.modelData)
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: Theme.fontCaption
+                font.bold: pill.focused
+                color: pill.filled ? Theme.background : pill.active ? pill.tint : Theme.textMuted
+            }
+
+            Behavior on implicitWidth {
                 NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
             }
-            Behavior on height {
-                NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
+            Behavior on border.color {
+                ColorAnimation { duration: Theme.animNormal }
             }
         }
     }
