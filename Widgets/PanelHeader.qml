@@ -36,7 +36,7 @@ RowLayout {
 
     IconButton {
         icon: Icons.close
-        size: 22
+        size: Theme.controlHeight
         visible: root.closable
         onClicked: root.closeRequested()
     }

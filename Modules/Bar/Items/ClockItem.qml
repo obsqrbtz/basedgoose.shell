@@ -29,7 +29,7 @@ BarItem {
         StyledText {
             Layout.alignment: root.vertical ? Qt.AlignHCenter : Qt.AlignBaseline
             text: Qt.formatDateTime(clock.date, "HH:mm")
-            font.pixelSize: root.vertical ? Theme.fontCaption : Theme.fontNormal
+            font.pixelSize: root.vertical ? Theme.fontSmall : Theme.fontNormal
             font.weight: Font.DemiBold
             color: root.hovered ? Theme.primary : Theme.text
         }
@@ -37,7 +37,7 @@ BarItem {
         StyledText {
             Layout.alignment: root.vertical ? Qt.AlignHCenter : Qt.AlignBaseline
             text: Qt.formatDateTime(clock.date, root.vertical ? "ddd" : "ddd MMM d")
-            font.pixelSize: root.vertical ? Theme.fontTiny : Theme.fontCaption
+            font.pixelSize: Theme.fontSmall
             color: Theme.textMuted
         }
     }

@@ -8,7 +8,7 @@ Item {
     property var model: []
     property int currentIndex: 0
 
-    implicitHeight: 28
+    implicitHeight: Theme.controlHeight
     implicitWidth: row.implicitWidth
 
     RowLayout {

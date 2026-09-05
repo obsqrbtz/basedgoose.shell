@@ -86,7 +86,7 @@ BarPopup {
 
                 StyledText {
                     text: Format.time(Players.position)
-                    font.pixelSize: Theme.fontTiny
+                    font.pixelSize: Theme.fontSmall
                     color: Theme.textMuted
                 }
 
@@ -94,7 +94,7 @@ BarPopup {
 
                 StyledText {
                     text: Format.time(Players.length)
-                    font.pixelSize: Theme.fontTiny
+                    font.pixelSize: Theme.fontSmall
                     color: Theme.textMuted
                     horizontalAlignment: Text.AlignRight
                 }
@@ -108,24 +108,24 @@ BarPopup {
 
             IconButton {
                 icon: Icons.previous
-                size: 30
-                iconSize: Theme.iconHuge
+                size: Theme.controlHeightLarge
+                iconSize: Theme.iconLarge
                 enabled: Players.active?.canGoPrevious ?? false
                 onClicked: Players.previous()
             }
 
             IconButton {
                 icon: Players.playing ? Icons.pause : Icons.play
-                size: 30
-                iconSize: Theme.iconHuge
+                size: Theme.controlHeightLarge
+                iconSize: Theme.iconLarge
                 variant: Button.Filled
                 onClicked: Players.playPause()
             }
 
             IconButton {
                 icon: Icons.next
-                size: 30
-                iconSize: Theme.iconHuge
+                size: Theme.controlHeightLarge
+                iconSize: Theme.iconLarge
                 enabled: Players.active?.canGoNext ?? false
                 onClicked: Players.next()
             }

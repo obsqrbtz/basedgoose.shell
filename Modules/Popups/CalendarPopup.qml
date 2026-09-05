@@ -29,13 +29,13 @@ BarPopup {
 
             IconButton {
                 icon: Icons.chevronDown
-                size: 20
+                size: Theme.controlHeight
                 rotation: 90
                 onClicked: root.offset--
             }
             IconButton {
                 icon: Icons.chevronRight
-                size: 20
+                size: Theme.controlHeight
                 onClicked: root.offset++
             }
         }
@@ -82,7 +82,7 @@ BarPopup {
                     StyledText {
                         anchors.centerIn: parent
                         text: parent.modelData.getDate()
-                        font.pixelSize: Theme.fontSmall
+                        font.pixelSize: Theme.fontNormal
                         color: parent.today ? Theme.primary : parent.thisMonth ? Theme.text : Theme.alpha(Theme.textMuted, 0.5)
                     }
                 }

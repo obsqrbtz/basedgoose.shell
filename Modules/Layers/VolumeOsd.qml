@@ -37,7 +37,7 @@ OsdWindow {
             StyledText {
                 Layout.fillWidth: true
                 text: Audio.muted ? "Muted" : Audio.sink?.description ?? ""
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
             }
 

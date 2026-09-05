@@ -25,7 +25,7 @@ BarItem {
 
     StyledText {
         text: `${Audio.percent}%`
-        font.pixelSize: root.vertical ? Theme.fontTiny : Theme.fontCaption
+        font.pixelSize: Theme.fontSmall
         color: Theme.textMuted
         visible: !Audio.muted
     }

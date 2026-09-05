@@ -37,7 +37,7 @@ OverlayWindow {
             Layout.fillWidth: true
             text: "Every entry accepts toggle, open and close. Bar popups act on the bar of the focused screen."
             color: Theme.textMuted
-            font.pixelSize: Theme.fontCaption
+            font.pixelSize: Theme.fontSmall
             wrapMode: Text.Wrap
         }
 
@@ -73,7 +73,7 @@ OverlayWindow {
                                 required property string modelData
 
                                 Layout.fillWidth: true
-                                implicitHeight: 26
+                                implicitHeight: Theme.controlHeight
                                 accent: Theme.primary
                                 onClicked: Clipboard.copy(command.text)
 
@@ -83,7 +83,7 @@ OverlayWindow {
                                     anchors.leftMargin: Theme.spacingSm
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: `${root.prefix} ${entry.modelData} toggle`
-                                    font.pixelSize: Theme.fontCaption
+                                    font.pixelSize: Theme.fontSmall
                                     color: entry.hovered ? Theme.primary : Theme.textMuted
                                 }
 
@@ -92,7 +92,7 @@ OverlayWindow {
                                     anchors.rightMargin: Theme.spacingSm
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: "click to copy"
-                                    font.pixelSize: Theme.fontTiny
+                                    font.pixelSize: Theme.fontSmall
                                     color: Theme.alpha(Theme.textMuted, 0.7)
                                     visible: entry.hovered
                                 }

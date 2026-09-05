@@ -9,6 +9,7 @@ Singleton {
     readonly property color background: Schemes.colors.background
     readonly property color surface: Schemes.colors.surfaceBase
     readonly property color surfaceAlt: Schemes.colors.surfaceContainer
+    readonly property color surfaceHigh: Schemes.colors.surfaceHigh
     readonly property color border: Schemes.colors.border
     readonly property color borderSubtle: Schemes.colors.surfaceBorder
     readonly property color text: Schemes.colors.foreground
@@ -25,17 +26,21 @@ Singleton {
     readonly property string fontFamily: "JetBrainsMono Nerd Font"
     readonly property string iconFontFamily: "JetBrainsMono Nerd Font Propo"
 
-    readonly property int fontTiny: 8
-    readonly property int fontCaption: 10
     readonly property int fontSmall: 11
-    readonly property int fontNormal: 12
-    readonly property int fontLarge: 13
-    readonly property int fontHeading: 16
+    readonly property int fontNormal: 13
+    readonly property int fontLarge: 16
+    readonly property int fontHeading: 20
 
-    readonly property int iconSmall: 12
-    readonly property int iconNormal: 14
-    readonly property int iconLarge: 16
-    readonly property int iconHuge: 20
+    readonly property int iconSmall: 14
+    readonly property int iconNormal: 16
+    readonly property int iconLarge: 20
+    readonly property int iconHuge: 28
+
+    readonly property int controlHeight: 28
+    readonly property int controlHeightSmall: 22
+    readonly property int controlHeightLarge: 34
+    readonly property int controlHeightBar: 26
+    readonly property int barItemInner: 20
 
     readonly property int spacingXs: 4
     readonly property int spacingSm: 8

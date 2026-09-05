@@ -8,16 +8,17 @@ import Qt.labs.folderlistmodel
 Singleton {
     id: root
 
-    readonly property var keys: ["background", "surfaceBase", "surfaceContainer", "border", "surfaceBorder", "foreground", "foregroundMuted", "primary", "primaryMuted", "secondary", "secondaryMuted", "info", "warning", "success", "error"]
+    readonly property var keys: ["background", "surfaceBase", "surfaceContainer", "surfaceHigh", "border", "surfaceBorder", "foreground", "foregroundMuted", "primary", "primaryMuted", "secondary", "secondaryMuted", "info", "warning", "success", "error"]
 
     readonly property var fallback: ({
         background: "#0C0C0C",
-        surfaceBase: "#111111",
-        surfaceContainer: "#181818",
-        border: "#2A2A2A",
-        surfaceBorder: "#222222",
+        surfaceBase: "#151515",
+        surfaceContainer: "#1F1F1F",
+        surfaceHigh: "#2A2A2A",
+        border: "#383838",
+        surfaceBorder: "#242424",
         foreground: "#C8C8C8",
-        foregroundMuted: "#525252",
+        foregroundMuted: "#6E6E6E",
         primary: "#5FAD5F",
         primaryMuted: "#0A190A",
         secondary: "#B89A3C",
@@ -36,8 +37,22 @@ Singleton {
         const scheme = available.find(s => s.id === Settings.colorScheme);
         const result = {};
         for (const key of keys)
-            result[key] = overrides[key] ?? scheme?.colors[key] ?? fallback[key];
+            result[key] = overrides[key] ?? scheme?.colors[key] ?? null;
+
+        for (const key of keys)
+            result[key] = result[key] ?? fallback[key];
         return result;
+    }
+
+    function isDark(color: string): bool {
+        return Qt.color(color).hslLightness < 0.5;
+    }
+
+    function shade(color: string, amount: real): string {
+        const c = Qt.color(color);
+        const out = Qt.hsla(c.hslHue, c.hslSaturation, Math.max(0, Math.min(1, c.hslLightness + amount)), 1);
+        const hex = v => Math.round(v * 255).toString(16).padStart(2, "0");
+        return `#${hex(out.r)}${hex(out.g)}${hex(out.b)}`;
     }
 
     readonly property bool edited: Object.keys(overrides).length > 0

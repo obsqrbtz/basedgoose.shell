@@ -53,13 +53,13 @@ ColumnLayout {
 
                 StyledText {
                     text: `${Icons.download}  ${Format.speed(root.source.netRxSpeed)}`
-                    font.pixelSize: Theme.fontCaption
+                    font.pixelSize: Theme.fontNormal
                     color: Theme.info
                 }
 
                 StyledText {
                     text: `${Icons.upload}  ${Format.speed(root.source.netTxSpeed)}`
-                    font.pixelSize: Theme.fontCaption
+                    font.pixelSize: Theme.fontNormal
                     color: Theme.secondary
                 }
             }
@@ -110,12 +110,12 @@ ColumnLayout {
                         StyledText {
                             Layout.fillWidth: true
                             text: driveRow.drive.name
-                            font.pixelSize: Theme.fontCaption
+                            font.pixelSize: Theme.fontNormal
                         }
 
                         StyledText {
                             text: `${Format.bytes(driveRow.drive.used)} / ${Format.bytes(driveRow.drive.total)}`
-                            font.pixelSize: Theme.fontTiny
+                            font.pixelSize: Theme.fontSmall
                             color: Theme.textMuted
                         }
                     }
@@ -155,7 +155,7 @@ ColumnLayout {
 
             StyledText {
                 text: reading.detail
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
             }
         }

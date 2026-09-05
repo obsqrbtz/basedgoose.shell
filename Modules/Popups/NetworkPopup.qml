@@ -37,7 +37,7 @@ BarPopup {
 
             StyledText {
                 text: Network.statusText
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Network.connected ? Theme.textMuted : Theme.warning
             }
         }
@@ -94,7 +94,7 @@ BarPopup {
                 StyledText {
                     Layout.fillWidth: true
                     text: Network.wifiDevice?.name ?? ""
-                    font.pixelSize: Theme.fontTiny
+                    font.pixelSize: Theme.fontSmall
                     color: Theme.textMuted
                 }
 

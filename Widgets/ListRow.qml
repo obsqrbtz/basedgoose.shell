@@ -26,7 +26,7 @@ Surface {
         spacing: Theme.spacingMd
 
         IconImage {
-            implicitSize: 22
+            implicitSize: Theme.iconLarge
             source: root.iconSource
             visible: root.iconSource !== ""
         }
@@ -46,14 +46,14 @@ Surface {
             StyledText {
                 Layout.fillWidth: true
                 text: root.title
-                font.pixelSize: Theme.fontSmall
+                font.pixelSize: Theme.fontNormal
                 color: root.active ? Theme.primary : Theme.text
             }
 
             StyledText {
                 Layout.fillWidth: true
                 text: root.subtitle
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
                 visible: root.subtitle !== ""
             }

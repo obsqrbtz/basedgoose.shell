@@ -26,7 +26,7 @@ BarItem {
         text: Players.title
         maximumLineCount: 1
         width: Math.min(implicitWidth, 160)
-        font.pixelSize: Theme.fontCaption
+        font.pixelSize: Theme.fontSmall
         color: root.hovered ? Theme.primary : Theme.text
         visible: !root.vertical
     }

@@ -35,7 +35,7 @@ OverlayWindow {
 
             StyledText {
                 text: `${Compositor.displayName} · ${Settings.configDir}`
-                font.pixelSize: Theme.fontTiny
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
             }
         }
@@ -82,8 +82,8 @@ OverlayWindow {
                     implicitHeight: 44
                     radius: Theme.radiusPanel
                     baseColor: modelData.colors.surfaceBase
-                    border.width: active ? 2 : 1
-                    border.color: active ? modelData.colors.primary : Theme.border
+                    border.width: 2
+                    border.color: active ? modelData.colors.primary : modelData.colors.border
                     accent: modelData.colors.primary
                     onClicked: Settings.colorScheme = modelData.id
 
@@ -95,7 +95,7 @@ OverlayWindow {
                         StyledText {
                             Layout.fillWidth: true
                             text: swatch.modelData.name
-                            font.pixelSize: Theme.fontCaption
+                            font.pixelSize: Theme.fontNormal
                             color: swatch.modelData.colors.foreground
                         }
 
@@ -122,7 +122,7 @@ OverlayWindow {
         StyledText {
             Layout.fillWidth: true
             text: "Edit a colour, then save the result as a new scheme in your config directory."
-            font.pixelSize: Theme.fontTiny
+            font.pixelSize: Theme.fontSmall
             color: Theme.textMuted
             wrapMode: Text.Wrap
         }
@@ -154,15 +154,15 @@ OverlayWindow {
                     StyledText {
                         Layout.preferredWidth: 92
                         text: entry.modelData
-                        font.pixelSize: Theme.fontTiny
+                        font.pixelSize: Theme.fontSmall
                         color: Theme.textMuted
                     }
 
                     TextField {
                         Layout.fillWidth: true
-                        implicitHeight: 20
+                        implicitHeight: Theme.controlHeightSmall
                         text: String(Schemes.colors[entry.modelData]).toUpperCase()
-                        inputItem.font.pixelSize: Theme.fontTiny
+                        inputItem.font.pixelSize: Theme.fontSmall
                         onAccepted: value => {
                             if (!Schemes.setColor(entry.modelData, value))
                                 text = String(Schemes.colors[entry.modelData]).toUpperCase();
@@ -235,7 +235,7 @@ OverlayWindow {
         StyledText {
             Layout.fillWidth: true
             text: "Click a module to move it to the next section, or off the bar."
-            font.pixelSize: Theme.fontTiny
+            font.pixelSize: Theme.fontSmall
             color: Theme.textMuted
             wrapMode: Text.Wrap
         }
@@ -266,7 +266,7 @@ OverlayWindow {
 
                             label: modelData
                             variant: Button.Filled
-                            fontSize: Theme.fontTiny
+                            fontSize: Theme.fontSmall
                             onClicked: root.moveModule(modelData)
                         }
                     }
@@ -290,7 +290,7 @@ OverlayWindow {
 
                     label: modelData
                     variant: Button.Outlined
-                    fontSize: Theme.fontTiny
+                    fontSize: Theme.fontSmall
                     onClicked: root.moveModule(modelData)
                 }
             }
@@ -358,7 +358,7 @@ OverlayWindow {
         StyledText {
             Layout.fillWidth: true
             text: Wallpapers.backend ? `Using ${Wallpapers.backend}.` : "Install swww, awww or swaybg to set wallpapers."
-            font.pixelSize: Theme.fontTiny
+            font.pixelSize: Theme.fontSmall
             color: Wallpapers.backend ? Theme.textMuted : Theme.warning
         }
     }
@@ -369,7 +369,7 @@ OverlayWindow {
         StyledText {
             Layout.fillWidth: true
             text: "Each host needs Prometheus scraping a node_exporter. See docs/monitoring-servers.md."
-            font.pixelSize: Theme.fontTiny
+            font.pixelSize: Theme.fontSmall
             color: Theme.textMuted
             wrapMode: Text.Wrap
         }
@@ -389,7 +389,7 @@ OverlayWindow {
 
                 IconButton {
                     icon: Icons.trash
-                    size: 22
+                    size: Theme.controlHeight
                     onClicked: Settings.monitorServers = Settings.monitorServers.filter((_, i) => i !== index)
                 }
             }
@@ -466,7 +466,7 @@ OverlayWindow {
         StyledText {
             Layout.fillWidth: true
             text: pathRow.value
-            font.pixelSize: Theme.fontCaption
+            font.pixelSize: Theme.fontSmall
             color: Theme.textMuted
         }
 

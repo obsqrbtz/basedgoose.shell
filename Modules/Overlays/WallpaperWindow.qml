@@ -35,7 +35,7 @@ OverlayWindow {
 
             StyledText {
                 text: Wallpapers.backend ? `via ${Wallpapers.backend}` : "no wallpaper daemon found"
-                font.pixelSize: Theme.fontTiny
+                font.pixelSize: Theme.fontSmall
                 color: Wallpapers.backend ? Theme.textMuted : Theme.error
             }
         }
@@ -145,8 +145,8 @@ OverlayWindow {
 
             StyledText {
                 text: `${Wallhaven.page} / ${Wallhaven.lastPage}`
-                font.pixelSize: Theme.fontCaption
-                color: Theme.textMuted
+                font.pixelSize: Theme.fontNormal
+                color: Theme.text
             }
 
             IconButton {
@@ -160,7 +160,7 @@ OverlayWindow {
             Layout.fillWidth: true
             text: Wallhaven.error
             color: Theme.error
-            font.pixelSize: Theme.fontCaption
+            font.pixelSize: Theme.fontSmall
             horizontalAlignment: Text.AlignHCenter
             visible: root.tab === 2 && Wallhaven.error !== ""
         }
@@ -186,8 +186,8 @@ OverlayWindow {
         height: GridView.view.cellHeight - Theme.spacingXs
         accent: Theme.primary
         baseColor: Theme.surface
-        border.width: current ? 2 : 1
-        border.color: current ? Theme.primary : Theme.borderSubtle
+        border.width: 2
+        border.color: current ? Theme.primary : "transparent"
         radius: Theme.radiusPanel
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onRightClicked: thumb.secondary()
@@ -222,7 +222,7 @@ OverlayWindow {
                 anchors.leftMargin: Theme.spacingXs
                 anchors.rightMargin: Theme.spacingXs
                 text: thumb.caption
-                font.pixelSize: Theme.fontTiny
+                font.pixelSize: Theme.fontSmall
                 verticalAlignment: Text.AlignVCenter
             }
         }

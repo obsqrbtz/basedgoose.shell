@@ -13,11 +13,11 @@ Rectangle {
     signal accepted(string text)
 
     implicitWidth: 200
-    implicitHeight: 30
+    implicitHeight: Theme.controlHeight
     radius: Theme.radius
-    color: Theme.alpha(Theme.text, 0.05)
+    color: Theme.surfaceAlt
     border.width: 1
-    border.color: input.activeFocus ? Theme.primary : Theme.border
+    border.color: input.activeFocus ? Theme.primary : "transparent"
 
     Behavior on border.color {
         ColorAnimation { duration: Theme.animNormal }

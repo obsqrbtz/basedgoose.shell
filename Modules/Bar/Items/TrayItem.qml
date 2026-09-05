@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Services.SystemTray
 import qs.Config
@@ -8,9 +9,11 @@ import qs.Widgets
 BarItem {
     id: root
 
+    readonly property bool monochrome: true
+
     interactive: false
     visible: SystemTray.items.values.length > 0
-    spacing: 2
+    spacing: Theme.spacingXs
 
     Repeater {
         model: SystemTray.items
@@ -20,8 +23,8 @@ BarItem {
 
             required property SystemTrayItem modelData
 
-            width: 20
-            height: 20
+            width: Theme.barItemInner
+            height: Theme.barItemInner
             accent: Theme.primary
             acceptedButtons: Qt.LeftButton | Qt.RightButton
 
@@ -32,17 +35,39 @@ BarItem {
             }
 
             Image {
+                id: icon
+
                 anchors.centerIn: parent
-                width: 14
-                height: 14
+                width: Theme.iconNormal
+                height: Theme.iconNormal
                 source: entry.modelData.icon
+                fillMode: Image.PreserveAspectFit
                 asynchronous: true
-                sourceSize.width: 28
-                sourceSize.height: 28
+                smooth: true
+                mipmap: true
+                sourceSize.width: Theme.iconNormal * 2
+                sourceSize.height: Theme.iconNormal * 2
+                visible: false
+            }
+
+            MultiEffect {
+                anchors.centerIn: parent
+                width: icon.width
+                height: icon.height
+                source: icon
+
+                colorization: root.monochrome && !entry.hovered ? 1 : 0
+                colorizationColor: Theme.text
+                saturation: colorization - 1
+
+                Behavior on colorization {
+                    NumberAnimation { duration: Theme.animFast }
+                }
             }
 
             QsMenuAnchor {
                 id: menu
+
                 menu: entry.modelData.menu
                 anchor.item: entry
                 anchor.edges: Settings.barPosition === "bottom" ? Edges.Top : Edges.Bottom

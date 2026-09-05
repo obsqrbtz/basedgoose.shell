@@ -1,10 +1,10 @@
 import qs.Config
 
 Button {
-    property int size: 26
+    property int size: Theme.controlHeight
 
     padding: 0
     implicitWidth: size
     implicitHeight: size
-    iconSize: Theme.iconLarge
+    iconSize: Theme.iconNormal
 }

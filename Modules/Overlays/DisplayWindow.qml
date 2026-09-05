@@ -31,7 +31,7 @@ OverlayWindow {
 
             StyledText {
                 text: Compositor.displayName
-                font.pixelSize: Theme.fontTiny
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
             }
         }
@@ -40,7 +40,7 @@ OverlayWindow {
             Layout.fillWidth: true
             text: Displays.error
             color: Theme.error
-            font.pixelSize: Theme.fontCaption
+            font.pixelSize: Theme.fontSmall
             visible: Displays.error !== ""
         }
 
@@ -144,14 +144,14 @@ OverlayWindow {
                     StyledText {
                         Layout.fillWidth: true
                         text: Displays.configPath ? `Saves to ${Displays.configPath}` : "No config file set for this compositor"
-                        font.pixelSize: Theme.fontTiny
+                        font.pixelSize: Theme.fontSmall
                         color: Displays.configPath ? Theme.textMuted : Theme.warning
                         elide: Text.ElideMiddle
                     }
 
                     IconButton {
                         icon: Icons.folder
-                        size: 20
+                        size: Theme.controlHeightSmall
                         enabled: Dialogs.available
                         onClicked: Dialogs.pickFile("Output config file", path => Settings.outputConfigPath = path)
                     }
@@ -160,7 +160,7 @@ OverlayWindow {
                 StyledText {
                     Layout.fillWidth: true
                     text: Compositor.outputConfigHint
-                    font.pixelSize: Theme.fontTiny
+                    font.pixelSize: Theme.fontSmall
                     color: Theme.textMuted
                     wrapMode: Text.Wrap
                 }
@@ -224,7 +224,7 @@ OverlayWindow {
                 StyledText {
                     anchors.centerIn: parent
                     text: box.modelData.name
-                    font.pixelSize: Theme.fontCaption
+                    font.pixelSize: Theme.fontNormal
                     horizontalAlignment: Text.AlignHCenter
                 }
 

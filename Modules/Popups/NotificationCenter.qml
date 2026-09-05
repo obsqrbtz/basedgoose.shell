@@ -22,14 +22,14 @@ BarPopup {
 
             IconButton {
                 icon: Icons.dnd
-                size: 22
+                size: Theme.controlHeight
                 active: Notifications.dnd
                 onClicked: Notifications.dnd = !Notifications.dnd
             }
 
             IconButton {
                 icon: Icons.trash
-                size: 22
+                size: Theme.controlHeight
                 visible: Notifications.count > 0
                 onClicked: Notifications.clearAll()
             }
@@ -56,7 +56,7 @@ BarPopup {
 
                     StyledText {
                         text: Notifications.grouped[modelData].length
-                        font.pixelSize: Theme.fontCaption
+                        font.pixelSize: Theme.fontSmall
                         color: Theme.textMuted
                     }
 
@@ -64,7 +64,7 @@ BarPopup {
 
                     IconButton {
                         icon: Icons.close
-                        size: 18
+                        size: Theme.controlHeightSmall
                         onClicked: Notifications.clearApp(modelData)
                     }
                 }

@@ -19,7 +19,7 @@ Surface {
 
     accent: Theme.primary
     implicitWidth: vertical ? 36 : layout.implicitWidth + Theme.spacingSm * 2
-    implicitHeight: vertical ? layout.implicitHeight + Theme.spacingSm : 26
+    implicitHeight: vertical ? layout.implicitHeight + Theme.spacingSm : Theme.controlHeightBar
 
     Grid {
         id: layout

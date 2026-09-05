@@ -30,7 +30,7 @@ BarItem {
             readonly property int padding: focused ? Theme.spacingSm : Theme.spacingXs
 
             implicitWidth: Math.max(implicitHeight, Math.min(label.implicitWidth, 48) + padding * 2)
-            implicitHeight: 18
+            implicitHeight: Theme.barItemInner
 
             radius: Theme.radius
             accent: tint
@@ -48,7 +48,7 @@ BarItem {
                 width: Math.min(implicitWidth, 48)
                 text: Compositor.label(pill.modelData)
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 font.bold: pill.focused
                 color: pill.filled ? Theme.background : pill.active ? pill.tint : Theme.textMuted
             }

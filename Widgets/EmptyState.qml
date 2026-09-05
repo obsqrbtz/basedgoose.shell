@@ -13,7 +13,7 @@ Column {
     Icon {
         anchors.horizontalCenter: parent.horizontalCenter
         text: root.icon
-        font.pixelSize: 28
+        font.pixelSize: Theme.iconHuge
         color: Theme.alpha(Theme.textMuted, 0.6)
         visible: root.icon !== ""
     }
@@ -28,7 +28,7 @@ Column {
     StyledText {
         anchors.horizontalCenter: parent.horizontalCenter
         text: root.hint
-        font.pixelSize: Theme.fontCaption
+        font.pixelSize: Theme.fontSmall
         color: Theme.alpha(Theme.textMuted, 0.7)
         horizontalAlignment: Text.AlignHCenter
         visible: root.hint !== ""

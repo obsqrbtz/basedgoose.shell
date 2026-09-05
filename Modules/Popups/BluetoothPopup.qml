@@ -48,7 +48,7 @@ BarPopup {
 
                 IconButton {
                     icon: Icons.trash
-                    size: 22
+                    size: Theme.controlHeight
                     visible: modelData.paired
                     onClicked: modelData.forget()
                 }

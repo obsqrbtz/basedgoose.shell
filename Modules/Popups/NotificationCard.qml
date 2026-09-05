@@ -40,10 +40,10 @@ Surface {
     readonly property color urgencyColor: notification.urgency === NotificationUrgency.Critical ? Theme.error : notification.urgency === NotificationUrgency.Low ? Theme.textMuted : Theme.primary
 
     implicitHeight: layout.implicitHeight + Theme.spacingMd * 2
-    baseColor: Theme.surface
+    baseColor: Theme.surfaceAlt
     radius: Theme.radiusPanel
     border.width: 1
-    border.color: notification.urgency === NotificationUrgency.Critical ? Theme.error : Theme.borderSubtle
+    border.color: notification.urgency === NotificationUrgency.Critical ? Theme.error : "transparent"
     accent: Theme.primary
 
     onClicked: {
@@ -93,13 +93,13 @@ Surface {
                 StyledText {
                     Layout.fillWidth: true
                     text: root.notification.summary
-                    font.pixelSize: Theme.fontSmall
+                    font.pixelSize: Theme.fontNormal
                     font.weight: Font.DemiBold
                 }
 
                 StyledText {
                     text: Notifications.age(root.notification)
-                    font.pixelSize: Theme.fontTiny
+                    font.pixelSize: Theme.fontSmall
                     color: Theme.textMuted
                 }
             }
@@ -107,7 +107,7 @@ Surface {
             StyledText {
                 Layout.fillWidth: true
                 text: root.notification.body
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
                 wrapMode: Text.Wrap
                 maximumLineCount: 3
@@ -126,9 +126,9 @@ Surface {
 
                         label: modelData.text
                         variant: Button.Outlined
-                        fontSize: Theme.fontTiny
+                        fontSize: Theme.fontSmall
                         padding: Theme.spacingSm
-                        implicitHeight: 22
+                        implicitHeight: Theme.controlHeightSmall
                         onClicked: modelData.invoke()
                     }
                 }
@@ -138,7 +138,7 @@ Surface {
         IconButton {
             Layout.alignment: Qt.AlignTop
             icon: Icons.close
-            size: 20
+            size: Theme.controlHeightSmall
             onClicked: root.dismissed()
         }
     }

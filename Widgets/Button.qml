@@ -27,7 +27,7 @@ Surface {
     border.color: active ? Theme.primary : Theme.border
 
     implicitWidth: content.implicitWidth + padding * 2
-    implicitHeight: Math.max(26, content.implicitHeight + Theme.spacingSm)
+    implicitHeight: Math.max(Theme.controlHeight, content.implicitHeight + Theme.spacingSm)
 
     RowLayout {
         id: content
@@ -47,7 +47,7 @@ Surface {
             id: labelItem
             text: root.label
             visible: root.label !== ""
-            font.pixelSize: Theme.fontSmall
+            font.pixelSize: Theme.fontNormal
             font.weight: Font.Medium
             color: root.hovered ? Theme.primary : root.contentColor
         }

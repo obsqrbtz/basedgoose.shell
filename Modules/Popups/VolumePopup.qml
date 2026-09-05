@@ -31,7 +31,7 @@ BarPopup {
 
                 IconButton {
                     icon: Icons.volumeLevel(Audio.percent, Audio.muted)
-                    size: 22
+                    size: Theme.controlHeight
                     contentColor: Audio.muted ? Theme.error : Theme.text
                     onClicked: Audio.toggleMute()
                 }
@@ -45,8 +45,8 @@ BarPopup {
 
                 StyledText {
                     text: `${Audio.percent}%`
-                    font.pixelSize: Theme.fontCaption
-                    color: Theme.textMuted
+                    font.pixelSize: Theme.fontNormal
+                    color: Theme.text
                     horizontalAlignment: Text.AlignRight
                     Layout.preferredWidth: 32
                 }
@@ -55,7 +55,7 @@ BarPopup {
             StyledText {
                 Layout.fillWidth: true
                 text: Audio.sink?.description ?? "No output device"
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
             }
         }
@@ -73,7 +73,7 @@ BarPopup {
 
                 IconButton {
                     icon: Audio.sourceMuted ? Icons.micOff : Icons.micOn
-                    size: 22
+                    size: Theme.controlHeight
                     contentColor: Audio.sourceMuted ? Theme.error : Theme.text
                     onClicked: Audio.toggleSourceMute()
                 }
@@ -87,8 +87,8 @@ BarPopup {
 
                 StyledText {
                     text: `${Audio.sourcePercent}%`
-                    font.pixelSize: Theme.fontCaption
-                    color: Theme.textMuted
+                    font.pixelSize: Theme.fontNormal
+                    color: Theme.text
                     horizontalAlignment: Text.AlignRight
                     Layout.preferredWidth: 32
                 }
@@ -97,7 +97,7 @@ BarPopup {
             StyledText {
                 Layout.fillWidth: true
                 text: Audio.source?.description ?? ""
-                font.pixelSize: Theme.fontCaption
+                font.pixelSize: Theme.fontSmall
                 color: Theme.textMuted
             }
         }

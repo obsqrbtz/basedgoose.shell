@@ -57,7 +57,7 @@ OverlayWindow {
         TextField {
             id: search
             Layout.fillWidth: true
-            Layout.preferredHeight: 36
+            Layout.preferredHeight: Theme.controlHeightLarge
             icon: Icons.search
             placeholder: "Search applications"
             text: root.filter

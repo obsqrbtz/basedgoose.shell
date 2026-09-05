@@ -50,7 +50,7 @@ BarItem {
         StyledText {
             id: label
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: Theme.fontCaption
+            font.pixelSize: Theme.fontSmall
             color: root.hovered ? Theme.primary : Theme.text
         }
     }
