@@ -34,10 +34,8 @@ BarItem {
 
             radius: Theme.radius
             accent: tint
-            baseColor: filled ? tint : active ? Theme.alpha(tint, 0.18) : Theme.surfaceAlt
 
-            border.width: 1
-            border.color: active && !filled ? tint : "transparent"
+            baseColor: filled ? tint : "transparent"
 
             onClicked: Compositor.activate(modelData)
 
@@ -55,9 +53,6 @@ BarItem {
 
             Behavior on implicitWidth {
                 NumberAnimation { duration: Theme.animNormal; easing.type: Easing.OutCubic }
-            }
-            Behavior on border.color {
-                ColorAnimation { duration: Theme.animNormal }
             }
         }
     }
